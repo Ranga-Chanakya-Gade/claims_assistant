@@ -18,6 +18,7 @@ zipSourceFolder: "./dist" #i.e: "./build"
 
 ### Tests
 testCommands:
+  - "npm ci"
 
 
 ### node version
