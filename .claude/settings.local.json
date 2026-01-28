@@ -21,7 +21,10 @@
       "Bash(find:*)",
       "Bash(git checkout:*)",
       "Bash(grep:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(dir:*)",
+      "Bash(npx vite)",
+      "Bash(netstat:*)"
     ]
   }
 }
