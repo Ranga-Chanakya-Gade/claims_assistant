@@ -24,7 +24,8 @@
       "Bash(taskkill:*)",
       "Bash(dir:*)",
       "Bash(npx vite)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(npm view:*)"
     ]
   }
 }
