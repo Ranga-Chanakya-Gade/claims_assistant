@@ -28,6 +28,7 @@ import PaymentQuickView from '../PaymentQuickView/PaymentQuickView';
 import PolicyDetailView from '../PolicyDetailView/PolicyDetailView';
 import PartyForm from '../PartyForm/PartyForm';
 import RequirementsEngine from '../RequirementsEngine/RequirementsEngine';
+import WorkNotes from '../WorkNotes/WorkNotes';
 import './ClaimsWorkbench.css';
 
 const ClaimsWorkbench = ({ claim }) => {
@@ -828,6 +829,16 @@ const ClaimsWorkbench = ({ claim }) => {
           </DxcFlex>
         </DxcContainer>
           </DxcFlex>
+        </DxcContainer>
+
+        {/* Work Notes Panel - Always Visible */}
+        <DxcContainer padding="var(--spacing-padding-l)" paddingTop="0">
+          <WorkNotes
+            claimSysId={claim.sysId || claim.servicenow_sys_id}
+            fnolNumber={claim.fnolNumber || claim.claimNumber}
+            isDemo={!claim.sysId || claim.sysId?.startsWith('demo-')}
+            demoWorkNotes={claim.workNotes || []}
+          />
         </DxcContainer>
       </DxcFlex>
 

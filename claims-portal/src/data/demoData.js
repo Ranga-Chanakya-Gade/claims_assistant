@@ -339,6 +339,46 @@ const generateTimeline = (claim) => {
 };
 
 /**
+ * Generate sample work notes for a claim
+ * Matches sys_journal_field structure from ServiceNow
+ */
+const generateWorkNotes = (claim) => {
+  const createdAtDate = typeof claim.createdAt === 'string' ? new Date(claim.createdAt) : claim.createdAt;
+  const authors = ['claims.adjuster', 'stephanie.lyons', 'john.examiner', 'admin', 'sarah.reviewer'];
+  const noteTemplates = [
+    'Initial claim review completed. All submitted documents have been received and logged.',
+    'Verified death certificate against LexisNexis records. 3-point match confirmed.',
+    'Contacted claimant to request additional documentation for beneficiary verification.',
+    'Policy status confirmed as in-force at date of death. No outstanding loans.',
+    'Reviewed AI risk assessment. No anomalies detected. Proceeding with standard processing.',
+    'Updated claim reserve based on policy face amount and PMI calculation.',
+    'Beneficiary identity verification completed successfully via CSLN search.',
+    'Sent ACE letter to claimant requesting signed statement of claim form.',
+    'Supervisor review completed. Claim approved for payment processing.',
+    'Payment scheduled for disbursement. ACH details verified with beneficiary.'
+  ];
+
+  const noteCount = Math.floor(Math.random() * 3) + 2; // 2-4 notes per claim
+  const notes = [];
+
+  for (let i = 0; i < noteCount; i++) {
+    const noteDate = new Date(createdAtDate.getTime() + (i + 1) * 24 * 60 * 60 * 1000);
+    notes.push({
+      sys_id: `wn-${claim.id}-${i + 1}`,
+      element: 'work_notes',
+      element_id: claim.sysId || claim.id,
+      name: 'x_dxcis_claims_a_0_claims_fnol',
+      value: noteTemplates[Math.floor(Math.random() * noteTemplates.length)],
+      sys_created_on: noteDate.toISOString().replace('T', ' ').substring(0, 19),
+      sys_created_by: authors[Math.floor(Math.random() * authors.length)]
+    });
+  }
+
+  // Sort newest first
+  return notes.sort((a, b) => new Date(b.sys_created_on) - new Date(a.sys_created_on));
+};
+
+/**
  * Generate a single demo claim
  */
 const generateClaim = (index, isFastTrack = false) => {
@@ -683,11 +723,18 @@ const generateClaim = (index, isFastTrack = false) => {
     }
   };
 
+  // Add sysId and fnolNumber for ServiceNow reference
+  claim.sysId = `demo-sys-id-${index}`;
+  claim.fnolNumber = `FNOL${String(index).padStart(7, '0')}`;
+
   // Add requirements
   claim.requirements = generateRequirements(claim);
 
   // Add timeline
   claim.timeline = generateTimeline(claim);
+
+  // Add work notes
+  claim.workNotes = generateWorkNotes(claim);
 
   return claim;
 };

@@ -12,31 +12,287 @@ class ServiceNowService {
   constructor() {
     // Use proxy in development to avoid CORS issues
     const isDevelopment = import.meta.env.DEV;
+    this.isDevelopment = isDevelopment;
+    this.serviceNowURL = import.meta.env.VITE_SERVICENOW_URL || 'https://nextgenbpmnp1.service-now.com';
     this.baseURL = isDevelopment
       ? '/servicenow-api'  // Vite proxy path
-      : (import.meta.env.VITE_SERVICENOW_URL || 'https://nextgenbpmnp1.service-now.com');
+      : this.serviceNowURL;
+    this.oauthURL = isDevelopment
+      ? '/servicenow-oauth'  // Vite proxy path for OAuth
+      : (this.serviceNowURL + '/oauth_token.do');
     this.apiVersion = '/api/now/table';
     this.fnolTable = 'x_dxcis_claims_a_0_claims_fnol';
 
+    // OAuth state
+    this.clientId = import.meta.env.VITE_SERVICENOW_CLIENT_ID || '';
+    this.clientSecret = import.meta.env.VITE_SERVICENOW_CLIENT_SECRET || '';
+    this.useOAuth = !!(this.clientId && this.clientSecret);
+    this.accessToken = null;
+    this.tokenExpiry = null;
+    this.refreshToken = null;
+    this.tokenPromise = null;
+    this._onAuthChangeCallbacks = [];
+
+    // Try to restore token from sessionStorage
+    this._restoreToken();
+
+    // Check for OAuth callback code in URL
+    this._handleOAuthCallback();
+
     console.log('[ServiceNow] Base URL:', this.baseURL, '(Development mode:', isDevelopment, ')');
+    console.log('[ServiceNow] Auth mode:', this.useOAuth ? 'OAuth (Authorization Code)' : 'Basic Auth');
+    console.log('[ServiceNow] Authenticated:', this.isAuthenticated());
+  }
+
+  /**
+   * Register a callback for auth state changes
+   */
+  onAuthChange(callback) {
+    this._onAuthChangeCallbacks.push(callback);
+    return () => {
+      this._onAuthChangeCallbacks = this._onAuthChangeCallbacks.filter(cb => cb !== callback);
+    };
+  }
+
+  _notifyAuthChange() {
+    const authenticated = this.isAuthenticated();
+    this._onAuthChangeCallbacks.forEach(cb => cb(authenticated));
+  }
+
+  /**
+   * Check if we have a valid OAuth token
+   */
+  isAuthenticated() {
+    if (!this.useOAuth) return true; // Basic auth is always "authenticated"
+    return !!(this.accessToken && this.tokenExpiry && Date.now() < this.tokenExpiry);
+  }
+
+  /**
+   * Save token to sessionStorage for persistence across page refreshes
+   */
+  _saveToken() {
+    if (this.accessToken) {
+      sessionStorage.setItem('snow_access_token', this.accessToken);
+      sessionStorage.setItem('snow_token_expiry', String(this.tokenExpiry));
+      if (this.refreshToken) {
+        sessionStorage.setItem('snow_refresh_token', this.refreshToken);
+      }
+    }
+  }
+
+  /**
+   * Restore token from sessionStorage
+   */
+  _restoreToken() {
+    const token = sessionStorage.getItem('snow_access_token');
+    const expiry = sessionStorage.getItem('snow_token_expiry');
+    const refresh = sessionStorage.getItem('snow_refresh_token');
+
+    if (token && expiry && Date.now() < Number(expiry)) {
+      this.accessToken = token;
+      this.tokenExpiry = Number(expiry);
+      this.refreshToken = refresh || null;
+      console.log('[ServiceNow] Token restored from session, expires in', Math.round((this.tokenExpiry - Date.now()) / 1000), 'seconds');
+    }
+  }
+
+  /**
+   * Clear stored tokens (logout)
+   */
+  clearAuth() {
+    this.accessToken = null;
+    this.tokenExpiry = null;
+    this.refreshToken = null;
+    sessionStorage.removeItem('snow_access_token');
+    sessionStorage.removeItem('snow_token_expiry');
+    sessionStorage.removeItem('snow_refresh_token');
+    this._notifyAuthChange();
+    console.log('[ServiceNow] Auth cleared');
+  }
+
+  /**
+   * Start OAuth Authorization Code flow - redirects user to ServiceNow login
+   */
+  startOAuthLogin() {
+    if (!this.clientId) {
+      console.error('[ServiceNow] Cannot start OAuth: no client ID configured');
+      return;
+    }
+
+    // Build the redirect URI (current origin + /oauth/callback)
+    const redirectUri = `${window.location.origin}/oauth/callback`;
+    const state = Math.random().toString(36).substring(2, 15);
+    sessionStorage.setItem('snow_oauth_state', state);
+
+    const authUrl = `${this.serviceNowURL}/oauth_auth.do?` + new URLSearchParams({
+      response_type: 'code',
+      client_id: this.clientId,
+      redirect_uri: redirectUri,
+      state: state
+    }).toString();
+
+    console.log('[ServiceNow] Redirecting to ServiceNow login...');
+    window.location.href = authUrl;
+  }
+
+  /**
+   * Handle OAuth callback - exchange authorization code for tokens
+   */
+  async _handleOAuthCallback() {
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+    const state = url.searchParams.get('state');
+
+    if (!code) return;
+
+    const savedState = sessionStorage.getItem('snow_oauth_state');
+    if (state && savedState && state !== savedState) {
+      console.error('[ServiceNow] OAuth state mismatch - possible CSRF attack');
+      return;
+    }
+
+    sessionStorage.removeItem('snow_oauth_state');
+
+    // Clean the URL (remove code/state params)
+    url.searchParams.delete('code');
+    url.searchParams.delete('state');
+    window.history.replaceState({}, '', url.pathname + url.search);
+
+    console.log('[ServiceNow] Exchanging authorization code for token...');
+
+    try {
+      const redirectUri = `${window.location.origin}/oauth/callback`;
+      const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        redirect_uri: redirectUri
+      });
+
+      const response = await fetch(this.oauthURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[ServiceNow] Token exchange error:', response.status, errorText);
+        throw new Error(`Token exchange failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      this.accessToken = data.access_token;
+      this.refreshToken = data.refresh_token || null;
+      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+
+      this._saveToken();
+      this._notifyAuthChange();
+
+      console.log('[ServiceNow] OAuth token obtained via authorization code, expires in', data.expires_in, 'seconds');
+    } catch (error) {
+      console.error('[ServiceNow] OAuth callback error:', error);
+    }
+  }
+
+  /**
+   * Get OAuth access token - uses cached token or refreshes if expired
+   */
+  async getOAuthToken() {
+    // Return cached token if still valid (with 60s buffer)
+    if (this.accessToken && this.tokenExpiry && Date.now() < this.tokenExpiry - 60000) {
+      return this.accessToken;
+    }
+
+    // Try refresh token if available
+    if (this.refreshToken) {
+      if (this.tokenPromise) return this.tokenPromise;
+
+      this.tokenPromise = this._refreshOAuthToken();
+      try {
+        const token = await this.tokenPromise;
+        return token;
+      } finally {
+        this.tokenPromise = null;
+      }
+    }
+
+    // No token and no refresh token - user needs to login
+    throw new Error('Not authenticated. Please connect to ServiceNow.');
+  }
+
+  async _refreshOAuthToken() {
+    console.log('[ServiceNow] Refreshing OAuth token...');
+
+    try {
+      const body = new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        refresh_token: this.refreshToken
+      });
+
+      const response = await fetch(this.oauthURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[ServiceNow] Token refresh error:', response.status, errorText);
+        this.clearAuth();
+        throw new Error('Token refresh failed. Please reconnect to ServiceNow.');
+      }
+
+      const data = await response.json();
+      this.accessToken = data.access_token;
+      this.refreshToken = data.refresh_token || this.refreshToken;
+      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+
+      this._saveToken();
+      console.log('[ServiceNow] Token refreshed, expires in', data.expires_in, 'seconds');
+      return this.accessToken;
+    } catch (error) {
+      console.error('[ServiceNow] Token refresh error:', error);
+      this.accessToken = null;
+      this.tokenExpiry = null;
+      throw error;
+    }
   }
 
   /**
    * Create authentication headers for ServiceNow API
+   * Uses OAuth Bearer token if configured, otherwise falls back to Basic Auth
    */
-  getAuthHeaders() {
-    // In development, proxy handles auth - don't send duplicate headers
-    const isDevelopment = import.meta.env.DEV;
+  async getAuthHeaders() {
+    const isDevelopment = this.isDevelopment;
 
+    // OAuth mode: get Bearer token
+    if (this.useOAuth) {
+      try {
+        const token = await this.getOAuthToken();
+        return {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        };
+      } catch (error) {
+        console.error('[ServiceNow] OAuth failed:', error.message);
+        throw error; // Re-throw so callers know auth failed
+      }
+    }
+
+    // Basic Auth mode - in dev, proxy handles auth
     if (isDevelopment) {
-      console.log('[ServiceNow] Development mode - proxy will handle authentication');
       return {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       };
     }
 
-    // Production: send auth header directly
+    // Production: send Basic Auth header directly
     const username = import.meta.env.VITE_SERVICENOW_USERNAME;
     const password = import.meta.env.VITE_SERVICENOW_PASSWORD;
 
@@ -49,7 +305,6 @@ class ServiceNowService {
     }
 
     const credentials = btoa(unescape(encodeURIComponent(`${username}:${password}`)));
-    console.log('[ServiceNow] Auth header created for user:', username);
 
     return {
       'Authorization': `Basic ${credentials}`,
@@ -149,10 +404,11 @@ class ServiceNowService {
       const url = `${this.baseURL}${this.apiVersion}/${this.fnolTable}`;
       console.log('[ServiceNow] Request URL:', url);
 
+      const authHeaders = await this.getAuthHeaders();
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          ...this.getAuthHeaders(),
+          ...authHeaders,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(mappedData)
@@ -200,9 +456,10 @@ class ServiceNowService {
   async getFNOL(sysId) {
     try {
       const url = `${this.baseURL}${this.apiVersion}/${this.fnolTable}/${sysId}`;
+      const headers = await this.getAuthHeaders();
       const response = await fetch(url, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers
       });
 
       if (!response.ok) {
@@ -230,9 +487,10 @@ class ServiceNowService {
       });
       const url = `${this.baseURL}${this.apiVersion}/${this.fnolTable}?${params}`;
 
+      const headers = await this.getAuthHeaders();
       const response = await fetch(url, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers
       });
 
       if (!response.ok) {
@@ -260,12 +518,13 @@ class ServiceNowService {
   async updateFNOL(sysId, updates) {
     try {
       const mappedUpdates = this.mapFNOLToServiceNow(updates);
+      const headers = await this.getAuthHeaders();
 
       const response = await apiClient.patch(
         `${this.baseURL}${this.apiVersion}/${this.fnolTable}/${sysId}`,
         mappedUpdates,
         {
-          headers: this.getAuthHeaders()
+          headers
         }
       );
 
@@ -305,10 +564,11 @@ class ServiceNowService {
         params.sysparm_query = queryParts.join('^');
       }
 
+      const headers = await this.getAuthHeaders();
       const response = await apiClient.get(
         `${this.baseURL}${this.apiVersion}/${this.fnolTable}`,
         {
-          headers: this.getAuthHeaders(),
+          headers,
           params
         }
       );
@@ -321,15 +581,230 @@ class ServiceNowService {
   }
 
   /**
+   * Get work notes for an FNOL record from sys_journal_field
+   * @param {string} sysId - ServiceNow sys_id of the FNOL record
+   * @returns {Promise<Array>} Array of work note journal entries
+   */
+  async getWorkNotes(sysId) {
+    try {
+      const params = new URLSearchParams({
+        sysparm_query: `element=work_notes^name=${this.fnolTable}^element_id=${sysId}^ORDERBYDESCsys_created_on`,
+        sysparm_display_value: 'true'
+      });
+      const url = `${this.baseURL}${this.apiVersion}/sys_journal_field?${params}`;
+      console.log('[ServiceNow] Fetching work notes for sys_id:', sysId);
+
+      const headers = await this.getAuthHeaders();
+      const response = await fetch(url, {
+        method: 'GET',
+        headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`ServiceNow API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('[ServiceNow] Work notes fetched:', data.result?.length || 0, 'entries');
+      return data.result || [];
+    } catch (error) {
+      console.error('[ServiceNow] Error fetching work notes:', error);
+      throw new Error(`Failed to fetch work notes from ServiceNow: ${error.message}`);
+    }
+  }
+
+  /**
+   * Add a work note to an FNOL record
+   * @param {string} sysId - ServiceNow sys_id of the FNOL record
+   * @param {string} noteText - The work note text to add
+   * @returns {Promise<Object>} Updated FNOL record
+   */
+  async addWorkNote(sysId, noteText) {
+    try {
+      const url = `${this.baseURL}${this.apiVersion}/${this.fnolTable}/${sysId}`;
+      console.log('[ServiceNow] Adding work note to sys_id:', sysId);
+
+      const authHeaders = await this.getAuthHeaders();
+      const requestBody = JSON.stringify({ work_notes: noteText });
+      console.log('[ServiceNow] PATCH URL:', url);
+      console.log('[ServiceNow] PATCH body:', requestBody);
+      console.log('[ServiceNow] PATCH headers:', JSON.stringify(authHeaders));
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          ...authHeaders,
+          'Content-Type': 'application/json'
+        },
+        body: requestBody
+      });
+
+      console.log('[ServiceNow] PATCH response status:', response.status, response.statusText);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[ServiceNow] Error response:', errorText);
+        throw new Error(`ServiceNow API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[ServiceNow] Work note PATCH full response:', JSON.stringify(data.result, null, 2));
+      console.log('[ServiceNow] Work note field in response:', data.result?.work_notes);
+      console.log('[ServiceNow] Comments_and_work_notes field:', data.result?.comments_and_work_notes);
+      console.log('[ServiceNow] Work note added successfully, response sys_id:', data.result?.sys_id);
+      return data.result;
+    } catch (error) {
+      console.error('[ServiceNow] Error adding work note:', error);
+      throw new Error(`Failed to add work note in ServiceNow: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get all FNOL records from global domain
+   * @param {Object} filters - Optional query filters
+   * @returns {Promise<Array>} Array of FNOL records
+   */
+  async getFNOLsGlobal(filters = {}) {
+    try {
+      const queryParts = ['ORDERBYDESCsys_created_on'];
+      if (filters.state) {
+        queryParts.unshift(`state=${filters.state}`);
+      }
+      if (filters.active !== undefined) {
+        queryParts.unshift(`active=${filters.active}`);
+      }
+
+      const params = new URLSearchParams({
+        sysparm_query: queryParts.join('^'),
+        sysparm_limit: String(filters.limit || 100),
+        sysparm_offset: String(filters.offset || 0),
+        sysparm_display_value: 'true'
+      });
+
+      const url = `${this.baseURL}${this.apiVersion}/${this.fnolTable}?${params}`;
+      console.log('[ServiceNow] Fetching global FNOL records');
+
+      const headers = await this.getAuthHeaders();
+      const response = await fetch(url, {
+        method: 'GET',
+        headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`ServiceNow API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('[ServiceNow] Global FNOLs fetched:', data.result?.length || 0, 'records');
+      return data.result || [];
+    } catch (error) {
+      console.error('[ServiceNow] Error fetching global FNOLs:', error);
+      throw new Error(`Failed to fetch global FNOLs from ServiceNow: ${error.message}`);
+    }
+  }
+
+  /**
+   * Map a ServiceNow FNOL record to the portal's claim data model
+   * @param {Object} fnol - Raw ServiceNow FNOL record
+   * @returns {Object} Claim object matching portal data model
+   */
+  mapFNOLToClaim(fnol) {
+    const stateMap = {
+      '1': 'new',
+      '2': 'submitted',
+      '3': 'under_review',
+      '4': 'in_review',
+      '5': 'pending_requirements',
+      '6': 'approved',
+      '7': 'closed',
+      '8': 'denied'
+    };
+
+    return {
+      id: fnol.sys_id,
+      sysId: fnol.sys_id,
+      fnolNumber: fnol.number || '',
+      claimNumber: fnol.number || fnol.case || '',
+      status: stateMap[fnol.state] || 'new',
+      claimType: 'death',
+      source: 'servicenow',
+      createdAt: fnol.opened_at || fnol.sys_created_on || '',
+      updatedAt: fnol.sys_updated_on || '',
+      insured: {
+        name: fnol.insured_full_name || 'N/A',
+        otherNames: fnol.insured_other_names || '',
+        dateOfBirth: fnol.insured_date_of_birth || '',
+        dateOfDeath: fnol.insured_date_of_death || '',
+        placeOfBirth: fnol.insured_place_of_birth || '',
+        maritalStatus: fnol.insured_marital_status || '',
+        causeOfDeath: fnol.insured_cause_of_death || '',
+        mannerOfDeath: fnol.insured_manner_of_death || '',
+        address: {
+          street: fnol.insured_street_address || '',
+          city: fnol.insured_city || '',
+          state: fnol.insured_state || '',
+          zipCode: fnol.insured_zip_code || ''
+        }
+      },
+      claimant: {
+        name: fnol.claimant_full_name || 'N/A',
+        otherNames: fnol.claimant_other_names || '',
+        relationship: fnol.claimant_relationship_to_insured || '',
+        dateOfBirth: fnol.claimant_date_of_birth || '',
+        sex: fnol.claimant_sex || '',
+        capacity: fnol.claimant_capacity || '',
+        countryOfCitizenship: fnol.claimant_country_of_citizenship || '',
+        emailAddress: fnol.claimant_email_address || '',
+        phoneNumber: fnol.claimant_phone_number || '',
+        communicationMethod: fnol.claimant_communication_method || '',
+        address: {
+          street: fnol.claimant_street_address || '',
+          city: fnol.claimant_city || '',
+          state: fnol.claimant_state || '',
+          zipCode: fnol.claimant_zip_code || ''
+        }
+      },
+      policy: {
+        policyNumber: fnol.policy_numbers || 'N/A',
+        policyType: 'Term Life Insurance'
+      },
+      financial: {
+        claimAmount: parseFloat(fnol.total_claim_amount) || 0,
+        totalClaimed: parseFloat(fnol.total_claim_amount) || 0
+      },
+      deathEvent: {
+        dateOfDeath: fnol.insured_date_of_death || '',
+        mannerOfDeath: fnol.insured_manner_of_death || 'Natural',
+        causeOfDeath: fnol.insured_cause_of_death || ''
+      },
+      description: fnol.description || fnol.short_description || '',
+      incidentLocation: fnol.incident_location || '',
+      incidentDescription: fnol.describe_the_incident || '',
+      priority: fnol.priority || '4',
+      company: fnol.company || '',
+      openedBy: fnol.opened_by || '',
+      assignedTo: fnol.assigned_to || '',
+      timeline: [],
+      requirements: [],
+      documents: [],
+      workNotes: [],
+      parties: [],
+      routing: { type: 'STANDARD' },
+      workflow: {}
+    };
+  }
+
+  /**
    * Test ServiceNow connection
    * @returns {Promise<boolean>} Connection status
    */
   async testConnection() {
     try {
+      const headers = await this.getAuthHeaders();
       const response = await apiClient.get(
         `${this.baseURL}${this.apiVersion}/${this.fnolTable}`,
         {
-          headers: this.getAuthHeaders(),
+          headers,
           params: {
             sysparm_limit: 1
           }

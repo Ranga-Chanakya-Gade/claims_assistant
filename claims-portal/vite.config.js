@@ -13,12 +13,36 @@ export default defineConfig(({ mode }) => {
     ? 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
     : null;
 
+  // OAuth configuration
+  const clientId = env.VITE_SERVICENOW_CLIENT_ID || '';
+  const clientSecret = env.VITE_SERVICENOW_CLIENT_SECRET || '';
+  const useOAuth = !!(clientId && clientSecret);
+
   console.log('[Vite Config] ServiceNow auth configured:', authHeader ? 'Yes' : 'No');
+  console.log('[Vite Config] OAuth configured:', useOAuth ? 'Yes (will use OAuth)' : 'No (will use Basic Auth)');
 
   return {
     plugins: [react()],
     server: {
       proxy: {
+        // Proxy for OAuth token requests
+        '/servicenow-oauth': {
+          target: 'https://nextgenbpmnp1.service-now.com',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) => path.replace(/^\/servicenow-oauth/, '/oauth_token.do'),
+          configure: (proxy, options) => {
+            proxy.on('proxyReq', (proxyReq, req, res) => {
+              console.log('[OAuth Proxy] Token request →', options.target + '/oauth_token.do');
+            });
+            proxy.on('proxyRes', (proxyRes, req, res) => {
+              console.log('[OAuth Proxy] Token response:', proxyRes.statusCode);
+            });
+            proxy.on('error', (err, req, res) => {
+              console.error('[OAuth Proxy] Error:', err.message);
+            });
+          }
+        },
         // Proxy ServiceNow API requests to avoid CORS issues
         '/servicenow-api': {
           target: 'https://nextgenbpmnp1.service-now.com',
@@ -29,12 +53,27 @@ export default defineConfig(({ mode }) => {
             proxy.on('proxyReq', (proxyReq, req, res) => {
               console.log('[Proxy] Request:', req.method, req.url, '→', options.target + req.url);
 
-              // ONLY use proxy-level auth (ignore client auth header)
-              if (authHeader) {
-                proxyReq.setHeader('Authorization', authHeader);
-                console.log('[Proxy] Added ServiceNow authentication for user:', username);
+              // If NOT using OAuth, inject Basic Auth at proxy level
+              if (!useOAuth) {
+                if (authHeader) {
+                  proxyReq.setHeader('Authorization', authHeader);
+                  console.log('[Proxy] Added Basic Auth for user:', username);
+                } else {
+                  console.error('[Proxy] ERROR: No auth header configured!');
+                }
               } else {
-                console.error('[Proxy] ERROR: No auth header configured!');
+                // Log whether client sent Bearer token
+                const clientAuth = proxyReq.getHeader('Authorization') || req.headers['authorization'];
+                console.log('[Proxy] OAuth mode - Authorization header forwarded:', clientAuth ? 'Yes (' + clientAuth.substring(0, 20) + '...)' : 'NO - MISSING!');
+              }
+
+              // Log request body for PATCH requests
+              if (req.method === 'PATCH') {
+                let body = '';
+                req.on('data', (chunk) => { body += chunk; });
+                req.on('end', () => {
+                  console.log('[Proxy] PATCH body:', body);
+                });
               }
             });
             proxy.on('proxyRes', (proxyRes, req, res) => {

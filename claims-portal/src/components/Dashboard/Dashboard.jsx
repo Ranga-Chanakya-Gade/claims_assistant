@@ -18,6 +18,7 @@ import { useWorkflow } from '../../contexts/WorkflowContext';
 import FastTrackBadge from '../shared/FastTrackBadge';
 import SLAIndicator from '../shared/SLAIndicator';
 import { RoutingType, ClaimStatus } from '../../types/claim.types';
+import serviceNowService from '../../services/api/serviceNowService';
 import './Dashboard.css';
 
 const Dashboard = ({ onClaimSelect }) => {
@@ -25,6 +26,9 @@ const Dashboard = ({ onClaimSelect }) => {
   const [searchValue, setSearchValue] = useState('');
   const [isGridView, setIsGridView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [snowClaims, setSnowClaims] = useState([]);
+  const [snowLoading, setSnowLoading] = useState(false);
+  const [snowConnected, setSnowConnected] = useState(serviceNowService.isAuthenticated());
 
   // Get data from contexts
   const {
@@ -41,15 +45,52 @@ const Dashboard = ({ onClaimSelect }) => {
     fetchSLAAtRiskCases
   } = useWorkflow();
 
+  // Fetch ServiceNow claims when authenticated
+  const fetchServiceNowClaims = async () => {
+    if (!serviceNowService.isAuthenticated()) return;
+    try {
+      setSnowLoading(true);
+      const fnolRecords = await serviceNowService.getFNOLsGlobal({ limit: 50 });
+      const mappedClaims = fnolRecords.map(fnol => serviceNowService.mapFNOLToClaim(fnol));
+      setSnowClaims(mappedClaims);
+      console.log('[Dashboard] ServiceNow FNOL claims loaded:', mappedClaims.length);
+    } catch (err) {
+      console.warn('[Dashboard] Could not fetch ServiceNow claims:', err.message);
+      setSnowClaims([]);
+    } finally {
+      setSnowLoading(false);
+    }
+  };
+
   // Fetch data on mount
   useEffect(() => {
     fetchClaims();
     fetchSLAAtRiskCases();
+    fetchServiceNowClaims();
+
+    // Listen for auth state changes
+    const unsubscribe = serviceNowService.onAuthChange((authenticated) => {
+      setSnowConnected(authenticated);
+      if (authenticated) {
+        fetchServiceNowClaims();
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  // Merge demo claims with ServiceNow claims (deduplicate by sysId)
+  const allClaims = useMemo(() => {
+    if (!claims) return snowClaims;
+    const demoClaims = [...claims];
+    const existingSysIds = new Set(demoClaims.map(c => c.sysId).filter(Boolean));
+    const uniqueSnowClaims = snowClaims.filter(sc => !existingSysIds.has(sc.sysId));
+    return [...demoClaims, ...uniqueSnowClaims];
+  }, [claims, snowClaims]);
 
   // Calculate FastTrack metrics
   const fastTrackMetrics = useMemo(() => {
-    if (!claims || claims.length === 0) {
+    if (!allClaims || allClaims.length === 0) {
       return {
         count: 0,
         percentage: 0,
@@ -57,7 +98,7 @@ const Dashboard = ({ onClaimSelect }) => {
       };
     }
 
-    const fastTrackClaims = claims.filter(c => c.routing?.type === RoutingType.FASTTRACK);
+    const fastTrackClaims = allClaims.filter(c => c.routing?.type === RoutingType.FASTTRACK);
     const closedFastTrackClaims = fastTrackClaims.filter(c => c.status === ClaimStatus.CLOSED);
 
     // Calculate average days to close for FastTrack claims
@@ -75,14 +116,14 @@ const Dashboard = ({ onClaimSelect }) => {
 
     return {
       count: fastTrackClaims.length,
-      percentage: Math.round((fastTrackClaims.length / claims.length) * 100),
+      percentage: allClaims.length > 0 ? Math.round((fastTrackClaims.length / allClaims.length) * 100) : 0,
       avgDaysToClose
     };
-  }, [claims]);
+  }, [allClaims]);
 
   // Calculate general metrics
   const metrics = useMemo(() => {
-    if (!claims || claims.length === 0) {
+    if (!allClaims || allClaims.length === 0) {
       return {
         openClaims: 0,
         newToday: 0,
@@ -101,29 +142,29 @@ const Dashboard = ({ onClaimSelect }) => {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const yearStart = new Date(now.getFullYear(), 0, 1);
 
-    const openClaims = claims.filter(c =>
+    const openClaims = allClaims.filter(c =>
       c.status !== ClaimStatus.CLOSED &&
       c.status !== ClaimStatus.DENIED
     ).length;
 
-    const newToday = claims.filter(c =>
+    const newToday = allClaims.filter(c =>
       new Date(c.createdAt) >= todayStart
     ).length;
 
-    const newThisWeek = claims.filter(c =>
+    const newThisWeek = allClaims.filter(c =>
       new Date(c.createdAt) >= weekStart
     ).length;
 
-    const pendingReview = claims.filter(c =>
+    const pendingReview = allClaims.filter(c =>
       c.status === ClaimStatus.UNDER_REVIEW
     ).length;
 
-    const approvedThisMonth = claims.filter(c =>
+    const approvedThisMonth = allClaims.filter(c =>
       c.status === ClaimStatus.APPROVED &&
       new Date(c.updatedAt) >= monthStart
     ).length;
 
-    const declinedThisMonth = claims.filter(c =>
+    const declinedThisMonth = allClaims.filter(c =>
       c.status === ClaimStatus.DENIED &&
       new Date(c.updatedAt) >= monthStart
     ).length;
@@ -134,7 +175,7 @@ const Dashboard = ({ onClaimSelect }) => {
       : 0;
 
     // Calculate total paid YTD
-    const claimsClosedYTD = claims.filter(c =>
+    const claimsClosedYTD = allClaims.filter(c =>
       c.status === ClaimStatus.CLOSED &&
       new Date(c.closedAt) >= yearStart
     );
@@ -153,13 +194,13 @@ const Dashboard = ({ onClaimSelect }) => {
       claimsPaidYTD,
       approvalRate
     };
-  }, [claims]);
+  }, [allClaims]);
 
   // Filter claims based on active tab and search
   const filteredClaims = useMemo(() => {
-    if (!claims) return [];
+    if (!allClaims) return [];
 
-    let filtered = [...claims];
+    let filtered = [...allClaims];
 
     // Filter by tab
     if (activeTabIndex === 1) {
@@ -178,13 +219,15 @@ const Dashboard = ({ onClaimSelect }) => {
       const search = searchValue.toLowerCase();
       filtered = filtered.filter(c =>
         c.claimNumber?.toLowerCase().includes(search) ||
+        c.fnolNumber?.toLowerCase().includes(search) ||
         c.policy?.policyNumber?.toLowerCase().includes(search) ||
-        c.claimant?.name?.toLowerCase().includes(search)
+        c.claimant?.name?.toLowerCase().includes(search) ||
+        c.insured?.name?.toLowerCase().includes(search)
       );
     }
 
     return filtered;
-  }, [claims, activeTabIndex, searchValue]);
+  }, [allClaims, activeTabIndex, searchValue]);
 
   // Paginate claims
   const paginatedClaims = useMemo(() => {
@@ -265,7 +308,7 @@ const Dashboard = ({ onClaimSelect }) => {
   ];
 
   // Show loading state
-  if (claimsLoading && !claims) {
+  if ((claimsLoading || snowLoading) && !claims?.length && !snowClaims.length) {
     return (
       <div style={{ padding: '24px', width: '100%', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <DxcSpinner label="Loading dashboard..." />
@@ -698,6 +741,127 @@ const Dashboard = ({ onClaimSelect }) => {
           </DxcFlex>
         </div>
 
+        {/* ServiceNow FNOL Claims Table */}
+        <div style={{
+          backgroundColor: "var(--color-bg-neutral-lightest)",
+          borderRadius: "var(--border-radius-m)",
+          boxShadow: "var(--shadow-mid-04)",
+          padding: "var(--spacing-padding-m)"
+        }}>
+          <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+            <DxcFlex justifyContent="space-between" alignItems="center">
+              <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
+                <DxcHeading level={3} text="ServiceNow FNOL Claims" />
+                {snowConnected && <DxcBadge label={String(snowClaims.length)} notificationBadge />}
+              </DxcFlex>
+              <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
+                {snowLoading && (
+                  <DxcSpinner label="Loading..." mode="small" />
+                )}
+                {serviceNowService.useOAuth && (
+                  snowConnected ? (
+                    <DxcButton
+                      label="Disconnect"
+                      mode="tertiary"
+                      icon="link_off"
+                      size="small"
+                      onClick={() => { serviceNowService.clearAuth(); setSnowClaims([]); }}
+                    />
+                  ) : (
+                    <DxcButton
+                      label="Connect to ServiceNow"
+                      mode="secondary"
+                      icon="link"
+                      onClick={() => serviceNowService.startOAuthLogin()}
+                    />
+                  )
+                )}
+              </DxcFlex>
+            </DxcFlex>
+
+            {!snowConnected && serviceNowService.useOAuth ? (
+              <DxcContainer padding="var(--spacing-padding-m)" style={{ backgroundColor: "var(--color-bg-neutral-lighter)", borderRadius: "var(--border-radius-m)" }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
+                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
+                    Connect to ServiceNow to view FNOL claims from the global domain.
+                  </DxcTypography>
+                </DxcFlex>
+              </DxcContainer>
+            ) : snowClaims.length === 0 && !snowLoading ? (
+              <DxcContainer padding="var(--spacing-padding-m)" style={{ backgroundColor: "var(--color-bg-neutral-lighter)" }}>
+                <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
+                  No ServiceNow FNOL records found. Check your ServiceNow connection configuration.
+                </DxcTypography>
+              </DxcContainer>
+            ) : (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
+                  <thead>
+                    <tr style={{ borderBottom: "2px solid var(--color-fg-secondary-medium)", textAlign: "left" }}>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>FNOL Number</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Status</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Insured</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Claimant</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Policy</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Opened</th>
+                      <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {snowClaims.map((claim, index) => (
+                      <tr
+                        key={claim.sysId || index}
+                        style={{
+                          borderBottom: "1px solid var(--border-color-neutral-lighter)",
+                          cursor: "pointer",
+                          backgroundColor: index % 2 === 0 ? "var(--color-bg-neutral-lightest)" : "var(--color-bg-neutral-lighter)"
+                        }}
+                        onClick={() => onClaimSelect(claim)}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-bg-neutral-light)"}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? "var(--color-bg-neutral-lightest)" : "var(--color-bg-neutral-lighter)"}
+                      >
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-medium)">
+                            {claim.fnolNumber || claim.claimNumber || 'N/A'}
+                          </DxcTypography>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcBadge label={claim.status || 'unknown'} mode="contextual" color={getStatusColor(claim.status)} />
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcTypography fontSize="font-scale-03">{claim.insured?.name || 'N/A'}</DxcTypography>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcTypography fontSize="font-scale-03">{claim.claimant?.name || 'N/A'}</DxcTypography>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcTypography fontSize="font-scale-03">{claim.policy?.policyNumber || 'N/A'}</DxcTypography>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            {claim.createdAt ? new Date(claim.createdAt).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'N/A'}
+                          </DxcTypography>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <DxcFlex gap="var(--spacing-gap-xs)">
+                            <DxcButton
+                              icon="open_in_new"
+                              mode="tertiary"
+                              size="small"
+                              title="Open Claim"
+                              onClick={(e) => { e.stopPropagation(); onClaimSelect(claim); }}
+                            />
+                          </DxcFlex>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </DxcFlex>
+        </div>
+
         {/* Main Content Card - My Priorities */}
         <div style={{
           backgroundColor: "var(--color-bg-neutral-lightest)",
@@ -789,8 +953,9 @@ const Dashboard = ({ onClaimSelect }) => {
               {displayData && displayData.map((submission, index) => {
                 // For real claims, use the claim data structure
                 const isClaim = submission.claimNumber !== undefined;
-                const displayId = isClaim ? submission.claimNumber : submission.id;
-                const displayName = isClaim ? submission.claimant?.name : submission.name;
+                const isServiceNow = submission.source === 'servicenow';
+                const displayId = isClaim ? (submission.fnolNumber || submission.claimNumber) : submission.id;
+                const displayName = isClaim ? (submission.claimant?.name || submission.insured?.name) : submission.name;
                 const displayStatus = isClaim ? submission.status : submission.status;
                 const displayType = isClaim
                   ? `LOB: ${submission.type === 'death' ? 'Life' : 'Annuity'}`
@@ -827,6 +992,9 @@ const Dashboard = ({ onClaimSelect }) => {
                             </DxcTypography>
                             {hasFastTrack && (
                               <FastTrackBadge eligible={true} showLabel={true} size="small" />
+                            )}
+                            {isServiceNow && (
+                              <DxcBadge label="ServiceNow" mode="contextual" color="info" />
                             )}
                           </DxcFlex>
                         <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">

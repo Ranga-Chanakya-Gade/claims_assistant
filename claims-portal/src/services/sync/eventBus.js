@@ -219,6 +219,10 @@ export const EventTypes = {
   LETTER_GENERATED: 'letter.generated',
   LETTER_SENT: 'letter.sent',
 
+  // Work Note Events
+  WORKNOTE_ADDED: 'worknote.added',
+  WORKNOTE_RECEIVED: 'worknote.received',
+
   // Sync Events
   SYNC_STARTED: 'sync.started',
   SYNC_COMPLETED: 'sync.completed',
