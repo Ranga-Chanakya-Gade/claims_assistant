@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     env.VITE_SERVICENOW_URL || 'https://nextgenbpmnp1.service-now.com';
 
   // =============================
-  // Basic Auth Header
+  // BASIC AUTH HEADER (DEV ONLY)
   // =============================
   const username = env.VITE_SERVICENOW_USERNAME || '';
   const password = env.VITE_SERVICENOW_PASSWORD || '';
@@ -20,14 +20,14 @@ export default defineConfig(({ mode }) => {
       ? 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
       : null;
 
-  // OAuth mode detection
+  // OAuth detection
   const clientId = env.VITE_SERVICENOW_CLIENT_ID || '';
   const clientSecret = env.VITE_SERVICENOW_CLIENT_SECRET || '';
-  const useOAuth = !!(clientId && clientSecret);
+  const useOAuth = Boolean(clientId && clientSecret);
 
   console.log('[Vite Config] Target:', SN_TARGET);
-  console.log('[Vite Config] Basic Auth:', authHeader ? 'Yes' : 'No');
-  console.log('[Vite Config] OAuth Mode:', useOAuth ? 'Enabled' : 'Disabled');
+  console.log('[Vite Config] Basic Auth Enabled:', !!authHeader);
+  console.log('[Vite Config] OAuth Mode:', useOAuth);
 
   return {
     plugins: [react()],
@@ -44,26 +44,21 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: true,
 
-          rewrite: (path) => path.replace(/^\/servicenow-oauth/, '/oauth_token.do'),
-          configure: (proxy, options) => {
-            proxy.on('proxyReq', (proxyReq, req, res) => {
-              console.log('[OAuth Proxy] Token request →', options.target + '/oauth_token.do');
-            });
-            proxy.on('proxyRes', (proxyRes, req, res) => {
-              console.log('[OAuth Proxy] Token response:', proxyRes.statusCode);
-            });
-            proxy.on('error', (err, req, res) => {
-
           rewrite: () => '/oauth_token.do',
 
           configure(proxy) {
 
             proxy.on('proxyReq', (proxyReq, req) => {
+
               console.log('[OAuth Proxy] Forwarding token request');
 
+              // Forward body correctly
               if (req.body) {
                 const body = req.body.toString();
-                proxyReq.setHeader('Content-Length', Buffer.byteLength(body));
+                proxyReq.setHeader(
+                  'Content-Length',
+                  Buffer.byteLength(body)
+                );
                 proxyReq.write(body);
               }
             });
@@ -72,10 +67,9 @@ export default defineConfig(({ mode }) => {
               console.log('[OAuth Proxy] Response:', proxyRes.statusCode);
             });
 
-            proxy.on('error', err => {
+            proxy.on('error', (err) => {
               console.error('[OAuth Proxy] Error:', err.message);
             });
-
           }
         },
 
@@ -99,10 +93,9 @@ export default defineConfig(({ mode }) => {
               if (!useOAuth && authHeader) {
                 proxyReq.setHeader('Authorization', authHeader);
               }
-
             });
 
-            proxy.on('proxyRes', (proxyRes, req) => {
+            proxy.on('proxyRes', (proxyRes) => {
 
               console.log('[API Proxy] Status:', proxyRes.statusCode);
 
@@ -110,13 +103,11 @@ export default defineConfig(({ mode }) => {
               if (proxyRes.statusCode === 401) {
                 delete proxyRes.headers['www-authenticate'];
               }
-
             });
 
-            proxy.on('error', err => {
+            proxy.on('error', (err) => {
               console.error('[API Proxy] Error:', err.message);
             });
-
           }
         }
 
