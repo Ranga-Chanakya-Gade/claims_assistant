@@ -159,7 +159,7 @@ const LossEventPanel = ({ claimData }) => {
                       <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold">
                         {sensor.reading}
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" color="var(--color-fg-error-strong)">
+                      <DxcTypography fontSize="font-scale-02" color="#000000">
                         ⚠️ {sensor.alert}
                       </DxcTypography>
                       <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">

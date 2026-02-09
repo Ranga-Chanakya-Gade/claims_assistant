@@ -47,9 +47,9 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
 
   const getStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'SATISFIED' || statusUpper === 'IGO') return 'var(--color-fg-success-medium)';
-    if (statusUpper === 'IN_REVIEW' || statusUpper === 'PENDING') return 'var(--color-fg-warning-medium)';
-    if (statusUpper === 'NIGO' || statusUpper === 'NOT_SATISFIED') return 'var(--color-fg-error-medium)';
+    if (statusUpper === 'SATISFIED' || statusUpper === 'IGO') return '#000000';
+    if (statusUpper === 'IN_REVIEW' || statusUpper === 'PENDING') return '#000000';
+    if (statusUpper === 'NIGO' || statusUpper === 'NOT_SATISFIED') return '#000000';
     if (statusUpper === 'WAIVED') return 'var(--color-fg-neutral-strong)';
     return 'var(--color-fg-neutral-dark)';
   };
@@ -147,7 +147,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
                   {Math.round(req.metadata.confidenceScore * 100)}%
                 </DxcTypography>
                 {req.metadata.confidenceScore >= 0.9 && (
-                  <span className="material-icons" style={{ fontSize: '16px', color: 'var(--color-fg-success-medium)' }}>
+                  <span className="material-icons" style={{ fontSize: '16px', color: '#000000' }}>
                     verified
                   </span>
                 )}
@@ -257,7 +257,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 SATISFIED (IGO)
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
                 {satisfiedRequirements}
               </DxcTypography>
             </DxcFlex>
@@ -271,7 +271,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 PENDING
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
                 {pendingRequirements}
               </DxcTypography>
             </DxcFlex>
@@ -285,7 +285,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 NOT GOOD (NIGO)
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
                 {nigoRequirements}
               </DxcTypography>
             </DxcFlex>

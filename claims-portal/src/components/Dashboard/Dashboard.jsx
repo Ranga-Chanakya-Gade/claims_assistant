@@ -446,7 +446,7 @@ const Dashboard = ({ onClaimSelect }) => {
                   <DxcTypography
                     fontSize="32px"
                     fontWeight="font-weight-semibold"
-                    color="var(--color-fg-secondary-strong)"
+                    color="#000000"
                     textAlign="center"
                   >
                     {metrics.openClaims}
@@ -482,7 +482,7 @@ const Dashboard = ({ onClaimSelect }) => {
                   <DxcTypography
                     fontSize="32px"
                     fontWeight="font-weight-semibold"
-                    color="var(--color-fg-error-medium)"
+                    color="#000000"
                     textAlign="center"
                   >
                     {metrics.newToday}
@@ -518,7 +518,7 @@ const Dashboard = ({ onClaimSelect }) => {
                   <DxcTypography
                     fontSize="32px"
                     fontWeight="font-weight-semibold"
-                    color="var(--color-fg-warning-medium)"
+                    color="#000000"
                     textAlign="center"
                   >
                     {metrics.newThisWeek}
@@ -570,7 +570,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="var(--color-fg-secondary-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {metrics.claimsPaidYTD}
@@ -578,7 +578,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="var(--color-fg-secondary-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         +12% vs last year
@@ -608,7 +608,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="var(--color-fg-warning-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {metrics.pendingReview}
@@ -616,7 +616,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="var(--color-fg-warning-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {slaAtRiskCases?.length || 0} at risk
@@ -646,7 +646,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="var(--color-fg-success-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {metrics.approvedThisMonth}
@@ -654,7 +654,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="var(--color-fg-success-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {metrics.approvalRate}% approval rate
@@ -684,7 +684,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="var(--color-fg-error-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {metrics.declinedThisMonth}
@@ -692,7 +692,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="var(--color-fg-error-medium)"
+                        color="#000000"
                         textAlign="center"
                       >
                         {100 - metrics.approvalRate}% decline rate
@@ -777,7 +777,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="32px"
                       fontWeight="font-weight-semibold"
-                      color="var(--color-fg-success-medium)"
+                      color="#000000"
                       textAlign="center"
                     >
                       {fastTrackMetrics.avgDaysToClose}
@@ -785,7 +785,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="12px"
                       fontWeight="font-weight-regular"
-                      color="var(--color-fg-success-medium)"
+                      color="#000000"
                       textAlign="center"
                     >
                       Target: ≤10 days
@@ -815,7 +815,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="32px"
                       fontWeight="font-weight-semibold"
-                      color={fastTrackMetrics.percentage >= 40 ? "var(--color-fg-success-medium)" : "var(--color-fg-warning-medium)"}
+                      color={fastTrackMetrics.percentage >= 40 ? "#000000" : "#000000"}
                       textAlign="center"
                     >
                       {fastTrackMetrics.percentage >= 40 ? '✓' : '○'}
@@ -823,7 +823,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="12px"
                       fontWeight="font-weight-regular"
-                      color={fastTrackMetrics.percentage >= 40 ? "var(--color-fg-success-medium)" : "var(--color-fg-warning-medium)"}
+                      color={fastTrackMetrics.percentage >= 40 ? "#000000" : "#000000"}
                       textAlign="center"
                     >
                       {fastTrackMetrics.percentage >= 40 ? 'Meeting goal' : 'Below target'}
@@ -891,7 +891,7 @@ const Dashboard = ({ onClaimSelect }) => {
               <div style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
                   <thead>
-                    <tr style={{ borderBottom: "2px solid var(--color-fg-secondary-medium)", textAlign: "left" }}>
+                    <tr style={{ borderBottom: "2px solid #000000", textAlign: "left" }}>
                       <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>FNOL Number</th>
                       <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Status</th>
                       <th style={{ padding: "12px 16px", color: "var(--color-fg-neutral-stronger)", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Insured</th>
@@ -915,7 +915,7 @@ const Dashboard = ({ onClaimSelect }) => {
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? "var(--color-bg-neutral-lightest)" : "var(--color-bg-neutral-lighter)"}
                       >
                         <td style={{ padding: "12px 16px" }}>
-                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-medium)">
+                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                             {claim.fnolNumber || claim.claimNumber || 'N/A'}
                           </DxcTypography>
                         </td>
@@ -981,7 +981,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     padding: "12px 16px",
                     borderRadius: "var(--border-radius-m)",
                     border: subsetFilter === group.key
-                      ? "2px solid var(--color-fg-secondary-medium)"
+                      ? "2px solid #000000"
                       : "1px solid var(--border-color-neutral-lighter)",
                     backgroundColor: subsetFilter === group.key
                       ? "var(--color-bg-neutral-lighter)"
@@ -996,7 +996,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="24px"
                       fontWeight="font-weight-semibold"
-                      color={group.count > 0 ? "var(--color-fg-secondary-medium)" : "var(--color-fg-neutral-dark)"}
+                      color={group.count > 0 ? "#000000" : "var(--color-fg-neutral-dark)"}
                     >
                       {group.count}
                     </DxcTypography>
@@ -1111,7 +1111,7 @@ const Dashboard = ({ onClaimSelect }) => {
                 <DxcFlex gap="var(--spacing-gap-none)" alignItems="center">
                   <DxcTypography
                     fontSize="font-scale-03"
-                    color="var(--color-fg-secondary-strong)"
+                    color="#000000"
                   >
                     Card View
                   </DxcTypography>
@@ -1121,7 +1121,7 @@ const Dashboard = ({ onClaimSelect }) => {
                   />
                   <DxcTypography
                     fontSize="font-scale-03"
-                    color="var(--color-fg-secondary-strong)"
+                    color="#000000"
                   >
                     Grid View
                   </DxcTypography>
@@ -1169,7 +1169,7 @@ const Dashboard = ({ onClaimSelect }) => {
                             <DxcTypography
                               fontSize="font-scale-03"
                               fontWeight="font-weight-semibold"
-                              color="var(--color-fg-secondary-medium)"
+                              color="#000000"
                             >
                               {displayId}
                             </DxcTypography>

@@ -162,7 +162,7 @@ const PropertyDamagePanel = ({ damageData }) => {
               <DxcTypography
                 fontSize="font-scale-05"
                 fontWeight="font-weight-bold"
-                color="var(--color-fg-error-strong)"
+                color="#000000"
               >
                 {formatCurrency(damageData.totalEstimatedLoss)}
               </DxcTypography>

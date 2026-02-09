@@ -201,7 +201,7 @@ const WorkNotes = ({ claimSysId, fnolNumber, isDemo = false, demoWorkNotes = [] 
               padding="var(--spacing-padding-m)"
               style={{
                 backgroundColor: 'var(--color-bg-neutral-lighter)',
-                borderLeft: '3px solid var(--color-fg-secondary-medium)'
+                borderLeft: '3px solid #000000'
               }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-s)">
@@ -266,7 +266,7 @@ const WorkNotes = ({ claimSysId, fnolNumber, isDemo = false, demoWorkNotes = [] 
                             <DxcTypography
                               fontSize="font-scale-02"
                               fontWeight="font-weight-semibold"
-                              color="var(--color-fg-secondary-medium)"
+                              #000000"
                             >
                               {note.sys_created_by || 'Unknown'}
                             </DxcTypography>

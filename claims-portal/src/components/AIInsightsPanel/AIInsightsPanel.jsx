@@ -133,7 +133,7 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
               style={{ backgroundColor: 'var(--color-bg-error-lightest)', flex: 1 }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-xxs)" alignItems="center">
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
                   {highAlerts.length}
                 </DxcTypography>
                 <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
@@ -146,7 +146,7 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
               style={{ backgroundColor: 'var(--color-bg-warning-lightest)', flex: 1 }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-xxs)" alignItems="center">
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
                   {mediumAlerts.length}
                 </DxcTypography>
                 <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
@@ -248,10 +248,10 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
             style={{ backgroundColor: 'var(--color-bg-success-lightest)', textAlign: 'center' }}
           >
             <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
-              <span className="material-icons" style={{ fontSize: '48px', color: 'var(--color-fg-success-medium)' }}>
+              <span className="material-icons" style={{ fontSize: '48px', color: '#000000' }}>
                 check_circle
               </span>
-              <DxcTypography color="var(--color-fg-success-medium)" fontWeight="font-weight-semibold">
+              <DxcTypography #000000" fontWeight="font-weight-semibold">
                 No anomalies detected
               </DxcTypography>
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-strong)">

@@ -43,9 +43,9 @@ const ClaimHeader = ({
   };
 
   const getSLAColor = (daysRemaining) => {
-    if (daysRemaining <= 3) return 'var(--color-fg-error-medium)';
-    if (daysRemaining <= 7) return 'var(--color-fg-warning-medium)';
-    return 'var(--color-fg-success-medium)';
+    if (daysRemaining <= 3) return '#000000';
+    if (daysRemaining <= 7) return '#000000';
+    return '#000000';
   };
 
   const slaDate = claim.workflow?.sla?.dueDate ? new Date(claim.workflow.sla.dueDate) : null;
@@ -177,7 +177,7 @@ const ClaimHeader = ({
                   {daysRemaining}
                 </DxcTypography>
                 {daysRemaining <= 3 && (
-                  <span className="material-icons" style={{ fontSize: '20px', color: 'var(--color-fg-error-medium)' }}>
+                  <span className="material-icons" style={{ fontSize: '20px', color: '#000000' }}>
                     warning
                   </span>
                 )}

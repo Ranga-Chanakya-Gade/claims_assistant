@@ -119,7 +119,7 @@ const ReserveManagementPanel = ({ financial }) => {
                 <DxcTypography
                   fontSize="font-scale-05"
                   fontWeight="font-weight-bold"
-                  style={{ color: 'var(--color-fg-error-strong)' }}
+                  style={{ color: '#000000' }}
                 >
                   {formatCurrency(financial.totalExposure)}
                 </DxcTypography>
@@ -148,7 +148,7 @@ const ReserveManagementPanel = ({ financial }) => {
                 </DxcTypography>
                 <DxcFlex justifyContent="space-between" alignItems="center">
                   <DxcTypography>Additional BI Exposure:</DxcTypography>
-                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" style={{ color: 'var(--color-fg-warning-strong)' }}>
+                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" style={{ color: '#000000' }}>
                     {formatCurrency(financial.businessInterruptionClaim)}
                   </DxcTypography>
                 </DxcFlex>
@@ -167,7 +167,7 @@ const ReserveManagementPanel = ({ financial }) => {
                   <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-strong)">
                     Paid to Date:
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" style={{ color: 'var(--color-fg-success-strong)' }}>
+                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" style={{ color: '#000000' }}>
                     {formatCurrency(financial.paidToDate)}
                   </DxcTypography>
                 </div>

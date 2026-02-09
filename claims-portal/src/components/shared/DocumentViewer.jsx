@@ -59,9 +59,9 @@ const DocumentViewer = ({
 
   // Get confidence color
   const getConfidenceColor = (confidence) => {
-    if (confidence >= 0.9) return 'var(--color-fg-success-medium)';
-    if (confidence >= 0.7) return 'var(--color-fg-warning-medium)';
-    return 'var(--color-fg-error-medium)';
+    if (confidence >= 0.9) return '#000000';
+    if (confidence >= 0.7) return '#000000';
+    return '#000000';
   };
 
   // Format file size

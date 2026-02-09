@@ -294,7 +294,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
           >
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
               <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                <span className="material-icons" style={{ color: 'var(--color-fg-success-medium)', fontSize: '20px' }}>
+                <span className="material-icons" style={{ color: '#000000', fontSize: '20px' }}>
                   check_circle
                 </span>
                 <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
@@ -325,7 +325,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                   <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                     Federal Withholding
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
                     {formatCurrency(calculationResult.federalWithholding.amount)}
                     {calculationResult.federalWithholding.applied &&
                       ` (${calculationResult.federalWithholding.rate}%)`
@@ -337,7 +337,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                   <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                     State Withholding ({calculationResult.stateWithholding.state})
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
                     {formatCurrency(calculationResult.stateWithholding.amount)}
                     {calculationResult.stateWithholding.applied &&
                       ` (${calculationResult.stateWithholding.rate}%)`
@@ -364,7 +364,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                       <DxcTypography fontSize="font-scale-01">
                         Total Withholding
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
                         -{formatCurrency(calculationResult.totalWithheld)}
                       </DxcTypography>
                     </DxcFlex>
@@ -372,7 +372,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                       <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
                         Net Payment to Beneficiary
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-semibold" color="var(--color-fg-success-darker)">
+                      <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-semibold" color="#000000">
                         {formatCurrency(calculationResult.netPayment)}
                       </DxcTypography>
                     </DxcFlex>

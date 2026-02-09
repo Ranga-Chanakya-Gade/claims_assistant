@@ -19,9 +19,9 @@ const FraudDetectionPanel = ({ fraudData, claimData }) => {
   }
 
   const getRiskLevel = (score) => {
-    if (score < 30) return { level: 'Low', color: 'success', semanticColor: 'var(--color-fg-success-strong)' };
-    if (score < 70) return { level: 'Medium', color: 'warning', semanticColor: 'var(--color-fg-warning-strong)' };
-    return { level: 'High', color: 'error', semanticColor: 'var(--color-fg-error-strong)' };
+    if (score < 30) return { level: 'Low', color: 'success', semanticColor: '#000000' };
+    if (score < 70) return { level: 'Medium', color: 'warning', semanticColor: '#000000' };
+    return { level: 'High', color: 'error', semanticColor: '#000000' };
   };
 
   const getRiskIcon = (score) => {

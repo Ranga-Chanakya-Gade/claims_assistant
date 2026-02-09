@@ -44,11 +44,7 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
   };
 
   const getStatusColor = (status) => {
-    const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'COMPLETED' || statusUpper === 'PAID') return 'var(--color-fg-success-medium)';
-    if (statusUpper === 'PENDING' || statusUpper === 'SCHEDULED') return 'var(--color-fg-warning-medium)';
-    if (statusUpper === 'FAILED' || statusUpper === 'CANCELLED') return 'var(--color-fg-error-medium)';
-    return 'var(--color-fg-neutral-dark)';
+    return '#000000';
   };
 
   const getPaymentMethodIcon = (method) => {
@@ -167,10 +163,10 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
 
               {payment.netBenefitPMI > 0 && (
                 <DxcFlex justifyContent="space-between" alignItems="center">
-                  <DxcTypography fontSize="font-scale-01" color="var(--color-fg-success-medium)">
+                  <DxcTypography fontSize="font-scale-01" #000000">
                     + Post Mortem Interest
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
                     {formatCurrency(payment.netBenefitPMI)}
                   </DxcTypography>
                 </DxcFlex>
@@ -178,10 +174,10 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
 
               {payment.taxWithheld > 0 && (
                 <DxcFlex justifyContent="space-between" alignItems="center">
-                  <DxcTypography fontSize="font-scale-01" color="var(--color-fg-error-medium)">
+                  <DxcTypography fontSize="font-scale-01" #000000">
                     - Tax Withholding
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
                     {formatCurrency(payment.taxWithheld)}
                   </DxcTypography>
                 </DxcFlex>
@@ -193,7 +189,7 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
                 <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
                   Net Benefit Proceeds
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="var(--color-fg-success-darker)">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                   {formatCurrency(payment.netBenefitProceeds)}
                 </DxcTypography>
               </DxcFlex>
@@ -306,7 +302,7 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
                       GL Posted
                     </DxcTypography>
                     <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                      <span className="material-icons" style={{ fontSize: '16px', color: 'var(--color-fg-success-medium)' }}>
+                      <span className="material-icons" style={{ fontSize: '16px', color: '#000000' }}>
                         check_circle
                       </span>
                       <DxcTypography fontSize="font-scale-01">

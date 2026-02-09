@@ -404,7 +404,7 @@ const IntakeForms = () => {
                       padding: "var(--spacing-padding-l)",
                       borderRadius: "var(--border-radius-m)",
                       border: selectedProduct === 'life'
-                        ? "2px solid var(--color-fg-secondary-medium)"
+                        ? "2px solid #000000"
                         : "1px solid var(--border-color-neutral-lighter)",
                       backgroundColor: "var(--color-bg-neutral-lighter)",
                       cursor: "pointer",
@@ -412,7 +412,7 @@ const IntakeForms = () => {
                     }}
                   >
                     <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
-                      <span className="material-icons" style={{ fontSize: "48px", color: "var(--color-fg-secondary-medium)" }}>favorite</span>
+                      <span className="material-icons" style={{ fontSize: "48px", color: "#000000" }}>favorite</span>
                       <DxcTypography fontWeight="font-weight-semibold" fontSize="font-scale-04">
                         Life Insurance
                       </DxcTypography>
@@ -431,7 +431,7 @@ const IntakeForms = () => {
                       padding: "var(--spacing-padding-l)",
                       borderRadius: "var(--border-radius-m)",
                       border: selectedProduct === 'annuity'
-                        ? "2px solid var(--color-fg-secondary-medium)"
+                        ? "2px solid #000000"
                         : "1px solid var(--border-color-neutral-lighter)",
                       backgroundColor: "var(--color-bg-neutral-lighter)",
                       cursor: "pointer",
@@ -439,7 +439,7 @@ const IntakeForms = () => {
                     }}
                   >
                     <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
-                      <span className="material-icons" style={{ fontSize: "48px", color: "var(--color-fg-secondary-medium)" }}>account_balance</span>
+                      <span className="material-icons" style={{ fontSize: "48px", color: "#000000" }}>account_balance</span>
                       <DxcTypography fontWeight="font-weight-semibold" fontSize="font-scale-04">
                         Annuity
                       </DxcTypography>
