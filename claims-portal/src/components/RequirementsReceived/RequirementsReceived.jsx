@@ -391,7 +391,7 @@ const RequirementsReceived = ({ onClaimSelect }) => {
                 <DxcFlex gap="var(--spacing-gap-l)" wrap="wrap">
                   <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                     <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">CLAIM</DxcTypography>
-                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                       {req.claimNumber}
                     </DxcTypography>
                   </DxcFlex>

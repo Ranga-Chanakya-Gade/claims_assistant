@@ -287,7 +287,7 @@ const PMICalculator = ({ claimData, onCalculate, onApply, onClose }) => {
                   <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                     Interest Amount
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(calculationResult.interestAmount)}
                   </DxcTypography>
                 </DxcFlex>

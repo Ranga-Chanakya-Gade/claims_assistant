@@ -414,7 +414,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                             <DxcTypography fontSize="12px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                               TOTAL PAID
                             </DxcTypography>
-                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" #000000">
+                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
                               {formatCurrency(financialData.reserves.paid)}
                             </DxcTypography>
                           </DxcFlex>
@@ -427,7 +427,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                             <DxcTypography fontSize="12px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                               OUTSTANDING RESERVE
                             </DxcTypography>
-                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" #000000">
+                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
                               {formatCurrency(financialData.reserves.outstanding)}
                             </DxcTypography>
                           </DxcFlex>
@@ -453,14 +453,14 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         </DxcFlex>
                         <DxcFlex justifyContent="space-between">
                           <DxcTypography fontSize="font-scale-03">Payments Issued</DxcTypography>
-                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                             -{formatCurrency(financialData.reserves.paid)}
                           </DxcTypography>
                         </DxcFlex>
                         <div style={{ borderTop: "1px solid var(--border-color-neutral-light)", paddingTop: "var(--spacing-gap-s)" }}>
                           <DxcFlex justifyContent="space-between">
                             <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">Current Reserve</DxcTypography>
-                            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                               {formatCurrency(financialData.reserves.current)}
                             </DxcTypography>
                           </DxcFlex>
@@ -506,13 +506,13 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                           <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                             <DxcFlex justifyContent="space-between" alignItems="center">
                               <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-                                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                                   {payment.id}
                                 </DxcTypography>
                                 <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
                                 <DxcBadge label={payment.status} />
                               </DxcFlex>
-                              <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" #000000">
+                              <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                                 {formatCurrency(payment.amount)}
                               </DxcTypography>
                             </DxcFlex>
@@ -581,13 +581,13 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                           <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                             <DxcFlex justifyContent="space-between" alignItems="center">
                               <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-                                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                                   {payment.id}
                                 </DxcTypography>
                                 <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
                                 <DxcBadge label={payment.status} />
                               </DxcFlex>
-                              <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" #000000">
+                              <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                                 {formatCurrency(payment.amount)}
                               </DxcTypography>
                             </DxcFlex>
@@ -712,7 +712,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                               </DxcFlex>
                               <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Amount</DxcTypography>
-                                <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" #000000">{ben.amount}</DxcTypography>
+                                <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">{ben.amount}</DxcTypography>
                               </DxcFlex>
                               <DxcBadge label={ben.status} />
                             </DxcFlex>

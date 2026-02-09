@@ -257,7 +257,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 SATISFIED (IGO)
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                 {satisfiedRequirements}
               </DxcTypography>
             </DxcFlex>
@@ -271,7 +271,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 PENDING
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                 {pendingRequirements}
               </DxcTypography>
             </DxcFlex>
@@ -285,7 +285,7 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                 NOT GOOD (NIGO)
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                 {nigoRequirements}
               </DxcTypography>
             </DxcFlex>

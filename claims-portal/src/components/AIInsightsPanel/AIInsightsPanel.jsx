@@ -133,7 +133,7 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
               style={{ backgroundColor: 'var(--color-bg-error-lightest)', flex: 1 }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-xxs)" alignItems="center">
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                   {highAlerts.length}
                 </DxcTypography>
                 <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
@@ -146,7 +146,7 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
               style={{ backgroundColor: 'var(--color-bg-warning-lightest)', flex: 1 }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-xxs)" alignItems="center">
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                   {mediumAlerts.length}
                 </DxcTypography>
                 <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
@@ -251,7 +251,7 @@ const AIInsightsPanel = ({ claimData, insights = [], onViewDetail, onDismiss }) 
               <span className="material-icons" style={{ fontSize: '48px', color: '#000000' }}>
                 check_circle
               </span>
-              <DxcTypography #000000" fontWeight="font-weight-semibold">
+              <DxcTypography color="#000000" fontWeight="font-weight-semibold">
                 No anomalies detected
               </DxcTypography>
               <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-strong)">

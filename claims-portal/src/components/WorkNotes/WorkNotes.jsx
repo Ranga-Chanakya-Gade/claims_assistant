@@ -266,7 +266,7 @@ const WorkNotes = ({ claimSysId, fnolNumber, isDemo = false, demoWorkNotes = [] 
                             <DxcTypography
                               fontSize="font-scale-02"
                               fontWeight="font-weight-semibold"
-                              #000000"
+                              color="#000000"
                             >
                               {note.sys_created_by || 'Unknown'}
                             </DxcTypography>

@@ -59,7 +59,7 @@ const RequirementItem = ({ requirement, onUpload, onWaive, onOverride, compact =
           {requirement.type}
         </DxcTypography>
         {isOverdue && (
-          <DxcTypography fontSize="12px" #000000">
+          <DxcTypography fontSize="12px" color="#000000">
             Overdue
           </DxcTypography>
         )}
@@ -118,7 +118,7 @@ const RequirementItem = ({ requirement, onUpload, onWaive, onOverride, compact =
                   Due: {new Date(requirement.dueDate).toLocaleDateString()}
                 </DxcTypography>
                 {isOverdue && !isSatisfied && (
-                  <DxcTypography fontSize="12px" #000000" fontWeight="font-weight-semibold">
+                  <DxcTypography fontSize="12px" color="#000000" fontWeight="font-weight-semibold">
                     OVERDUE
                   </DxcTypography>
                 )}
@@ -297,7 +297,7 @@ const RequirementsTracker = ({
               <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
                 Requirements Progress
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" #000000">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                 {stats.completionPercentage}%
               </DxcTypography>
             </DxcFlex>
@@ -321,7 +321,7 @@ const RequirementsTracker = ({
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
                   Satisfied
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                   {stats.satisfied}
                 </DxcTypography>
               </DxcFlex>
@@ -330,7 +330,7 @@ const RequirementsTracker = ({
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
                   Pending
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                   {stats.pending}
                 </DxcTypography>
               </DxcFlex>
@@ -349,7 +349,7 @@ const RequirementsTracker = ({
                   <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
                     Overdue
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                     {stats.overdue}
                   </DxcTypography>
                 </DxcFlex>

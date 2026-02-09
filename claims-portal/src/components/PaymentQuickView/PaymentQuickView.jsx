@@ -163,10 +163,10 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
 
               {payment.netBenefitPMI > 0 && (
                 <DxcFlex justifyContent="space-between" alignItems="center">
-                  <DxcTypography fontSize="font-scale-01" #000000">
+                  <DxcTypography fontSize="font-scale-01" color="#000000">
                     + Post Mortem Interest
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(payment.netBenefitPMI)}
                   </DxcTypography>
                 </DxcFlex>
@@ -174,10 +174,10 @@ const PaymentQuickView = ({ payment, onEdit, onCancel, onResend, onView1099, onC
 
               {payment.taxWithheld > 0 && (
                 <DxcFlex justifyContent="space-between" alignItems="center">
-                  <DxcTypography fontSize="font-scale-01" #000000">
+                  <DxcTypography fontSize="font-scale-01" color="#000000">
                     - Tax Withholding
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(payment.taxWithheld)}
                   </DxcTypography>
                 </DxcFlex>

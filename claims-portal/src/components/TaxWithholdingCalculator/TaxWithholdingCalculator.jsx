@@ -325,7 +325,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                   <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                     Federal Withholding
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(calculationResult.federalWithholding.amount)}
                     {calculationResult.federalWithholding.applied &&
                       ` (${calculationResult.federalWithholding.rate}%)`
@@ -337,7 +337,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                   <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
                     State Withholding ({calculationResult.stateWithholding.state})
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" #000000">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(calculationResult.stateWithholding.amount)}
                     {calculationResult.stateWithholding.applied &&
                       ` (${calculationResult.stateWithholding.rate}%)`
@@ -364,7 +364,7 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
                       <DxcTypography fontSize="font-scale-01">
                         Total Withholding
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" #000000">
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">
                         -{formatCurrency(calculationResult.totalWithheld)}
                       </DxcTypography>
                     </DxcFlex>
