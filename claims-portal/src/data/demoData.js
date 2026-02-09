@@ -192,6 +192,198 @@ const DAY = 86400000;
 const createShowcaseClaims = () => {
   const claims = [];
 
+  // ---- CLAIM 0A: $50K STP - APPROVED (Straight Through Processing) ----
+  {
+    const createdDate = new Date(NOW.getTime() - 3 * DAY);
+    const deathDate = new Date(NOW.getTime() - 8 * DAY);
+    const approvedDate = new Date(createdDate.getTime() + 6 * 3600000); // 6 hours later
+    const slaDate = new Date(createdDate.getTime() + 10 * DAY);
+    const daysOpen = Math.floor((approvedDate - createdDate) / DAY);
+    const claimAmount = 50000;
+
+    const claim = {
+      id: 'claim-0a', claimNumber: 'CLM-000050', status: ClaimStatus.APPROVED, type: ClaimType.DEATH,
+      createdAt: createdDate.toISOString(), updatedAt: approvedDate.toISOString(), closedAt: null,
+      deathEvent: {
+        dateOfDeath: deathDate.toISOString().split('T')[0], mannerOfDeath: 'Natural', causeOfDeath: 'Natural Causes',
+        deathInUSA: true, countryOfDeath: 'USA', stateOfDeath: 'CA', proofOfDeathSourceType: 'Death Certificate',
+        proofOfDeathDate: new Date(deathDate.getTime() + 2 * DAY).toISOString().split('T')[0],
+        certifiedDOB: '1960-08-14', verificationSource: 'LexisNexis', verificationScore: 98, specialEvent: null
+      },
+      insured: { name: 'Thomas Chen', ssn: maskedSSN('5892'), dateOfBirth: '1960-08-14', dateOfDeath: deathDate.toISOString().split('T')[0], age: 65 },
+      claimant: { name: 'Lisa Chen', relationship: 'Spouse', contactInfo: { email: 'lisa.chen@email.com', phone: '415-555-0892' } },
+      policies: [{
+        policyNumber: 'POL-892456', policyType: 'Term Life', policyStatus: 'In Force', issueDate: '2015-06-20',
+        issueState: 'CA', region: 'West', companyCode: 'BLM', planCode: 'TL50', faceAmount: claimAmount,
+        currentCashValue: 30000, loanBalance: 0, paidToDate: new Date(deathDate.getTime() - 20 * DAY).toISOString().split('T')[0],
+        source: 'Policy Admin', owner: 'Thomas Chen'
+      }],
+      policy: { policyNumber: 'POL-892456', type: 'Term Life', status: 'In Force', issueDate: '2015-06-20', faceAmount: claimAmount, owner: 'Thomas Chen' },
+      parties: [
+        { id: 'party-0a-1', name: 'Thomas Chen', role: 'Insured', source: 'Policy Admin', resState: 'CA', dateOfBirth: '1960-08-14', ssn: maskedSSN('5892'), phone: '415-555-0891', email: 'thomas.chen@email.com', address: '2840 Market Street, San Francisco, CA 94114', verificationStatus: 'Verified', verificationScore: 98, cslnAction: 'Verified', cslnResult: 'Match' },
+        { id: 'party-0a-2', name: 'Lisa Chen', role: 'Primary Beneficiary', source: 'Policy Admin', resState: 'CA', dateOfBirth: '1962-11-30', ssn: maskedSSN('4107'), phone: '415-555-0892', email: 'lisa.chen@email.com', address: '2840 Market Street, San Francisco, CA 94114', verificationStatus: 'Verified', verificationScore: 97, cslnAction: 'Verified', cslnResult: 'Match' },
+        { id: 'party-0a-3', name: 'Lisa Chen', role: 'Notifier', source: 'FNOL', resState: 'CA', phone: '415-555-0892', email: 'lisa.chen@email.com', verificationStatus: 'Verified' }
+      ],
+      aiInsights: {
+        riskScore: 8,
+        alerts: [],
+        stpEligible: true,
+        stpReason: 'All verification criteria met: Death certificate verified, beneficiary matches, policy in force, no contestability issues, amount under $100K threshold'
+      },
+      financial: {
+        claimAmount, reserve: claimAmount, amountPaid: 0, pmiState: 'CA', pmiRate: 0.10, pmiDays: 0,
+        interestAmount: 0, netBenefitProceeds: claimAmount, netBenefitPMI: 0,
+        federalTaxRate: 0, stateTaxRate: 0, taxableAmount: 0, federalTaxWithheld: 0, stateTaxWithheld: 0, taxWithheld: 0,
+        percentage: 100, currency: 'USD', payments: []
+      },
+      routing: {
+        type: RoutingType.FASTTRACK, score: 98, eligible: true,
+        evaluatedAt: new Date(createdDate.getTime() + 5 * 60000).toISOString(),
+        criteria: { deathVerification: true, policyInForce: true, beneficiaryMatch: true, noContestability: true, claimAmountThreshold: true, noAnomalies: true }
+      },
+      workflow: {
+        fsoCase: 'FSO-CLM-000050', currentTask: 'Payment Scheduled', assignedTo: 'Automated System', daysOpen,
+        sla: { dueDate: slaDate.toISOString(), daysRemaining: Math.ceil((slaDate - approvedDate) / DAY), atRisk: false }
+      }
+    };
+    claim.sysId = 'demo-sys-id-0a'; claim.fnolNumber = 'FNOL0000050';
+    claim.requirements = generateRequirements(claim); claim.timeline = generateTimeline(claim); claim.workNotes = generateWorkNotes(claim);
+    claims.push(claim);
+  }
+
+  // ---- CLAIM 0B: $250K - AI DETECTED SPOUSE NAME MISMATCH (Requires Review) ----
+  {
+    const createdDate = new Date(NOW.getTime() - 5 * DAY);
+    const deathDate = new Date(NOW.getTime() - 10 * DAY);
+    const slaDate = new Date(createdDate.getTime() + 30 * DAY);
+    const daysOpen = Math.floor((NOW - createdDate) / DAY);
+    const daysToSla = Math.ceil((slaDate - NOW) / DAY);
+    const claimAmount = 250000;
+
+    const claim = {
+      id: 'claim-0b', claimNumber: 'CLM-000051', status: ClaimStatus.PENDING_REQUIREMENTS, type: ClaimType.DEATH,
+      createdAt: createdDate.toISOString(), updatedAt: new Date(createdDate.getTime() + 2 * DAY).toISOString(), closedAt: null,
+      deathEvent: {
+        dateOfDeath: deathDate.toISOString().split('T')[0], mannerOfDeath: 'Natural', causeOfDeath: 'Natural Causes',
+        deathInUSA: true, countryOfDeath: 'USA', stateOfDeath: 'NY', proofOfDeathSourceType: 'Death Certificate',
+        proofOfDeathDate: new Date(deathDate.getTime() + 3 * DAY).toISOString().split('T')[0],
+        certifiedDOB: '1958-03-22', verificationSource: 'LexisNexis', verificationScore: 95, specialEvent: null
+      },
+      insured: { name: 'Richard Thompson', ssn: maskedSSN('7293'), dateOfBirth: '1958-03-22', dateOfDeath: deathDate.toISOString().split('T')[0], age: 68 },
+      claimant: { name: 'Jennifer Thompson', relationship: 'Spouse', contactInfo: { email: 'jennifer.thompson@email.com', phone: '212-555-0847' } },
+      policies: [{
+        policyNumber: 'POL-784521', policyType: 'Universal Life', policyStatus: 'In Force', issueDate: '2010-04-15',
+        issueState: 'NY', region: 'Northeast', companyCode: 'BLM', planCode: 'UL250', faceAmount: claimAmount,
+        currentCashValue: 180000, loanBalance: 0, paidToDate: new Date(deathDate.getTime() - 25 * DAY).toISOString().split('T')[0],
+        source: 'Policy Admin', owner: 'Richard Thompson'
+      }],
+      policy: { policyNumber: 'POL-784521', type: 'Universal Life', status: 'In Force', issueDate: '2010-04-15', faceAmount: claimAmount, owner: 'Richard Thompson' },
+      parties: [
+        { id: 'party-0b-1', name: 'Richard Thompson', role: 'Insured', source: 'Policy Admin', resState: 'NY', dateOfBirth: '1958-03-22', ssn: maskedSSN('7293'), phone: '212-555-0846', email: 'richard.thompson@email.com', address: '485 Park Avenue, New York, NY 10022', verificationStatus: 'Verified', verificationScore: 97, cslnAction: 'Verified', cslnResult: 'Match' },
+        { id: 'party-0b-2', name: 'Susan Thompson', role: 'Primary Beneficiary', source: 'Policy Admin', resState: 'NY', dateOfBirth: '1960-07-18', ssn: maskedSSN('4156'), phone: '212-555-0732', email: 'susan.thompson@email.com', address: '485 Park Avenue, New York, NY 10022', verificationStatus: 'Unverified', verificationScore: 45, cslnAction: 'Alert', cslnResult: 'Name Mismatch' },
+        { id: 'party-0b-3', name: 'Jennifer Thompson', role: 'Notifier', source: 'FNOL', resState: 'NY', phone: '212-555-0847', email: 'jennifer.thompson@email.com', verificationStatus: 'Pending', cslnAction: 'Review Required', cslnResult: 'Different Person' }
+      ],
+      aiInsights: {
+        riskScore: 72,
+        alerts: [{
+          id: 'alert-0b-1',
+          severity: 'High',
+          category: 'Beneficiary Mismatch',
+          title: 'Spouse Name Does Not Match Beneficiary',
+          message: 'Current spouse Jennifer Thompson does not match beneficiary Susan Thompson on policy',
+          description: 'The person filing the claim (Jennifer Thompson) identifies as the current spouse, but the policy shows Susan Thompson as the primary beneficiary. This suggests the beneficiary designation was not updated after a divorce/remarriage. Manual review and updated beneficiary designation documentation required.',
+          confidence: 94,
+          recommendation: 'Contact claimant to verify marital status and obtain updated beneficiary designation or divorce decree. May require proof of marriage to current spouse.',
+          timestamp: new Date(createdDate.getTime() + 2 * 3600000).toISOString(),
+          detectedBy: 'AI Beneficiary Verification Engine'
+        }],
+        stpEligible: false,
+        stpReason: 'Beneficiary name mismatch detected - requires manual review'
+      },
+      financial: {
+        claimAmount, reserve: claimAmount, amountPaid: 0, pmiState: 'NY', pmiRate: 0.08, pmiDays: 0,
+        interestAmount: 0, netBenefitProceeds: claimAmount, netBenefitPMI: 0,
+        federalTaxRate: 0, stateTaxRate: 0, taxableAmount: 0, federalTaxWithheld: 0, stateTaxWithheld: 0, taxWithheld: 0,
+        percentage: 100, currency: 'USD', payments: []
+      },
+      routing: {
+        type: RoutingType.STANDARD, score: 28, eligible: false,
+        evaluatedAt: new Date(createdDate.getTime() + 2 * 3600000).toISOString(),
+        criteria: { deathVerification: true, policyInForce: true, beneficiaryMatch: false, noContestability: true, claimAmountThreshold: false, noAnomalies: false }
+      },
+      workflow: {
+        fsoCase: 'FSO-CLM-000051', currentTask: 'Beneficiary Verification', assignedTo: 'Sarah Martinez', daysOpen,
+        sla: { dueDate: slaDate.toISOString(), daysRemaining: daysToSla, atRisk: daysToSla < 7 }
+      }
+    };
+    claim.sysId = 'demo-sys-id-0b'; claim.fnolNumber = 'FNOL0000051';
+    claim.requirements = generateRequirements(claim); claim.timeline = generateTimeline(claim); claim.workNotes = generateWorkNotes(claim);
+    claims.push(claim);
+  }
+
+  // ---- CLAIM 0C: Annuity Surrender - $75K (No death, policy owner request) ----
+  {
+    const createdDate = new Date(NOW.getTime() - 8 * DAY);
+    const approvedDate = new Date(createdDate.getTime() + 4 * DAY);
+    const slaDate = new Date(createdDate.getTime() + 15 * DAY);
+    const daysOpen = Math.floor((approvedDate - createdDate) / DAY);
+    const claimAmount = 75000;
+
+    const claim = {
+      id: 'claim-0c', claimNumber: 'CLM-000052', status: ClaimStatus.APPROVED, type: ClaimType.SURRENDER,
+      createdAt: createdDate.toISOString(), updatedAt: approvedDate.toISOString(), closedAt: null,
+      deathEvent: null, // No death event for surrender
+      insured: null, // Owner is alive
+      claimant: {
+        name: 'Patricia Williams',
+        relationship: 'Policy Owner',
+        contactInfo: { email: 'patricia.williams@email.com', phone: '404-555-0734' }
+      },
+      policies: [{
+        policyNumber: 'POL-459123', policyType: 'Variable Annuity', policyStatus: 'In Force', issueDate: '2016-09-10',
+        issueState: 'GA', region: 'Southeast', companyCode: 'ALI', planCode: 'VA-FLEX', faceAmount: 0,
+        currentCashValue: claimAmount, loanBalance: 0, paidToDate: new Date(createdDate.getTime() - 30 * DAY).toISOString().split('T')[0],
+        source: 'Policy Admin', owner: 'Patricia Williams'
+      }],
+      policy: {
+        policyNumber: 'POL-459123', type: 'Variable Annuity', status: 'In Force', issueDate: '2016-09-10',
+        faceAmount: 0, currentCashValue: claimAmount, owner: 'Patricia Williams'
+      },
+      parties: [
+        { id: 'party-0c-1', name: 'Patricia Williams', role: 'Policy Owner', source: 'Policy Admin', resState: 'GA', dateOfBirth: '1965-12-08', ssn: maskedSSN('8524'), phone: '404-555-0734', email: 'patricia.williams@email.com', address: '3680 Peachtree Road, Atlanta, GA 30319', verificationStatus: 'Verified', verificationScore: 98, cslnAction: 'Verified', cslnResult: 'Match' }
+      ],
+      aiInsights: {
+        riskScore: 12,
+        alerts: [],
+        stpEligible: true,
+        stpReason: 'Full surrender request verified. Owner identity confirmed, no contestability period, surrender value confirmed.'
+      },
+      financial: {
+        claimAmount, reserve: 0, amountPaid: 0, pmiState: null, pmiRate: 0, pmiDays: 0,
+        interestAmount: 0, netBenefitProceeds: claimAmount, netBenefitPMI: 0,
+        surrenderCharge: 3750, // 5% surrender charge
+        netAmount: claimAmount - 3750,
+        federalTaxRate: 24, stateTaxRate: 6, taxableAmount: claimAmount, // Full amount is taxable for annuity
+        federalTaxWithheld: Math.floor(claimAmount * 0.24),
+        stateTaxWithheld: Math.floor(claimAmount * 0.06),
+        taxWithheld: Math.floor(claimAmount * 0.30),
+        percentage: 100, currency: 'USD', payments: []
+      },
+      routing: {
+        type: RoutingType.FASTTRACK, score: 96, eligible: true,
+        evaluatedAt: new Date(createdDate.getTime() + 15 * 60000).toISOString(),
+        criteria: { deathVerification: null, policyInForce: true, beneficiaryMatch: null, noContestability: true, claimAmountThreshold: true, noAnomalies: true }
+      },
+      workflow: {
+        fsoCase: 'FSO-CLM-000052', currentTask: 'Payment Scheduled', assignedTo: 'Automated System', daysOpen,
+        sla: { dueDate: slaDate.toISOString(), daysRemaining: Math.ceil((slaDate - approvedDate) / DAY), atRisk: false }
+      }
+    };
+    claim.sysId = 'demo-sys-id-0c'; claim.fnolNumber = 'FNOL0000052';
+    claim.requirements = generateRequirements(claim); claim.timeline = generateTimeline(claim); claim.workNotes = generateWorkNotes(claim);
+    claims.push(claim);
+  }
+
   // ---- CLAIM 1: Elizabeth Jones (featured, UNDER_REVIEW, Standard) ----
   {
     const createdDate = new Date(NOW.getTime() - 20 * DAY);

@@ -15,6 +15,7 @@ import {
   DxcDialog
 } from '@dxc-technology/halstack-react';
 import FastTrackBadge from '../shared/FastTrackBadge';
+import ProcessTracker from '../shared/ProcessTracker';
 import DocumentUpload from '../shared/DocumentUpload';
 import DocumentViewer from '../shared/DocumentViewer';
 import BeneficiaryAnalyzer from '../BeneficiaryAnalyzer/BeneficiaryAnalyzer';
@@ -726,7 +727,10 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
 
               {/* Timeline Tab - SA-010 Activity Timeline */}
               {activeTab === 3 && (
-                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+                  {/* Pizza Tracker Style Progress */}
+                  <ProcessTracker claim={claim} />
+
                   <DxcFlex justifyContent="space-between" alignItems="center">
                     <DxcHeading level={4} text="Activity Timeline" />
                     <DxcFlex gap="var(--spacing-gap-s)">
