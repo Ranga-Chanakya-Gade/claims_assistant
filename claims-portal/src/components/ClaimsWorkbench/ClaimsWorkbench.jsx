@@ -17,6 +17,7 @@ import {
 import FastTrackBadge from '../shared/FastTrackBadge';
 import ProcessTracker from '../shared/ProcessTracker';
 import DocumentUpload from '../shared/DocumentUpload';
+import MetricCard from '../shared/MetricCard';
 import DocumentViewer from '../shared/DocumentViewer';
 import BeneficiaryAnalyzer from '../BeneficiaryAnalyzer/BeneficiaryAnalyzer';
 import DeathEventPanel from '../DeathEventPanel/DeathEventPanel';
@@ -52,10 +53,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
   const [showPartyForm, setShowPartyForm] = useState(false);
   const [selectedParty, setSelectedParty] = useState(null);
 
-  console.log('[ClaimsWorkbench] Received claim:', claim);
-
   if (!claim) {
-    console.log('[ClaimsWorkbench] No claim provided, showing alert');
     return (
       <DxcContainer
         padding="var(--spacing-padding-xl)"
@@ -403,45 +401,21 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                     <>
                       {/* L&A Mode: Reserve Summary */}
                       <DxcFlex gap="var(--spacing-gap-m)">
-                        <DxcContainer
-                          padding="var(--spacing-padding-m)"
-                          style={{ backgroundColor: "var(--color-bg-info-lighter)" }}
-                        >
-                          <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-                            <DxcTypography fontSize="12px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
-                              TOTAL CLAIM AMOUNT
-                            </DxcTypography>
-                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
-                              {formatCurrency(financialData.totalClaimAmount)}
-                            </DxcTypography>
-                          </DxcFlex>
-                        </DxcContainer>
-                        <DxcContainer
-                          padding="var(--spacing-padding-m)"
-                          style={{ backgroundColor: "var(--color-bg-success-lighter)" }}
-                        >
-                          <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-                            <DxcTypography fontSize="12px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
-                              TOTAL PAID
-                            </DxcTypography>
-                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
-                              {formatCurrency(financialData.reserves.paid)}
-                            </DxcTypography>
-                          </DxcFlex>
-                        </DxcContainer>
-                        <DxcContainer
-                          padding="var(--spacing-padding-m)"
-                          style={{ backgroundColor: "var(--color-bg-warning-lighter)" }}
-                        >
-                          <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-                            <DxcTypography fontSize="12px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
-                              OUTSTANDING RESERVE
-                            </DxcTypography>
-                            <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
-                              {formatCurrency(financialData.reserves.outstanding)}
-                            </DxcTypography>
-                          </DxcFlex>
-                        </DxcContainer>
+                        <MetricCard
+                          label="TOTAL CLAIM AMOUNT"
+                          value={formatCurrency(financialData.totalClaimAmount)}
+                          variant="info"
+                        />
+                        <MetricCard
+                          label="TOTAL PAID"
+                          value={formatCurrency(financialData.reserves.paid)}
+                          variant="success"
+                        />
+                        <MetricCard
+                          label="OUTSTANDING RESERVE"
+                          value={formatCurrency(financialData.reserves.outstanding)}
+                          variant="warning"
+                        />
                       </DxcFlex>
                     </>
                   )}
@@ -862,7 +836,6 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                   claimId={claim.claimNumber || claim.id}
                   claim={claim}
                   onApproveBeneficiaries={(beneficiaries) => {
-                    console.log('[ClaimsWorkbench] Beneficiaries approved:', beneficiaries);
                     // TODO: Update claim with approved beneficiaries
                     // Switch back to Policy 360 tab to see updated beneficiaries
                     setActiveTab(2);

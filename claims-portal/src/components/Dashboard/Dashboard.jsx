@@ -15,6 +15,7 @@ import {
   DxcAccordion,
   DxcChip,
   DxcSelect,
+  DxcAlert,
 } from '@dxc-technology/halstack-react';
 import { useClaims } from '../../contexts/ClaimsContext';
 import { useWorkflow } from '../../contexts/WorkflowContext';
@@ -33,6 +34,7 @@ const Dashboard = ({ onClaimSelect }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [snowClaims, setSnowClaims] = useState([]);
   const [snowLoading, setSnowLoading] = useState(false);
+  const [snowError, setSnowError] = useState(null);
   const [snowConnected, setSnowConnected] = useState(serviceNowService.isAuthenticated());
   // Multi-attribute filters
   const [typeFilter, setTypeFilter] = useState('');
@@ -62,12 +64,13 @@ const Dashboard = ({ onClaimSelect }) => {
     if (!serviceNowService.isAuthenticated()) return;
     try {
       setSnowLoading(true);
+      setSnowError(null);
       const fnolRecords = await serviceNowService.getFNOLsGlobal({ limit: 50 });
       const mappedClaims = fnolRecords.map(fnol => serviceNowService.mapFNOLToClaim(fnol));
       setSnowClaims(mappedClaims);
-      console.log('[Dashboard] ServiceNow FNOL claims loaded:', mappedClaims.length);
     } catch (err) {
-      console.warn('[Dashboard] Could not fetch ServiceNow claims:', err.message);
+      console.error('[Dashboard] Failed to fetch ServiceNow claims:', err);
+      setSnowError(`Failed to load ServiceNow claims: ${err.message}`);
       setSnowClaims([]);
     } finally {
       setSnowLoading(false);
@@ -418,6 +421,25 @@ const Dashboard = ({ onClaimSelect }) => {
       <DxcFlex direction="column" gap="var(--spacing-gap-m)">
         {/* Page Title */}
         <DxcHeading level={1} text="Dashboard" />
+
+        {/* Error Alert */}
+        {claimsError && (
+          <DxcAlert
+            type="error"
+            inlineText={`Failed to load claims: ${claimsError}`}
+            size="fillParent"
+            closable
+            onClose={() => {}}
+          >
+            <DxcButton
+              label="Retry"
+              mode="secondary"
+              size="small"
+              icon="refresh"
+              onClick={() => fetchClaims()}
+            />
+          </DxcAlert>
+        )}
 
         {/* Highlights Section - Top Cards */}
         <DxcFlex gap="var(--spacing-gap-m)">
@@ -815,7 +837,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="32px"
                       fontWeight="font-weight-semibold"
-                      color={fastTrackMetrics.percentage >= 40 ? "#000000" : "#000000"}
+                      color={fastTrackMetrics.percentage >= 40 ? "var(--color-fg-success-medium)" : "var(--color-fg-warning-medium)"}
                       textAlign="center"
                     >
                       {fastTrackMetrics.percentage >= 40 ? '✓' : '○'}
@@ -823,7 +845,7 @@ const Dashboard = ({ onClaimSelect }) => {
                     <DxcTypography
                       fontSize="12px"
                       fontWeight="font-weight-regular"
-                      color={fastTrackMetrics.percentage >= 40 ? "#000000" : "#000000"}
+                      color={fastTrackMetrics.percentage >= 40 ? "var(--color-fg-success-medium)" : "var(--color-fg-warning-medium)"}
                       textAlign="center"
                     >
                       {fastTrackMetrics.percentage >= 40 ? 'Meeting goal' : 'Below target'}
@@ -873,7 +895,23 @@ const Dashboard = ({ onClaimSelect }) => {
               </DxcFlex>
             </DxcFlex>
 
-            {!snowConnected && serviceNowService.useOAuth ? (
+            {snowError ? (
+              <DxcAlert
+                type="error"
+                inlineText={snowError}
+                size="fillParent"
+                closable
+                onClose={() => setSnowError(null)}
+              >
+                <DxcButton
+                  label="Retry"
+                  mode="secondary"
+                  size="small"
+                  icon="refresh"
+                  onClick={() => fetchServiceNowClaims()}
+                />
+              </DxcAlert>
+            ) : !snowConnected && serviceNowService.useOAuth ? (
               <DxcContainer padding="var(--spacing-padding-m)" style={{ backgroundColor: "var(--color-bg-neutral-lighter)", borderRadius: "var(--border-radius-m)" }}>
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
                   <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
@@ -1106,7 +1144,7 @@ const Dashboard = ({ onClaimSelect }) => {
                   label="Columns"
                   mode="tertiary"
                   icon="view_column"
-                  onClick={() => {}}
+                  onClick={() => alert('Column customization feature\n\nThis will allow you to show/hide columns and reorder them to match your workflow preferences.')}
                 />
                 <DxcFlex gap="var(--spacing-gap-none)" alignItems="center">
                   <DxcTypography
@@ -1228,19 +1266,30 @@ const Dashboard = ({ onClaimSelect }) => {
                             icon="check"
                             mode="tertiary"
                             title="Approve"
-                            onClick={() => {}}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              alert(`Approve claim ${displayId}\n\nThis feature will trigger the approval workflow and move the claim to the next stage.`);
+                            }}
                           />
                           <DxcButton
                             icon="cancel"
                             mode="tertiary"
                             title="Decline"
-                            onClick={() => {}}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (window.confirm(`Decline claim ${displayId}?\n\nThis will require a denial reason and send notification to the claimant.`)) {
+                                alert('Denial workflow would be initiated here.');
+                              }
+                            }}
                           />
                           <DxcButton
                             icon="swap_horiz"
                             mode="tertiary"
                             title="Transfer"
-                            onClick={() => {}}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              alert(`Transfer claim ${displayId}\n\nThis feature will allow you to reassign this claim to another examiner or queue.`);
+                            }}
                           />
                         </DxcFlex>
                       </DxcFlex>

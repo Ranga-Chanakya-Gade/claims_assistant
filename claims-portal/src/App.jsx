@@ -33,7 +33,6 @@ function AppContent() {
   const [isThemeSettingsOpen, setIsThemeSettingsOpen] = useState(false);
 
   const handleClaimSelect = (claim) => {
-    console.log('[App] handleClaimSelect called with claim:', claim);
     setSelectedClaim(claim);
     setCurrentView('workbench');
   };

@@ -10,6 +10,7 @@ import {
   DxcInset,
   DxcAccordion
 } from '@dxc-technology/halstack-react';
+import MetricCard from '../shared/MetricCard';
 import './RequirementsEngine.css';
 
 /**
@@ -235,61 +236,29 @@ const RequirementsEngine = ({ claim, onGenerateRequirements, onGenerateLetter, o
 
         {/* Requirements Summary */}
         <div className="requirements-summary-grid">
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{ backgroundColor: 'var(--color-bg-info-lighter)' }}
-          >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                TOTAL REQUIREMENTS
-              </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
-                {totalRequirements}
-              </DxcTypography>
-            </DxcFlex>
-          </DxcContainer>
+          <MetricCard
+            label="TOTAL REQUIREMENTS"
+            value={totalRequirements}
+            variant="info"
+          />
 
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{ backgroundColor: 'var(--color-bg-success-lighter)' }}
-          >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                SATISFIED (IGO)
-              </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
-                {satisfiedRequirements}
-              </DxcTypography>
-            </DxcFlex>
-          </DxcContainer>
+          <MetricCard
+            label="SATISFIED (IGO)"
+            value={satisfiedRequirements}
+            variant="success"
+          />
 
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{ backgroundColor: 'var(--color-bg-warning-lighter)' }}
-          >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                PENDING
-              </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
-                {pendingRequirements}
-              </DxcTypography>
-            </DxcFlex>
-          </DxcContainer>
+          <MetricCard
+            label="PENDING"
+            value={pendingRequirements}
+            variant="warning"
+          />
 
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{ backgroundColor: 'var(--color-bg-error-lighter)' }}
-          >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                NOT GOOD (NIGO)
-              </DxcTypography>
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
-                {nigoRequirements}
-              </DxcTypography>
-            </DxcFlex>
-          </DxcContainer>
+          <MetricCard
+            label="NOT GOOD (NIGO)"
+            value={nigoRequirements}
+            variant="error"
+          />
         </div>
 
         <DxcDivider />
