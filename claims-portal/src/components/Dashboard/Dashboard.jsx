@@ -570,7 +570,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="#000000"
+                        color="var(--color-fg-secondary-medium)"
                         textAlign="center"
                       >
                         {metrics.claimsPaidYTD}
@@ -578,7 +578,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="#000000"
+                        color="var(--color-fg-secondary-weak)"
                         textAlign="center"
                       >
                         +12% vs last year
@@ -608,7 +608,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="#000000"
+                        color="var(--color-fg-warning-medium)"
                         textAlign="center"
                       >
                         {metrics.pendingReview}
@@ -616,7 +616,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="#000000"
+                        color="var(--color-fg-warning-weak)"
                         textAlign="center"
                       >
                         {slaAtRiskCases?.length || 0} at risk
@@ -646,7 +646,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="#000000"
+                        color="var(--color-fg-success-medium)"
                         textAlign="center"
                       >
                         {metrics.approvedThisMonth}
@@ -654,7 +654,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="#000000"
+                        color="var(--color-fg-success-weak)"
                         textAlign="center"
                       >
                         {metrics.approvalRate}% approval rate
@@ -684,7 +684,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="32px"
                         fontWeight="font-weight-semibold"
-                        color="#000000"
+                        color="var(--color-fg-error-medium)"
                         textAlign="center"
                       >
                         {metrics.declinedThisMonth}
@@ -692,7 +692,7 @@ const Dashboard = ({ onClaimSelect }) => {
                       <DxcTypography
                         fontSize="12px"
                         fontWeight="font-weight-regular"
-                        color="#000000"
+                        color="var(--color-fg-error-weak)"
                         textAlign="center"
                       >
                         {100 - metrics.approvalRate}% decline rate
