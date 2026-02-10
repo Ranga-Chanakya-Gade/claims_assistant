@@ -30,6 +30,7 @@ import FastTrackMetricsCard from './FastTrackMetricsCard';
 import DepartmentInventorySection from './DepartmentInventorySection';
 import ServiceNowClaimsTable from './ServiceNowClaimsTable';
 import MyTasksCard from './MyTasksCard';
+import ClaimCard from './ClaimCard';
 import './Dashboard.css';
 
 const Dashboard = ({ onClaimSelect }) => {
@@ -598,188 +599,14 @@ const Dashboard = ({ onClaimSelect }) => {
               gap="var(--spacing-gap-m)"
               wrap={isGridView ? "wrap" : "nowrap"}
             >
-              {displayData && displayData.map((submission, index) => {
-                // For real claims, use the claim data structure
-                const isClaim = submission.claimNumber !== undefined;
-                const isServiceNow = submission.source === 'servicenow';
-                const displayId = isClaim ? (submission.fnolNumber || submission.claimNumber) : submission.id;
-
-                // Helper to get claimant/insured name (handles different data structures)
-                const getClaimantName = (claim) => {
-                  // Try standard name field (L&A)
-                  if (claim.claimant?.name) return claim.claimant.name;
-                  if (claim.insured?.name) return claim.insured.name;
-                  // Try P&C structure with firstName/lastName
-                  if (claim.claimant?.firstName || claim.claimant?.lastName) {
-                    const first = claim.claimant.firstName || '';
-                    const last = claim.claimant.lastName || '';
-                    return `${first} ${last}`.trim();
-                  }
-                  // Try business name for commercial claims
-                  if (claim.claimant?.businessName) return claim.claimant.businessName;
-                  return 'N/A';
-                };
-
-                const displayName = isClaim ? getClaimantName(submission) : submission.name;
-                const displayStatus = isClaim ? submission.status : submission.status;
-
-                // Helper to get claim type display label
-                const getClaimTypeLabel = (type) => {
-                  const typeLabels = {
-                    // L&A Types
-                    'death': 'LOB: Life',
-                    'maturity': 'LOB: Annuity',
-                    'surrender': 'LOB: Annuity',
-                    'withdrawal': 'LOB: Annuity',
-                    'disability': 'LOB: Disability',
-                    // P&C Types
-                    'property_damage': 'LOB: Property',
-                    'commercial_property': 'LOB: Commercial Property',
-                    'homeowners': 'LOB: Homeowners',
-                    'auto_collision': 'LOB: Auto',
-                    'auto_comprehensive': 'LOB: Auto',
-                    'liability': 'LOB: Liability',
-                    'general_liability': 'LOB: General Liability',
-                    'workers_comp': 'LOB: Workers Comp'
-                  };
-                  return typeLabels[type] || `LOB: ${type}`;
-                };
-
-                const displayType = isClaim
-                  ? getClaimTypeLabel(submission.type)
-                  : submission.type;
-                const displaySubmitted = isClaim
-                  ? new Date(submission.createdAt).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-                  : submission.submitted;
-                const hasFastTrack = isClaim && submission.routing?.type === RoutingType.FASTTRACK;
-                const isClosed = isClaim && (submission.status === 'closed' || submission.status === 'denied' || submission.status === 'approved');
-                const hasSLA = isClaim && submission.workflow?.sla?.dueDate;
-
-                return (
-                  <DxcContainer
-                    key={index}
-                    style={
-                      isGridView
-                        ? { backgroundColor: "var(--color-bg-neutral-lighter)", flex: "1 1 calc(50% - var(--spacing-gap-m) / 2)", minWidth: "400px", cursor: "pointer", borderRadius: "var(--border-radius-m)", border: "1px solid var(--border-color-neutral-lighter)" }
-                        : { backgroundColor: "var(--color-bg-neutral-lighter)", cursor: "pointer", borderRadius: "var(--border-radius-m)", border: "1px solid var(--border-color-neutral-lighter)" }
-                    }
-                    onClick={() => onClaimSelect(submission)}
-                  >
-                    <DxcInset space="var(--spacing-padding-m)">
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
-                        <DxcFlex justifyContent="space-between" alignItems="center">
-                          <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-                            <DxcTypography
-                              fontSize="font-scale-03"
-                              fontWeight="font-weight-semibold"
-                              color="#000000"
-                            >
-                              {displayId}
-                            </DxcTypography>
-                            <DxcTypography fontSize="font-scale-03">
-                              {displayName}
-                            </DxcTypography>
-                            {hasFastTrack && (
-                              <FastTrackBadge eligible={true} showLabel={true} size="small" />
-                            )}
-                            {isServiceNow && (
-                              <DxcBadge label="ServiceNow" mode="contextual" color="info" />
-                            )}
-                          </DxcFlex>
-                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-                          <DxcButton
-                            icon="check"
-                            mode="tertiary"
-                            title="Approve"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              alert(`Approve claim ${displayId}\n\nThis feature will trigger the approval workflow and move the claim to the next stage.`);
-                            }}
-                          />
-                          <DxcButton
-                            icon="cancel"
-                            mode="tertiary"
-                            title="Decline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (window.confirm(`Decline claim ${displayId}?\n\nThis will require a denial reason and send notification to the claimant.`)) {
-                                alert('Denial workflow would be initiated here.');
-                              }
-                            }}
-                          />
-                          <DxcButton
-                            icon="swap_horiz"
-                            mode="tertiary"
-                            title="Transfer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              alert(`Transfer claim ${displayId}\n\nThis feature will allow you to reassign this claim to another examiner or queue.`);
-                            }}
-                          />
-                        </DxcFlex>
-                      </DxcFlex>
-
-                        <DxcFlex gap="var(--spacing-gap-m)" alignItems="center" wrap="wrap">
-                          <DxcBadge
-                            label={displayStatus}
-                            mode="contextual"
-                            color={isClaim ? getStatusColor(displayStatus) : submission.statusColor}
-                          />
-                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                            {displayType}
-                          </DxcTypography>
-                          <div style={{
-                            width: "6px",
-                            height: "6px",
-                            borderRadius: "50%",
-                            backgroundColor: "var(--color-fg-neutral-strong)"
-                          }} />
-                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                            Submitted: {displaySubmitted}
-                          </DxcTypography>
-                          {hasSLA && (
-                            <>
-                              <div style={{
-                                width: "6px",
-                                height: "6px",
-                                borderRadius: "50%",
-                                backgroundColor: "var(--color-fg-neutral-strong)"
-                              }} />
-                              <SLAIndicator
-                                slaDate={submission.workflow.sla.dueDate}
-                                claimStatus={submission.status}
-                                compact={true}
-                              />
-                            </>
-                          )}
-                          {!isClaim && (
-                            <>
-                              <div style={{
-                                width: "6px",
-                                height: "6px",
-                                borderRadius: "50%",
-                                backgroundColor: "var(--color-fg-neutral-strong)"
-                              }} />
-                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                                Received: {submission.received}
-                              </DxcTypography>
-                              <div style={{
-                                width: "6px",
-                                height: "6px",
-                                borderRadius: "50%",
-                                backgroundColor: "var(--color-fg-neutral-strong)"
-                              }} />
-                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                                Effective: {submission.effective}
-                              </DxcTypography>
-                            </>
-                          )}
-                        </DxcFlex>
-                      </DxcFlex>
-                    </DxcInset>
-                  </DxcContainer>
-                );
-              })}
+              {displayData && displayData.map((submission, index) => (
+                <ClaimCard
+                  key={index}
+                  submission={submission}
+                  isGridView={isGridView}
+                  onSelect={onClaimSelect}
+                />
+              ))}
             </DxcFlex>
 
             {/* Paginator */}
