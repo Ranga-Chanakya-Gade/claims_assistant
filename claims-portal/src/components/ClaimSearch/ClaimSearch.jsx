@@ -8,9 +8,17 @@ import {
   DxcSelect,
   DxcTable,
   DxcBadge,
-  DxcInset
+  DxcInset,
+  DxcAlert
 } from '@dxc-technology/halstack-react';
 import FastTrackBadge from '../shared/FastTrackBadge';
+import {
+  sanitizeInput,
+  validateSSN,
+  validateDateRange,
+  validateClaimNumber,
+  validatePolicyNumber
+} from '../../utils/validation';
 import './ClaimSearch.css';
 
 /**
@@ -46,6 +54,7 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   // Status options
   const statusOptions = [
@@ -73,15 +82,69 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
   ];
 
   const handleInputChange = (field, value) => {
+    // Sanitize text inputs to prevent XSS
+    let sanitizedValue = value;
+    if (typeof value === 'string' && ['claimNumber', 'policyNumber', 'insuredName', 'examiner'].includes(field)) {
+      sanitizedValue = sanitizeInput(value);
+    }
+
     setSearchCriteria(prev => ({
       ...prev,
-      [field]: value
+      [field]: sanitizedValue
+    }));
+
+    // Clear validation error for this field
+    setValidationErrors(prev => ({
+      ...prev,
+      [field]: null
     }));
   };
 
   const handleSearch = async () => {
+    // Validate inputs before searching
+    const errors = {};
+
+    // Validate SSN format if provided
+    if (searchCriteria.ssn) {
+      const ssnValidation = validateSSN(searchCriteria.ssn);
+      if (!ssnValidation.isValid) {
+        errors.ssn = ssnValidation.error;
+      }
+    }
+
+    // Validate claim number format if provided
+    if (searchCriteria.claimNumber) {
+      const claimNumValidation = validateClaimNumber(searchCriteria.claimNumber);
+      if (!claimNumValidation.isValid) {
+        errors.claimNumber = claimNumValidation.error;
+      }
+    }
+
+    // Validate policy number format if provided
+    if (searchCriteria.policyNumber) {
+      const policyNumValidation = validatePolicyNumber(searchCriteria.policyNumber);
+      if (!policyNumValidation.isValid) {
+        errors.policyNumber = policyNumValidation.error;
+      }
+    }
+
+    // Validate date range if both dates provided
+    if (searchCriteria.dateFrom && searchCriteria.dateTo) {
+      const dateRangeValidation = validateDateRange(searchCriteria.dateFrom, searchCriteria.dateTo);
+      if (!dateRangeValidation.isValid) {
+        errors.dateRange = dateRangeValidation.error;
+      }
+    }
+
+    // If there are validation errors, don't proceed
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     setIsSearching(true);
     setHasSearched(true);
+    setValidationErrors({});
 
     try {
       // Simulate API call
@@ -233,6 +296,7 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
                 value={searchCriteria.claimNumber}
                 onChange={(value) => handleInputChange('claimNumber', value)}
                 placeholder="CLM-XXXXXX"
+                error={validationErrors.claimNumber}
                 size="fillParent"
               />
 
@@ -241,6 +305,7 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
                 value={searchCriteria.policyNumber}
                 onChange={(value) => handleInputChange('policyNumber', value)}
                 placeholder="POL-XXXXXX"
+                error={validationErrors.policyNumber}
                 size="fillParent"
               />
 
@@ -257,6 +322,7 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
                 value={searchCriteria.ssn}
                 onChange={(value) => handleInputChange('ssn', value)}
                 placeholder="XXX-XX-XXXX"
+                error={validationErrors.ssn}
                 size="fillParent"
               />
             </div>
@@ -314,6 +380,16 @@ const ClaimSearch = ({ onSelectClaim, onClose }) => {
                 size="fillParent"
               />
             </div>
+
+            {/* Date Range Error */}
+            {validationErrors.dateRange && (
+              <DxcAlert
+                type="error"
+                inlineText={validationErrors.dateRange}
+                closable
+                onClose={() => setValidationErrors(prev => ({ ...prev, dateRange: null }))}
+              />
+            )}
 
             {/* Action Buttons */}
             <DxcFlex gap="var(--spacing-gap-s)">

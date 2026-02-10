@@ -24,6 +24,7 @@ import FastTrackBadge from '../shared/FastTrackBadge';
 import SLAIndicator from '../shared/SLAIndicator';
 import { RoutingType, ClaimStatus } from '../../types/claim.types';
 import serviceNowService from '../../services/api/serviceNowService';
+import { sanitizeInput } from '../../utils/validation';
 import './Dashboard.css';
 
 const Dashboard = ({ onClaimSelect }) => {
@@ -943,12 +944,21 @@ const Dashboard = ({ onClaimSelect }) => {
                     {snowClaims.map((claim, index) => (
                       <tr
                         key={claim.sysId || index}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Open claim ${claim.fnolNumber || claim.claimNumber} for ${claim.insured?.name || claim.claimant?.name}`}
                         style={{
                           borderBottom: "1px solid var(--border-color-neutral-lighter)",
                           cursor: "pointer",
                           backgroundColor: index % 2 === 0 ? "var(--color-bg-neutral-lightest)" : "var(--color-bg-neutral-lighter)"
                         }}
                         onClick={() => onClaimSelect(claim)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onClaimSelect(claim);
+                          }
+                        }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-bg-neutral-light)"}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? "var(--color-bg-neutral-lightest)" : "var(--color-bg-neutral-lighter)"}
                       >
@@ -1010,10 +1020,22 @@ const Dashboard = ({ onClaimSelect }) => {
               {workflowGroups.map(group => (
                 <div
                   key={group.key}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Filter by ${group.label} (${group.count} claims)`}
+                  aria-pressed={subsetFilter === group.key}
                   onClick={() => {
                     setSubsetFilter(subsetFilter === group.key ? null : group.key);
                     setActiveTabIndex(0);
                     setCurrentPage(1);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSubsetFilter(subsetFilter === group.key ? null : group.key);
+                      setActiveTabIndex(0);
+                      setCurrentPage(1);
+                    }
                   }}
                   style={{
                     padding: "12px 16px",
@@ -1027,7 +1049,8 @@ const Dashboard = ({ onClaimSelect }) => {
                     cursor: "pointer",
                     transition: "all 0.15s",
                     minWidth: "140px",
-                    textAlign: "center"
+                    textAlign: "center",
+                    outline: "none"
                   }}
                 >
                   <DxcFlex direction="column" gap="var(--spacing-gap-xxs)" alignItems="center">
@@ -1099,7 +1122,7 @@ const Dashboard = ({ onClaimSelect }) => {
               <DxcTextInput
                 placeholder="Search for Claim, Policy, or Quote Numbers..."
                 value={searchValue}
-                onChange={({ value }) => setSearchValue(value)}
+                onChange={({ value }) => setSearchValue(sanitizeInput(value))}
                 size="medium"
               />
               <DxcSelect

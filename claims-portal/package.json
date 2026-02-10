@@ -13,6 +13,8 @@
     "@dxc-technology/halstack-react": "^16.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "dompurify": "^3.3.1",
+    "isomorphic-dompurify": "^3.0.0-rc.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

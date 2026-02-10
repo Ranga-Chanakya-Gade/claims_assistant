@@ -14,7 +14,7 @@ const ProcessTracker = ({ claim }) => {
     { key: 'verification', label: 'Verification', icon: '✓', statuses: [ClaimStatus.REQUIREMENTS_COMPLETE] },
     { key: 'approved', label: 'Approved', icon: '✅', statuses: [ClaimStatus.APPROVED, ClaimStatus.IN_APPROVAL] },
     { key: 'payment', label: 'Payment', icon: '💰', statuses: [ClaimStatus.PAYMENT_SCHEDULED] },
-    { key: 'completed', label: 'Completed', icon: '🎉', statuses: [ClaimStatus.CLOSED] }
+    { key: 'completed', label: 'Completed', icon: '✓', statuses: [ClaimStatus.CLOSED] }
   ];
 
   // Determine current stage
