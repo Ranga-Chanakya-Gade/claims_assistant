@@ -9,6 +9,10 @@ import {
   DxcInset,
   DxcAlert
 } from '@dxc-technology/halstack-react';
+import {
+  validateAmount,
+  validateDateRange
+} from '../../utils/validation';
 import './PMICalculator.css';
 
 /**
@@ -68,6 +72,18 @@ const PMICalculator = ({ claimData, onCalculate, onApply, onClose }) => {
       // Validation
       if (!formData.dateOfDeath || !formData.settlementDate || !formData.claimAmount) {
         throw new Error('Please fill in all required fields');
+      }
+
+      // Validate claim amount
+      const amountValidation = validateAmount(formData.claimAmount, 0);
+      if (!amountValidation.isValid) {
+        throw new Error(amountValidation.error);
+      }
+
+      // Validate date range
+      const dateValidation = validateDateRange(formData.dateOfDeath, formData.settlementDate);
+      if (!dateValidation.isValid) {
+        throw new Error(dateValidation.error);
       }
 
       const dod = new Date(formData.dateOfDeath);

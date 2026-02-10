@@ -10,6 +10,7 @@ import {
   DxcInset,
   DxcAlert
 } from '@dxc-technology/halstack-react';
+import { validateAmount } from '../../utils/validation';
 import './TaxWithholdingCalculator.css';
 
 /**
@@ -80,6 +81,20 @@ const TaxWithholdingCalculator = ({ claimData, paymentData, onCalculate, onApply
       // Validation
       if (!formData.benefitAmount) {
         throw new Error('Benefit amount is required');
+      }
+
+      // Validate benefit amount
+      const benefitValidation = validateAmount(formData.benefitAmount, 0);
+      if (!benefitValidation.isValid) {
+        throw new Error(benefitValidation.error);
+      }
+
+      // Validate interest amount if provided
+      if (formData.interestAmount) {
+        const interestValidation = validateAmount(formData.interestAmount, 0);
+        if (!interestValidation.isValid) {
+          throw new Error(interestValidation.error);
+        }
       }
 
       // Calculate taxable amount (typically only interest portion is taxable)
