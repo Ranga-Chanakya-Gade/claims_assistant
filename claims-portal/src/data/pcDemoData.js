@@ -1,5 +1,5 @@
 // P&C Demo Data - Winter Storm Scenario
-// Primary scenario: Maria Rodriguez, Green Petal Florist, Denver winter storm pipe burst
+// Primary scenario: Kim Lee, Bloom & Petals Florist, Portland winter storm pipe burst
 
 const pcDemoData = [
   {
@@ -11,12 +11,12 @@ const pcDemoData = [
     status: 'under_review',
     priority: 'high',
     claimant: {
-      firstName: 'Maria',
-      lastName: 'Rodriguez',
-      businessName: 'Green Petal Florist',
-      email: 'maria.rodriguez@greenpetalflorist.com',
-      phone: '303-555-0142',
-      dateOfBirth: '1978-05-12'
+      firstName: 'Kim',
+      lastName: 'Lee',
+      businessName: 'Bloom & Petals Florist',
+      email: 'kim@bloomandpetals.com',
+      phone: '(555) 234-8890',
+      dateOfBirth: '1982-03-15'
     },
 
     // Loss Event (P&C equivalent of death event)
@@ -26,11 +26,11 @@ const pcDemoData = [
       reportedDate: '2026-01-15T07:30:00Z',
       causeOfLoss: 'Frozen Pipe Burst',
       location: {
-        address: '1245 Pearl Street',
-        city: 'Denver',
-        state: 'CO',
-        zip: '80203',
-        coordinates: { lat: 39.7392, lon: -104.9903 }
+        address: '1847 Main Street',
+        city: 'Portland',
+        state: 'OR',
+        zip: '97214',
+        coordinates: { lat: 45.5152, lon: -122.6784 }
       },
       weatherData: {
         temperature: '-5°F',
@@ -41,7 +41,7 @@ const pcDemoData = [
       },
       iotSensorData: [
         {
-          sensorId: 'TEMP-GPF-001',
+          sensorId: 'TEMP-BPF-001',
           type: 'temperature',
           reading: '-5°F',
           timestamp: '2026-01-15T02:30:00Z',
@@ -49,7 +49,7 @@ const pcDemoData = [
           status: 'active'
         },
         {
-          sensorId: 'WATER-GPF-002',
+          sensorId: 'WATER-BPF-002',
           type: 'water_leak',
           reading: 'Active leak detected',
           timestamp: '2026-01-15T03:45:00Z',
@@ -57,7 +57,7 @@ const pcDemoData = [
           status: 'active'
         },
         {
-          sensorId: 'HUMID-GPF-003',
+          sensorId: 'HUMID-BPF-003',
           type: 'humidity',
           reading: '85%',
           timestamp: '2026-01-15T04:00:00Z',
@@ -178,7 +178,7 @@ const pcDemoData = [
     },
 
     aiInsights: {
-      claimSummary: 'Commercial property claim for winter storm-related pipe burst at Green Petal Florist. IoT sensors validated freezing conditions and water leak. Weather data confirms severe winter storm. Low fraud risk with straightforward causation.',
+      claimSummary: 'Commercial property claim for winter storm-related pipe burst at Bloom & Petals Florist. IoT sensors validated freezing conditions and water leak. Weather data confirms severe winter storm. Low fraud risk with straightforward causation.',
       recommendedActions: [
         'Authorize emergency water mitigation services',
         'Fast-track equipment damage assessment',
@@ -199,7 +199,7 @@ const pcDemoData = [
     timeline: [
       { date: '2026-01-15T02:30:00Z', event: 'IoT temperature alert triggered', actor: 'System' },
       { date: '2026-01-15T03:45:00Z', event: 'Water leak sensor activated', actor: 'System' },
-      { date: '2026-01-15T07:30:00Z', event: 'Claim reported via mobile app', actor: 'Maria Rodriguez' },
+      { date: '2026-01-15T07:30:00Z', event: 'Claim reported via mobile app', actor: 'Kim Lee' },
       { date: '2026-01-15T09:00:00Z', event: 'Claim assigned to adjuster', actor: 'System' },
       { date: '2026-01-15T10:00:00Z', event: 'Initial reserve set', actor: 'James Mitchell' }
     ]
