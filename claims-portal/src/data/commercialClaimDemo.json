@@ -18,8 +18,8 @@
     "businessName": "Bloom & Petals Florist",
     "dba": "Bloom & Petals",
     "businessType": "Retail Florist",
-    "ownerName": "Sarah Martinez",
-    "email": "sarah@bloomandpetals.com",
+    "ownerName": "Kim Lee",
+    "email": "kim@bloomandpetals.com",
     "phone": "(555) 234-8890",
     "businessAddress": {
       "street": "1847 Main Street",
@@ -163,8 +163,8 @@
       "id": 2,
       "timestamp": "2026-02-10T03:30:00Z",
       "event": "Owner Responded",
-      "description": "Sarah Martinez arrived on-site. Confirmed frozen pipe burst near water heater. Main water shut off.",
-      "actor": "Sarah Martinez",
+      "description": "Kim Lee arrived on-site. Confirmed frozen pipe burst near water heater. Main water shut off.",
+      "actor": "Kim Lee",
       "category": "Response",
       "icon": "user"
     },
@@ -173,7 +173,7 @@
       "timestamp": "2026-02-10T03:47:00Z",
       "event": "Claim Reported",
       "description": "FNOL submitted via mobile app with photos and incident details.",
-      "actor": "Sarah Martinez",
+      "actor": "Kim Lee",
       "category": "Submission",
       "icon": "document"
     },
@@ -420,7 +420,7 @@
     },
     {
       "action": "Complete Inventory Loss Documentation",
-      "assignedTo": "Sarah Martinez (Insured)",
+      "assignedTo": "Kim Lee (Insured)",
       "dueDate": "2026-02-12",
       "priority": "High",
       "status": "In Progress"

@@ -18,7 +18,7 @@
 ### Slide: Meet Bloom & Petals Florist
 
 **Script**:
-> "Meet Sarah Martinez, owner of Bloom & Petals Florist in Portland, Oregon. She's been in business for 8 years with 6 employees and does about $450,000 in annual revenue."
+> "Meet Kim Lee, owner of Bloom & Petals Florist in Portland, Oregon. She's been in business for 8 years with 6 employees and does about $450,000 in annual revenue."
 
 **Key Points**:
 - Small business, retail florist
@@ -30,7 +30,7 @@
 ### Slide: Prior Claim - January 2024
 
 **Script**:
-> "In January 2024, Sarah had a frozen pipe burst in her basement. It caused $15,000 in damage to her flower inventory and flooring."
+> "In January 2024, Kim had a frozen pipe burst in her basement. It caused $15,000 in damage to her flower inventory and flooring."
 
 **Show Prior Claim Details**:
 - Claim Number: CLM-2024-012847
@@ -45,7 +45,7 @@
 ### Slide: Risk Assessment & Recommendations
 
 **Script**:
-> "Our adjuster identified exposed basement pipes as a critical risk. We didn't just note it in the file—we gave Sarah specific, actionable recommendations."
+> "Our adjuster identified exposed basement pipes as a critical risk. We didn't just note it in the file—we gave Kim specific, actionable recommendations."
 
 **Show Recommendations**:
 ✅ Install pipe insulation
@@ -54,7 +54,7 @@
 ✅ Regular inspections
 
 **Key Message**:
-> "And Sarah did something most policyholders don't—she followed every single recommendation. She installed the FloodStop Pro water sensor in March 2024."
+> "And Kim did something most policyholders don't—she followed every single recommendation. She installed the FloodStop Pro water sensor in March 2024."
 
 **Show**: Water sensor equipment photo, installation date
 
@@ -65,12 +65,12 @@
 ### Slide: Winter Storm Warning - February 8, 2026
 
 **Script**:
-> "Fast forward to this month. On February 8th, our weather monitoring system detected an incoming severe cold snap. We automatically sent Sarah a storm alert—48 hours in advance."
+> "Fast forward to this month. On February 8th, our weather monitoring system detected an incoming severe cold snap. We automatically sent Kim a storm alert—48 hours in advance."
 
 **Show**: Storm alert notification
 
 **Key Point**:
-> "Sarah reviewed her prevention checklist. Checked the basement temperature. Made sure everything was ready. She was prepared."
+> "Kim reviewed her prevention checklist. Checked the basement temperature. Made sure everything was ready. She was prepared."
 
 ---
 
@@ -80,10 +80,10 @@
 > "Now here's where it gets interesting. Let me walk you through what happened in real-time..."
 
 **3:15 AM** - 🚨 **Water Leak Detected**
-> "At 3:15 in the morning, the FloodStop Pro sensor detected water. It immediately sent an alert to Sarah's phone."
+> "At 3:15 in the morning, the FloodStop Pro sensor detected water. It immediately sent an alert to Kim's phone."
 
 **3:30 AM** - 👤 **Owner Responds**
-> "Within 15 minutes, Sarah was on-site. She confirmed a frozen pipe had burst near the water heater and shut off the main water line. Quick response limited the damage."
+> "Within 15 minutes, Kim was on-site. She confirmed a frozen pipe had burst near the water heater and shut off the main water line. Quick response limited the damage."
 
 **3:47 AM** - 📱 **Claim Reported**
 > "At 3:47 AM, she submitted her First Notice of Loss through our mobile app. Photos, incident details, everything. While standing in her basement at 4 AM."
@@ -115,7 +115,7 @@
 ### Slide: Immediate Action
 
 **3:50 AM** - 👨‍💼 **Adjuster Auto-Assigned**
-> "Jennifer Torres, a commercial property specialist with 12 years of experience, was automatically assigned. The system matched her expertise to Sarah's claim type."
+> "Jennifer Torres, a commercial property specialist with 12 years of experience, was automatically assigned. The system matched her expertise to Kim's claim type."
 
 **4:15 AM** - ✅ **Emergency Mitigation Pre-Approved**
 > "Our AI authorized $5,000 for emergency water extraction and drying—no waiting, no approval delays. RapidDry Emergency Services was dispatched immediately."
@@ -172,7 +172,7 @@
 - **Recommendation**: Approve
 
 **Script**:
-> "Our AI analyzed the entire claim. Fraud risk? Extremely low. The sensor verified the event. Sarah has a history of following our recommendations. She reported immediately. There's literally sensor logs showing the exact time water was detected."
+> "Our AI analyzed the entire claim. Fraud risk? Extremely low. The sensor verified the event. Kim has a history of following our recommendations. She reported immediately. There's literally sensor logs showing the exact time water was detected."
 
 **Show Fraud Analysis Factors**:
 ✅ Prior relationship established
@@ -188,7 +188,7 @@
 
 | Time | Customer Experience |
 |------|---------------------|
-| 3:15 AM | Phone alert wakes Sarah |
+| 3:15 AM | Phone alert wakes Kim |
 | 3:30 AM | Water shut off, damage controlled |
 | 3:47 AM | Claim submitted via mobile |
 | 3:50 AM | Confirmation received (3 minutes) |
@@ -197,7 +197,7 @@
 | 2:00 PM | Adjuster on-site inspection |
 
 **Script**:
-> "Think about Sarah's experience. She woke up to a nightmare—water in her business during Valentine's week, the busiest time of year. But within 3 minutes of submitting her claim, she had confirmation. Within 2 hours, professionals were helping. By morning, she knew she wasn't alone."
+> "Think about Kim's experience. She woke up to a nightmare—water in her business during Valentine's week, the busiest time of year. But within 3 minutes of submitting her claim, she had confirmation. Within 2 hours, professionals were helping. By morning, she knew she wasn't alone."
 
 **Show Customer Sentiment**:
 > "Customer Sentiment: Positive - Grateful for fast response and sensor system"
@@ -218,7 +218,7 @@
 | **Total Investment** | **~$775 net** | **$30,000+ saved** |
 
 **Script**:
-> "Here's the business case. Sarah invested about $1,100 total. She gets a $325 annual discount for the Smart Monitoring Program—so it pays for itself in 3-4 years even without a claim. But she had a claim, and the sensor prevented $30,000 in additional damage."
+> "Here's the business case. Kim invested about $1,100 total. She gets a $325 annual discount for the Smart Monitoring Program—so it pays for itself in 3-4 years even without a claim. But she had a claim, and the sensor prevented $30,000 in additional damage."
 
 **Key Message**:
 > "This isn't insurance that just pays for losses. This is insurance that actually prevents them."
@@ -285,10 +285,10 @@
 ### Slide: The Bloom Promise
 
 **Script**:
-> "This is the future we're building at Bloom Insurance. Where we don't just pay claims—we prevent them. Where technology doesn't replace the human touch—it empowers it. Jennifer Torres still did the site inspection. She still worked with Sarah. But the AI handled all the routine analysis, freeing Jennifer to focus on what matters: helping Sarah get back to business."
+> "This is the future we're building at Bloom Insurance. Where we don't just pay claims—we prevent them. Where technology doesn't replace the human touch—it empowers it. Jennifer Torres still did the site inspection. She still worked with Kim. But the AI handled all the routine analysis, freeing Jennifer to focus on what matters: helping Kim get back to business."
 
 **Final Message**:
-> "Sarah followed our recommendations. We rewarded that with the fastest claim settlement she's ever experienced. That's insurance done right."
+> "Kim followed our recommendations. We rewarded that with the fastest claim settlement she's ever experienced. That's insurance done right."
 
 ---
 

@@ -8,7 +8,7 @@ This demo showcases a **Fast-Track Commercial Property Claim** for water damage 
 
 ### Business Profile
 - **Business Name**: Bloom & Petals Florist
-- **Owner**: Sarah Martinez
+- **Owner**: Kim Lee
 - **Type**: Retail Florist
 - **Location**: Portland, OR
 - **Years in Business**: 8 years (est. 2018)
@@ -170,7 +170,7 @@ This demo adapts the life insurance claims portal for **commercial property** us
 
 ## Demo Script Suggestions
 
-**Opening**: "Meet Sarah, owner of Bloom & Petals Florist. Last year, she had a frozen pipe claim. Instead of just cutting a check, we identified the risk and offered solutions..."
+**Opening**: "Meet Kim, owner of Bloom & Petals Florist. Last year, she had a frozen pipe claim. Instead of just cutting a check, we identified the risk and offered solutions..."
 
 **Transition**: "When the next winter storm hit, her smart water sensor caught the leak at 3:15 AM—before serious damage occurred..."
 

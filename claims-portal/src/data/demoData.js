@@ -312,7 +312,7 @@ const createShowcaseClaims = () => {
         criteria: { deathVerification: true, policyInForce: true, beneficiaryMatch: false, noContestability: true, claimAmountThreshold: false, noAnomalies: false }
       },
       workflow: {
-        fsoCase: 'FSO-CLM-000051', currentTask: 'Beneficiary Verification', assignedTo: 'Sarah Martinez', daysOpen,
+        fsoCase: 'FSO-CLM-000051', currentTask: 'Beneficiary Verification', assignedTo: 'Kim Lee', daysOpen,
         sla: { dueDate: slaDate.toISOString(), daysRemaining: daysToSla, atRisk: daysToSla < 7 }
       }
     };
