@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import useAriaLiveRegion from '../../hooks/useAriaLiveRegion.jsx';
 import {
   DxcHeading,
   DxcFlex,
@@ -65,6 +66,9 @@ const Dashboard = ({ onClaimSelect }) => {
   } = useWorkflow();
 
   const { demoLineOfBusiness } = useDemoMode();
+
+  // ARIA live region for announcing changes
+  const [announce, LiveRegion] = useAriaLiveRegion();
 
   // Fetch ServiceNow claims when authenticated
   const fetchServiceNowClaims = async () => {
@@ -333,6 +337,16 @@ const Dashboard = ({ onClaimSelect }) => {
     return filtered;
   }, [allClaims, activeTabIndex, subsetFilter, searchValue, typeFilter, productFilter, amountRangeFilter]);
 
+  // Announce filtered results to screen readers
+  useEffect(() => {
+    if (filteredClaims.length === 0) {
+      announce('No claims found matching your criteria');
+    } else {
+      const tabName = activeTabIndex === 0 ? 'open' : 'closed';
+      announce(`Showing ${filteredClaims.length} ${tabName} ${filteredClaims.length === 1 ? 'claim' : 'claims'}`);
+    }
+  }, [filteredClaims.length, activeTabIndex, announce]);
+
   // Paginate claims
   const paginatedClaims = useMemo(() => {
     const startIndex = (currentPage - 1) * 9;
@@ -428,6 +442,9 @@ const Dashboard = ({ onClaimSelect }) => {
       <DxcFlex direction="column" gap="var(--spacing-gap-m)">
         {/* Page Title */}
         <DxcHeading level={1} text="Dashboard" />
+
+        {/* ARIA Live Region for announcements */}
+        <LiveRegion />
 
         {/* Error Alert */}
         {claimsError && (

@@ -72,6 +72,9 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
 
   return (
     <DxcContainer
+      role="article"
+      tabIndex={0}
+      aria-label={`Claim ${displayId} for ${displayName}, Status ${displayStatus}, Type ${displayType}, Submitted ${displaySubmitted}`}
       style={
         isGridView
           ? {
@@ -90,6 +93,12 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
             }
       }
       onClick={() => onSelect(submission)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect(submission);
+        }
+      }}
     >
       <DxcInset space="var(--spacing-padding-m)">
         <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
@@ -111,7 +120,8 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
               <DxcButton
                 icon="check"
                 mode="tertiary"
-                title="Approve"
+                title={`Approve claim ${displayId}`}
+                aria-label={`Approve claim ${displayId} for ${displayName}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   alert(
@@ -122,7 +132,8 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
               <DxcButton
                 icon="close"
                 mode="tertiary"
-                title="Decline"
+                title={`Decline claim ${displayId}`}
+                aria-label={`Decline claim ${displayId} for ${displayName}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (

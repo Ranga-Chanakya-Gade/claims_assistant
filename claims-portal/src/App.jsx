@@ -98,6 +98,11 @@ function AppContent() {
 
   return (
     <>
+    {/* Skip to main content link for keyboard navigation */}
+    <a href="#main-content" className="skip-link">
+      Skip to main content
+    </a>
+
     <DxcApplicationLayout
       header={
         <DxcApplicationLayout.Header
@@ -126,12 +131,16 @@ function AppContent() {
                     label="L&A"
                     mode={demoLineOfBusiness === 'LA' ? 'primary' : 'tertiary'}
                     size="small"
+                    aria-label={`Switch to Life and Annuity demo mode${demoLineOfBusiness === 'LA' ? ' (currently selected)' : ''}`}
+                    aria-pressed={demoLineOfBusiness === 'LA'}
                     onClick={() => toggleDemoMode('LA')}
                   />
                   <DxcButton
                     label="P&C"
                     mode={demoLineOfBusiness === 'PC' ? 'primary' : 'tertiary'}
                     size="small"
+                    aria-label={`Switch to Property and Casualty demo mode${demoLineOfBusiness === 'PC' ? ' (currently selected)' : ''}`}
+                    aria-pressed={demoLineOfBusiness === 'PC'}
                     onClick={() => toggleDemoMode('PC')}
                   />
                 </DxcFlex>
@@ -152,13 +161,15 @@ function AppContent() {
                   title="Theme Settings"
                   role="button"
                   tabIndex={0}
+                  aria-label="Open theme settings"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
                       setIsThemeSettingsOpen(true);
                     }
                   }}
                 >
-                  <span className="material-icons">palette</span>
+                  <span className="material-icons" aria-hidden="true">palette</span>
                 </div>
                 <DxcFlex direction="column" gap="var(--spacing-gap-none)">
                   <DxcTypography>{user?.name || 'User'}</DxcTypography>
@@ -198,7 +209,7 @@ function AppContent() {
         />
       }
     >
-      <DxcApplicationLayout.Main>
+      <DxcApplicationLayout.Main id="main-content">
         {renderContent()}
       </DxcApplicationLayout.Main>
     </DxcApplicationLayout>

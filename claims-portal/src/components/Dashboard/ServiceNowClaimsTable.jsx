@@ -62,7 +62,7 @@ const ServiceNowClaimsTable = ({
           </DxcFlex>
           <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
             {snowLoading && (
-              <DxcSpinner label="Loading..." mode="small" />
+              <DxcSpinner label="Loading..." mode="small" aria-label="Loading ServiceNow claims" />
             )}
             {serviceNowService.useOAuth && (
               snowConnected ? (
@@ -130,10 +130,23 @@ const ServiceNowClaimsTable = ({
         ) : (
           /* Claims Table */
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }} aria-label="ServiceNow FNOL Claims">
+              <caption style={{
+                position: 'absolute',
+                width: '1px',
+                height: '1px',
+                padding: 0,
+                margin: '-1px',
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                border: 0
+              }}>
+                ServiceNow FNOL Claims - {snowClaims.length} {snowClaims.length === 1 ? 'claim' : 'claims'}
+              </caption>
               <thead>
                 <tr style={{ borderBottom: '2px solid #000000', textAlign: 'left' }}>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -143,7 +156,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     FNOL Number
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -153,7 +166,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     Status
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -163,7 +176,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     Insured
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -173,7 +186,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     Claimant
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -183,7 +196,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     Policy
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,
@@ -193,7 +206,7 @@ const ServiceNowClaimsTable = ({
                   }}>
                     Opened
                   </th>
-                  <th style={{
+                  <th scope="col" style={{
                     padding: '12px 16px',
                     color: 'var(--color-fg-neutral-stronger)',
                     fontWeight: 600,

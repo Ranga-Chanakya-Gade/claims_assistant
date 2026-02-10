@@ -38,6 +38,7 @@ import RequirementsEngine from '../RequirementsEngine/RequirementsEngine';
 import WorkNotes from '../WorkNotes/WorkNotes';
 import ClaimProgressCard from './ClaimProgressCard';
 import FinancialsTab from './FinancialsTab';
+import ModalWrapper from '../shared/ModalWrapper';
 import './ClaimsWorkbench.css';
 
 const ClaimsWorkbench = ({ claim, onBack }) => {
@@ -621,43 +622,54 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
 
       {/* Modal Dialogs */}
       {/* PMI Calculator Modal */}
-      {showPMICalculator && (
-        <DxcDialog isCloseVisible={false}>
-          <PMICalculator
-            claimData={claim}
-            onCalculate={(result) => {
-              console.log('PMI calculated:', result);
-            }}
-            onApply={(result) => {
-              console.log('PMI applied:', result);
-              setShowPMICalculator(false);
-            }}
-            onClose={() => setShowPMICalculator(false)}
-          />
-        </DxcDialog>
-      )}
+      <ModalWrapper
+        isOpen={showPMICalculator}
+        onClose={() => setShowPMICalculator(false)}
+        ariaLabel="PMI Calculator"
+      >
+        <PMICalculator
+          claimData={claim}
+          onCalculate={(result) => {
+            console.log('PMI calculated:', result);
+          }}
+          onApply={(result) => {
+            console.log('PMI applied:', result);
+            setShowPMICalculator(false);
+          }}
+          onClose={() => setShowPMICalculator(false)}
+        />
+      </ModalWrapper>
 
       {/* Tax Withholding Calculator Modal */}
-      {showTaxCalculator && (
-        <DxcDialog isCloseVisible={false}>
-          <TaxWithholdingCalculator
-            claimData={claim}
-            paymentData={claim.financial?.payments?.[0]}
-            onCalculate={(result) => {
-              console.log('Tax calculated:', result);
-            }}
-            onApply={(result) => {
-              console.log('Tax applied:', result);
-              setShowTaxCalculator(false);
-            }}
-            onClose={() => setShowTaxCalculator(false)}
-          />
-        </DxcDialog>
-      )}
+      <ModalWrapper
+        isOpen={showTaxCalculator}
+        onClose={() => setShowTaxCalculator(false)}
+        ariaLabel="Tax Withholding Calculator"
+      >
+        <TaxWithholdingCalculator
+          claimData={claim}
+          paymentData={claim.financial?.payments?.[0]}
+          onCalculate={(result) => {
+            console.log('Tax calculated:', result);
+          }}
+          onApply={(result) => {
+            console.log('Tax applied:', result);
+            setShowTaxCalculator(false);
+          }}
+          onClose={() => setShowTaxCalculator(false)}
+        />
+      </ModalWrapper>
 
       {/* Payment Quick View Modal */}
-      {showPaymentModal && selectedPayment && (
-        <DxcDialog isCloseVisible={false}>
+      <ModalWrapper
+        isOpen={showPaymentModal && !!selectedPayment}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setSelectedPayment(null);
+        }}
+        ariaLabel={`Payment details for ${selectedPayment?.id || 'payment'}`}
+      >
+        {selectedPayment && (
           <PaymentQuickView
             payment={selectedPayment}
             onEdit={(payment) => {
@@ -680,12 +692,19 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
               setSelectedPayment(null);
             }}
           />
-        </DxcDialog>
-      )}
+        )}
+      </ModalWrapper>
 
       {/* Policy Detail View Modal */}
-      {showPolicyModal && selectedPolicy && (
-        <DxcDialog isCloseVisible={false}>
+      <ModalWrapper
+        isOpen={showPolicyModal && !!selectedPolicy}
+        onClose={() => {
+          setShowPolicyModal(false);
+          setSelectedPolicy(null);
+        }}
+        ariaLabel={`Policy details for ${selectedPolicy?.policyNumber || 'policy'}`}
+      >
+        {selectedPolicy && (
           <PolicyDetailView
             policy={selectedPolicy}
             onEdit={(policy) => {
@@ -709,48 +728,55 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
               setSelectedPolicy(null);
             }}
           />
-        </DxcDialog>
-      )}
+        )}
+      </ModalWrapper>
 
       {/* Party Add/Edit Form Modal */}
-      {showPartyForm && (
-        <DxcDialog isCloseVisible={false}>
-          <PartyForm
-            party={selectedParty}
-            onSave={(partyData) => {
-              console.log('Party saved:', partyData);
-              setShowPartyForm(false);
-              setSelectedParty(null);
-            }}
-            onCancel={() => {
-              setShowPartyForm(false);
-              setSelectedParty(null);
-            }}
-            onCSLNSearch={(partyData) => {
-              console.log('CSLN search for:', partyData);
-            }}
-          />
-        </DxcDialog>
-      )}
+      <ModalWrapper
+        isOpen={showPartyForm}
+        onClose={() => {
+          setShowPartyForm(false);
+          setSelectedParty(null);
+        }}
+        ariaLabel={selectedParty ? `Edit party ${selectedParty.name}` : 'Add new party'}
+      >
+        <PartyForm
+          party={selectedParty}
+          onSave={(partyData) => {
+            console.log('Party saved:', partyData);
+            setShowPartyForm(false);
+            setSelectedParty(null);
+          }}
+          onCancel={() => {
+            setShowPartyForm(false);
+            setSelectedParty(null);
+          }}
+          onCSLNSearch={(partyData) => {
+            console.log('CSLN search for:', partyData);
+          }}
+        />
+      </ModalWrapper>
 
       {/* Beneficiary Analyzer Modal */}
-      {showBeneficiaryAnalyzer && (
-        <DxcDialog isCloseVisible={false}>
-          <BeneficiaryAnalyzer
-            claimId={claim.claimNumber || claim.id}
-            claim={claim}
-            onApproveBeneficiaries={(beneficiaries) => {
-              console.log('Beneficiaries approved:', beneficiaries);
-              setShowBeneficiaryAnalyzer(false);
-            }}
-            onRequestDocuments={(beneficiaries) => {
-              console.log('Request documents for beneficiaries:', beneficiaries);
-              setShowBeneficiaryAnalyzer(false);
-            }}
-            onClose={() => setShowBeneficiaryAnalyzer(false)}
-          />
-        </DxcDialog>
-      )}
+      <ModalWrapper
+        isOpen={showBeneficiaryAnalyzer}
+        onClose={() => setShowBeneficiaryAnalyzer(false)}
+        ariaLabel="Beneficiary Analyzer"
+      >
+        <BeneficiaryAnalyzer
+          claimId={claim.claimNumber || claim.id}
+          claim={claim}
+          onApproveBeneficiaries={(beneficiaries) => {
+            console.log('Beneficiaries approved:', beneficiaries);
+            setShowBeneficiaryAnalyzer(false);
+          }}
+          onRequestDocuments={(beneficiaries) => {
+            console.log('Request documents for beneficiaries:', beneficiaries);
+            setShowBeneficiaryAnalyzer(false);
+          }}
+          onClose={() => setShowBeneficiaryAnalyzer(false)}
+        />
+      </ModalWrapper>
     </DxcContainer>
   );
 };
