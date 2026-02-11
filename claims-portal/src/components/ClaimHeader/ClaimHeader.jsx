@@ -110,7 +110,10 @@ const ClaimHeader = ({
                 <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold">
                   {claim.claimNumber}
                 </DxcTypography>
-                <DxcBadge label={claim.status} color={getStatusColor(claim.status)} />
+                <DxcBadge
+                  label={claim.status}
+                  {...(getStatusColor(claim.status) && { color: getStatusColor(claim.status) })}
+                />
                 {claim.routing && (
                   <FastTrackBadge routing={claim.routing.type} size="medium" />
                 )}

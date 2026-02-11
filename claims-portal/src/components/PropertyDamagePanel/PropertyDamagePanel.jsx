@@ -78,7 +78,7 @@ const PropertyDamagePanel = ({ damageData }) => {
           <span>{getSeverityIcon(damage.severity)}</span>
           <DxcBadge
             label={damage.severity}
-            color={getSeverityColor(damage.severity)}
+            {...(getSeverityColor(damage.severity) && { color: getSeverityColor(damage.severity) })}
           />
         </DxcFlex>
       )

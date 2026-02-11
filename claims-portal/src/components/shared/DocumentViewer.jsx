@@ -221,7 +221,10 @@ const DocumentViewer = ({
                         {formatFileSize(doc.size)}
                       </DxcTypography>
                       {doc.status && (
-                        <DxcBadge label={doc.status} color={getDocumentStatusColor(doc.status)} />
+                        <DxcBadge
+                          label={doc.status}
+                          {...(getDocumentStatusColor(doc.status) && { color: getDocumentStatusColor(doc.status) })}
+                        />
                       )}
                     </DxcFlex>
                   </DxcFlex>
@@ -350,7 +353,10 @@ const DocumentViewer = ({
                     <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                       Status
                     </DxcTypography>
-                    <DxcBadge label={selectedDoc.status} color={getDocumentStatusColor(selectedDoc.status)} />
+                    <DxcBadge
+                      label={selectedDoc.status}
+                      {...(getDocumentStatusColor(selectedDoc.status) && { color: getDocumentStatusColor(selectedDoc.status) })}
+                    />
                   </DxcFlex>
                 )}
               </DxcFlex>

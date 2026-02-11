@@ -146,7 +146,10 @@ const FinancialsTab = ({
                         {payment.id}
                       </DxcTypography>
                       <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
-                      <DxcBadge label={payment.status} color={getPaymentStatusColor(payment.status)} />
+                      <DxcBadge
+                        label={payment.status}
+                        {...(getPaymentStatusColor(payment.status) && { color: getPaymentStatusColor(payment.status) })}
+                      />
                     </DxcFlex>
                     <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                       {formatCurrency(payment.amount)}
@@ -221,7 +224,10 @@ const FinancialsTab = ({
                       {payment.id}
                     </DxcTypography>
                     <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
-                    <DxcBadge label={payment.status} color={getPaymentStatusColor(payment.status)} />
+                    <DxcBadge
+                        label={payment.status}
+                        {...(getPaymentStatusColor(payment.status) && { color: getPaymentStatusColor(payment.status) })}
+                      />
                   </DxcFlex>
                   <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(payment.amount)}

@@ -472,7 +472,10 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Amount</DxcTypography>
                                 <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">{ben.amount}</DxcTypography>
                               </DxcFlex>
-                              <DxcBadge label={ben.status} color={getBeneficiaryStatusColor(ben.status)} />
+                              <DxcBadge
+                                label={ben.status}
+                                {...(getBeneficiaryStatusColor(ben.status) && { color: getBeneficiaryStatusColor(ben.status) })}
+                              />
                             </DxcFlex>
                           </DxcFlex>
                         </DxcInset>
