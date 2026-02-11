@@ -82,16 +82,16 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
 
   const getBeneficiaryStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'VERIFIED' || statusUpper === 'APPROVED') {
+    if (statusUpper.includes('VERIFIED') || statusUpper.includes('APPROVED') || statusUpper.includes('COMPLETE')) {
       return 'success';
     }
-    if (statusUpper === 'PENDING' || statusUpper === 'UNDER REVIEW') {
+    if (statusUpper.includes('PENDING') || statusUpper.includes('REVIEW') || statusUpper.includes('PROGRESS')) {
       return 'warning';
     }
-    if (statusUpper === 'REJECTED' || statusUpper === 'INVALID') {
+    if (statusUpper.includes('REJECTED') || statusUpper.includes('INVALID') || statusUpper.includes('FAILED')) {
       return 'error';
     }
-    return undefined;
+    return 'info';
   };
 
   // Extract financial data from claim
