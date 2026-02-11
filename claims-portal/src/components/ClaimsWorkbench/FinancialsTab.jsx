@@ -25,23 +25,6 @@ const FinancialsTab = ({
   onShowTaxCalculator,
   onPaymentClick
 }) => {
-  const getPaymentStatusColor = (status) => {
-    const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'PAID' || statusUpper === 'COMPLETED' || statusUpper === 'ISSUED') {
-      return 'green';
-    }
-    if (statusUpper === 'PENDING' || statusUpper === 'PENDING APPROVAL' || statusUpper === 'SCHEDULED') {
-      return 'orange';
-    }
-    if (statusUpper === 'CANCELLED' || statusUpper === 'FAILED' || statusUpper === 'REJECTED') {
-      return 'red';
-    }
-    if (statusUpper === 'ON HOLD' || statusUpper === 'PROCESSING') {
-      return 'yellow';
-    }
-    return 'grey';
-  };
-
   return (
     <DxcFlex direction="column" gap="var(--spacing-gap-l)">
       {demoLineOfBusiness === 'PC' ? (
@@ -146,7 +129,7 @@ const FinancialsTab = ({
                         {payment.id}
                       </DxcTypography>
                       <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
-                      <DxcBadge label={payment.status} color={getPaymentStatusColor(payment.status)} />
+                      <DxcBadge label={payment.status} />
                     </DxcFlex>
                     <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                       {formatCurrency(payment.amount)}
@@ -221,7 +204,7 @@ const FinancialsTab = ({
                       {payment.id}
                     </DxcTypography>
                     <DxcTypography fontSize="font-scale-03">{payment.payee}</DxcTypography>
-                    <DxcBadge label={payment.status} color={getPaymentStatusColor(payment.status)} />
+                    <DxcBadge label={payment.status} />
                   </DxcFlex>
                   <DxcTypography fontSize="20px" fontWeight="font-weight-semibold" color="#000000">
                     {formatCurrency(payment.amount)}

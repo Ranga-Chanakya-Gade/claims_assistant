@@ -64,21 +64,6 @@ const DocumentViewer = ({
     return '#000000';
   };
 
-  // Get document status color
-  const getDocumentStatusColor = (status) => {
-    const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'VERIFIED' || statusUpper === 'APPROVED' || statusUpper === 'PROCESSED') {
-      return 'green';
-    }
-    if (statusUpper === 'PENDING' || statusUpper === 'PROCESSING' || statusUpper === 'UNDER REVIEW') {
-      return 'orange';
-    }
-    if (statusUpper === 'REJECTED' || statusUpper === 'FAILED' || statusUpper === 'INVALID') {
-      return 'red';
-    }
-    return 'grey';
-  };
-
   // Format file size
   const formatFileSize = (bytes) => {
     if (!bytes) return 'Unknown';
@@ -221,7 +206,7 @@ const DocumentViewer = ({
                         {formatFileSize(doc.size)}
                       </DxcTypography>
                       {doc.status && (
-                        <DxcBadge label={doc.status} color={getDocumentStatusColor(doc.status)} />
+                        <DxcBadge label={doc.status} />
                       )}
                     </DxcFlex>
                   </DxcFlex>
@@ -350,7 +335,7 @@ const DocumentViewer = ({
                     <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                       Status
                     </DxcTypography>
-                    <DxcBadge label={selectedDoc.status} color={getDocumentStatusColor(selectedDoc.status)} />
+                    <DxcBadge label={selectedDoc.status} />
                   </DxcFlex>
                 )}
               </DxcFlex>
