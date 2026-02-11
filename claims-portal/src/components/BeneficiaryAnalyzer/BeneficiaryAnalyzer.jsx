@@ -37,8 +37,21 @@ const BeneficiaryAnalyzer = ({ claimId, claim, onApproveBeneficiaries, onCancel 
   // Build analysis data from claim if available, otherwise use fallback
   const buildAnalysisData = () => {
     // Try to get beneficiaries from claim data
-    const claimBeneficiaries = claim?.beneficiaries || claim?.policy?.beneficiaries || [];
     const claimParties = claim?.parties || [];
+    // Extract beneficiaries from parties array (where role includes "Beneficiary")
+    const beneficiariesFromParties = claimParties
+      .filter(p => p.role?.toLowerCase().includes('beneficiary'))
+      .map(p => ({
+        name: p.name,
+        relationship: p.role || 'Beneficiary',
+        ssn: p.ssn,
+        dateOfBirth: p.dateOfBirth,
+        address: p.address,
+        phone: p.phone,
+        email: p.email,
+        percentage: 100 // Default if not specified
+      }));
+    const claimBeneficiaries = claim?.beneficiaries || claim?.policy?.beneficiaries || beneficiariesFromParties;
     const claimantData = claim?.claimant || {};
 
     if (claimBeneficiaries.length > 0) {
