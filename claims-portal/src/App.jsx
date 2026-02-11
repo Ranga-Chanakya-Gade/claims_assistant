@@ -7,7 +7,6 @@ import FNOLWorkspace from './components/FNOLWorkspace/FNOLWorkspace';
 import PendingClaimsReview from './components/PendingClaimsReview/PendingClaimsReview';
 import RequirementsReceived from './components/RequirementsReceived/RequirementsReceived';
 import ThemeSettings from './components/ThemeSettings/ThemeSettings';
-import CommercialClaimDemo from './components/CommercialClaimDemo';
 
 // Context Providers
 import { AppProvider, useApp } from './contexts/AppContext';
@@ -59,8 +58,6 @@ function AppContent() {
         return <PendingClaimsReview onClaimSelect={handleClaimSelect} />;
       case 'requirementsReceived':
         return <RequirementsReceived onClaimSelect={handleClaimSelect} />;
-      case 'commercialDemo':
-        return <CommercialClaimDemo />;
       default:
         return <Dashboard onClaimSelect={handleClaimSelect} />;
     }
@@ -72,12 +69,6 @@ function AppContent() {
       icon: "dashboard",
       selected: currentView === 'dashboard',
       onClick: () => handleNavigationClick('dashboard')
-    },
-    {
-      label: "Commercial Demo - Bloom & Petals",
-      icon: "store",
-      selected: currentView === 'commercialDemo',
-      onClick: () => handleNavigationClick('commercialDemo')
     },
     {
       label: "New Claim FNOL Party Portal",
