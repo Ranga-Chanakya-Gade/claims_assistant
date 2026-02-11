@@ -55,6 +55,11 @@ const ModalWrapper = ({
         aria-modal="true"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        style={{
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          width: '100%'
+        }}
       >
         {children}
       </div>
