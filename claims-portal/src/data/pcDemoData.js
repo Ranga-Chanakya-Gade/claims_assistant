@@ -4,13 +4,13 @@
 const pcDemoData = [
   {
     id: 'pc-claim-001',
-    claimNumber: 'PC-2026-001',
+    claimNumber: 'CLM-2026-089432',
     type: 'commercial_property',
     lineOfBusiness: 'property_casualty',
     subType: 'water_damage',
     status: 'approved',
     priority: 'high',
-    approvedAt: '2026-01-15T08:15:00Z',
+    approvedAt: '2026-02-10T08:15:00Z',
     approvalMethod: 'STP - Straight-Through Processing',
     claimant: {
       firstName: 'Kim',
@@ -24,11 +24,11 @@ const pcDemoData = [
     // Loss Event (P&C equivalent of death event)
     lossEvent: {
       eventType: 'winter_storm',
-      lossDate: '2026-01-15T03:45:00Z',
-      reportedDate: '2026-01-15T07:30:00Z',
-      causeOfLoss: 'Frozen Pipe Burst',
+      lossDate: '2026-02-10T03:15:00Z',
+      reportedDate: '2026-02-10T07:30:00Z',
+      causeOfLoss: 'Water Damage - Frozen Pipe Burst',
       location: {
-        address: '1847 Main Street',
+        address: 'Bloom & Petals - Basement Storage',
         city: 'Portland',
         state: 'OR',
         zip: '97214',
@@ -46,7 +46,7 @@ const pcDemoData = [
           sensorId: 'TEMP-BPF-001',
           type: 'temperature',
           reading: '-5°F',
-          timestamp: '2026-01-15T02:30:00Z',
+          timestamp: '2026-02-10T02:30:00Z',
           alert: 'Critical temperature drop detected',
           status: 'active'
         },
@@ -54,15 +54,15 @@ const pcDemoData = [
           sensorId: 'WATER-BPF-002',
           type: 'water_leak',
           reading: 'Active leak detected',
-          timestamp: '2026-01-15T03:45:00Z',
-          alert: 'Water leak detected in storage area',
+          timestamp: '2026-02-10T03:15:00Z',
+          alert: 'Water sensor detected leak at 3:15 AM and sent alert',
           status: 'active'
         },
         {
           sensorId: 'HUMID-BPF-003',
           type: 'humidity',
           reading: '85%',
-          timestamp: '2026-01-15T04:00:00Z',
+          timestamp: '2026-02-10T04:00:00Z',
           alert: 'Abnormal humidity spike',
           status: 'active'
         }
@@ -71,37 +71,33 @@ const pcDemoData = [
 
     // Property Damage Assessment
     propertyDamage: {
-      affectedAreas: ['Storage Room', 'Main Retail Floor', 'Walk-in Cooler', 'Office'],
+      affectedAreas: ['Basement Storage', 'Walk-in Cooler', 'Storefront Display', 'Delivery Van Area'],
       damageCategories: [
-        {
-          category: 'Water Damage',
-          severity: 'Major',
-          description: 'Extensive water damage from pipe burst affecting walls, flooring, and ceiling',
-          estimatedCost: 35000
-        },
         {
           category: 'Inventory Loss',
           severity: 'Critical',
-          description: 'Complete loss of refrigerated flower inventory and damaged retail displays',
-          estimatedCost: 25000
-        },
-        {
-          category: 'Equipment Damage',
-          severity: 'Moderate',
-          description: 'Walk-in cooler compressor damage, point-of-sale system water damage',
-          estimatedCost: 15000
-        },
-        {
-          category: 'Business Interruption',
-          severity: 'High',
-          description: 'Estimated 2-week closure for repairs and inventory replacement',
+          description: 'Complete loss of refrigerated flower inventory',
           estimatedCost: 12000
+        },
+        {
+          category: 'Structural Damage',
+          severity: 'Major',
+          description: 'Water damage from pipe burst in basement affecting walls and flooring',
+          estimatedCost: 7500
         }
       ],
-      totalEstimatedLoss: 87000,
+      totalEstimatedLoss: 19500,
+      capturedAreas: [
+        { area: 'Storefront Display', status: 'captured', timestamp: '2026-02-10T07:30:00Z' },
+        { area: 'Walk-in Cooler', status: 'captured', timestamp: '2026-02-10T07:32:00Z' },
+        { area: 'Basement Water Pipes', status: 'captured', timestamp: '2026-02-10T07:35:00Z' },
+        { area: 'Delivery Van', status: 'captured', timestamp: '2026-02-10T07:38:00Z' }
+      ],
       photos: [
-        { url: '/images/water-damage-storage.jpg', caption: 'Storage room water damage', timestamp: '2026-01-15T08:00:00Z' },
-        { url: '/images/inventory-loss.jpg', caption: 'Damaged flower inventory', timestamp: '2026-01-15T08:15:00Z' }
+        { url: '/images/storefront-display.jpg', caption: 'Storefront Display', timestamp: '2026-02-10T07:30:00Z' },
+        { url: '/images/walk-in-cooler.jpg', caption: 'Walk-in Cooler', timestamp: '2026-02-10T07:32:00Z' },
+        { url: '/images/basement-pipes.jpg', caption: 'Basement Water Pipes', timestamp: '2026-02-10T07:35:00Z' },
+        { url: '/images/delivery-van.jpg', caption: 'Delivery Van', timestamp: '2026-02-10T07:38:00Z' }
       ]
     },
 
@@ -125,31 +121,31 @@ const pcDemoData = [
         {
           criterion: 'Storm Alert Sent',
           met: true,
-          details: 'Winter storm alert was sent 48 hours before incident',
-          timestamp: '2026-01-13T03:45:00Z'
+          details: 'Winter storm alert sent 48 hours before incident',
+          timestamp: '2026-02-08T03:15:00Z'
         },
         {
           criterion: 'Risk Documentation',
           met: true,
-          details: 'Property photos documented vulnerable pipe locations from prior claim',
+          details: 'Property photos documented vulnerable pipe locations',
           priorClaimRef: 'CLM-2024-012847'
         },
         {
           criterion: 'Smart Monitoring',
           met: true,
-          details: 'Water sensor detected leak at 3:45 AM and sent immediate alert',
+          details: 'Water sensor detected leak at 3:15 AM and sent alert',
           sensorVerified: true
         },
         {
           criterion: 'Prevention Compliance',
           met: true,
-          details: 'Insured followed all recommended prevention measures from prior claim',
+          details: 'Followed recommended prevention checklist',
           complianceScore: 100
         },
         {
           criterion: 'Rapid Response',
           met: true,
-          details: 'Emergency mitigation began within 2 hours of detection',
+          details: 'Emergency mitigation began within 2 hours',
           responseTime: '1 hour 45 minutes'
         }
       ]
@@ -159,23 +155,23 @@ const pcDemoData = [
     proactiveAlerts: [
       {
         type: 'temperature_warning',
-        timestamp: '2026-01-15T02:30:00Z',
+        timestamp: '2026-02-10T02:30:00Z',
         message: 'Critical temperature drop detected at insured location',
         severity: 'high',
         actionTaken: 'Automated notification sent to insured'
       },
       {
         type: 'weather_advisory',
-        timestamp: '2026-01-14T18:00:00Z',
-        message: 'Winter storm warning issued for Denver area',
-        severity: 'medium',
+        timestamp: '2026-02-08T03:15:00Z',
+        message: 'Winter storm alert sent 48 hours before incident',
+        severity: 'high',
         actionTaken: 'Preventive measures advisory sent'
       }
     ],
 
     routing: {
-      type: 'FASTTRACK',
-      method: 'STP',
+      type: 'STP',
+      method: 'STP - Straight-Through Processing',
       reason: 'IoT-verified, prevention compliance, prior good history, all 5 STP criteria met',
       score: 94,
       eligible: true
@@ -183,27 +179,27 @@ const pcDemoData = [
 
     // Financial/Reserve Management (P&C specific)
     financial: {
-      claimAmount: 87000,
-      initialReserve: 90000,
+      claimAmount: 19500,
+      initialReserve: 20000,
       currentReserve: 0,
       policyLimit: 500000,
       deductible: 5000,
-      businessInterruptionClaim: 12000,
-      totalExposure: 87000,
-      paidToDate: 87000,
+      businessInterruptionClaim: 0,
+      totalExposure: 19500,
+      paidToDate: 19500,
       reserveAdequacy: 'closed',
-      lastReserveUpdate: '2026-01-15T14:00:00Z',
+      lastReserveUpdate: '2026-02-10T14:00:00Z',
       payments: [
         {
           id: 'PAY-001-001',
-          amount: 87000,
+          amount: 19500,
           payee: 'Bloom & Petals Florist',
           status: 'Approved',
-          date: '2026-01-15',
-          approvalDate: '2026-01-15T08:15:00Z',
+          date: '2026-02-10',
+          approvalDate: '2026-02-10T08:15:00Z',
           type: 'STP Auto-Approval',
           method: 'ACH Transfer',
-          scheduledDate: '2026-01-17',
+          scheduledDate: '2026-02-12',
           note: 'Fast-tracked due to IoT verification and prevention compliance'
         }
       ]
@@ -226,9 +222,9 @@ const pcDemoData = [
     workflow: {
       currentStage: 'approved',
       processingType: 'STP - Straight-Through Processing',
-      assignedTo: 'AI Auto-Approval System',
-      assignedDate: '2026-01-15T07:30:00Z',
-      approvedDate: '2026-01-15T08:15:00Z',
+      assignedTo: 'Jennifer Torres',
+      assignedDate: '2026-02-10T08:15:00Z',
+      approvedDate: '2026-02-10T08:15:00Z',
       approvalDuration: '45 minutes',
       humanReviewRequired: false,
       postApprovalAudit: 'Scheduled',
@@ -241,38 +237,38 @@ const pcDemoData = [
     },
 
     aiInsights: {
-      claimSummary: 'Commercial property claim for winter storm-related pipe burst at Bloom & Petals Florist. IoT sensors validated freezing conditions and water leak. Weather data confirms severe winter storm. Low fraud risk with straightforward causation.',
+      claimSummary: 'Commercial property claim for winter storm-related frozen pipe burst at Bloom & Petals Florist basement. IoT sensors validated freezing conditions and water leak at 3:15 AM. Weather data confirms severe winter storm. Low fraud risk with straightforward causation. All 5 STP criteria met.',
       recommendedActions: [
-        'Authorize emergency water mitigation services',
-        'Fast-track equipment damage assessment',
-        'Coordinate with restoration contractor',
-        'Review business interruption coverage timeline'
+        'STP Auto-Approval - All criteria met',
+        'Payment authorized via ACH',
+        'Post-settlement audit scheduled',
+        'Adjuster Jennifer Torres assigned'
       ],
       similarClaims: 3,
-      averageSettlementTime: '12 days',
-      settlementPrediction: '$82,000 - $92,000'
+      averageSettlementTime: '< 1 day',
+      settlementPrediction: '$19,500'
     },
 
     documents: [
-      { id: 'doc-001', type: 'FNOL', name: 'First Notice of Loss', uploadDate: '2026-01-15T07:30:00Z' },
-      { id: 'doc-002', type: 'Photos', name: 'Damage Photos', uploadDate: '2026-01-15T08:30:00Z' },
-      { id: 'doc-003', type: 'Invoice', name: 'Inventory Loss List', uploadDate: '2026-01-15T10:00:00Z' }
+      { id: 'doc-001', type: 'FNOL', name: 'First Notice of Loss', uploadDate: '2026-02-10T07:30:00Z' },
+      { id: 'doc-002', type: 'Photos', name: '4 Area Captures (Storefront, Cooler, Pipes, Van)', uploadDate: '2026-02-10T07:38:00Z' },
+      { id: 'doc-003', type: 'Invoice', name: 'Inventory Loss List', uploadDate: '2026-02-10T10:00:00Z' }
     ],
 
     timeline: [
-      { date: '2026-01-13T03:45:00Z', event: 'Winter storm alert sent to insured', actor: 'Weather Monitoring System', note: 'STP Criterion 1 met' },
-      { date: '2026-01-15T02:30:00Z', event: 'IoT temperature alert triggered - Critical temp drop', actor: 'FloodStop Pro Sensor' },
-      { date: '2026-01-15T03:45:00Z', event: 'Water leak sensor activated - Immediate alert sent', actor: 'FloodStop Pro Sensor', note: 'STP Criterion 3 met' },
-      { date: '2026-01-15T04:00:00Z', event: 'Insured acknowledged alert, arrived on-site', actor: 'Kim Lee' },
-      { date: '2026-01-15T05:30:00Z', event: 'Emergency water mitigation started', actor: 'RapidDry Emergency Services', note: 'STP Criterion 5 met - Response within 2 hours' },
-      { date: '2026-01-15T07:30:00Z', event: 'Claim reported via mobile app with photos', actor: 'Kim Lee' },
-      { date: '2026-01-15T07:31:00Z', event: 'AI analysis initiated - STP evaluation', actor: 'AI Claims Engine' },
-      { date: '2026-01-15T07:32:00Z', event: 'Prior claim history retrieved (CLM-2024-012847)', actor: 'AI Claims Engine', note: 'STP Criterion 2 & 4 verified' },
-      { date: '2026-01-15T07:33:00Z', event: 'All 5 STP criteria validated - 94% confidence', actor: 'AI Claims Engine' },
-      { date: '2026-01-15T08:15:00Z', event: 'Claim auto-approved via STP', actor: 'AI Auto-Approval System', note: 'Straight-Through Processing completed' },
-      { date: '2026-01-15T08:16:00Z', event: 'Payment authorized - ACH transfer scheduled', actor: 'Payment System' },
-      { date: '2026-01-15T08:30:00Z', event: 'Approval notification sent to insured', actor: 'Communication System' },
-      { date: '2026-01-15T14:00:00Z', event: 'Post-approval audit scheduled', actor: 'Quality Assurance' }
+      { date: '2026-02-08T03:15:00Z', event: 'Winter storm alert sent 48 hours before incident', actor: 'Weather Monitoring System', note: 'STP Criterion 1 met' },
+      { date: '2026-02-10T02:30:00Z', event: 'IoT temperature alert triggered - Critical temp drop', actor: 'FloodStop Pro Sensor' },
+      { date: '2026-02-10T03:15:00Z', event: 'Water leak sensor detected at 3:15 AM and sent alert', actor: 'FloodStop Pro Sensor', note: 'STP Criterion 3 met' },
+      { date: '2026-02-10T04:00:00Z', event: 'Insured acknowledged alert, arrived on-site', actor: 'Kim Lee' },
+      { date: '2026-02-10T05:00:00Z', event: 'Emergency mitigation began within 2 hours', actor: 'RapidDry Emergency Services', note: 'STP Criterion 5 met - Response within 2 hours' },
+      { date: '2026-02-10T07:30:00Z', event: 'Claim reported via mobile app with 4 area captures', actor: 'Kim Lee' },
+      { date: '2026-02-10T07:31:00Z', event: 'AI analysis initiated - STP evaluation', actor: 'AI Claims Engine' },
+      { date: '2026-02-10T07:32:00Z', event: 'Prior claim history retrieved (CLM-2024-012847)', actor: 'AI Claims Engine', note: 'STP Criterion 2 & 4 verified' },
+      { date: '2026-02-10T07:33:00Z', event: 'All 5 STP criteria validated - 94% confidence', actor: 'AI Claims Engine' },
+      { date: '2026-02-10T08:15:00Z', event: 'Claim auto-approved via STP - Adjuster Jennifer Torres assigned', actor: 'AI Auto-Approval System', note: 'Straight-Through Processing completed' },
+      { date: '2026-02-10T08:16:00Z', event: 'Payment authorized - ACH transfer scheduled', actor: 'Payment System' },
+      { date: '2026-02-10T08:30:00Z', event: 'Fast-Track approval notification sent to insured', actor: 'Communication System' },
+      { date: '2026-02-10T14:00:00Z', event: 'Post-approval audit scheduled', actor: 'Quality Assurance' }
     ],
 
     priorClaimHistory: {
