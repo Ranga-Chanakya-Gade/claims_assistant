@@ -2,6 +2,7 @@ import {
   DxcHeading,
   DxcFlex,
   DxcTypography,
+  DxcBadge,
   DxcChip,
   DxcInset,
   DxcTable
@@ -29,18 +30,18 @@ const PropertyDamagePanel = ({ damageData }) => {
   const getSeverityColor = (severity) => {
     switch (severity?.toLowerCase()) {
       case 'critical':
-        return 'error';
+        return 'red';
       case 'major':
       case 'high':
-        return 'error';
+        return 'red';
       case 'moderate':
       case 'medium':
-        return 'warning';
+        return 'orange';
       case 'minor':
       case 'low':
-        return 'info';
+        return 'green';
       default:
-        return 'default';
+        return undefined;
     }
   };
 
@@ -75,9 +76,8 @@ const PropertyDamagePanel = ({ damageData }) => {
       displayValue: (
         <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
           <span>{getSeverityIcon(damage.severity)}</span>
-          <DxcChip
+          <DxcBadge
             label={damage.severity}
-            size="small"
             color={getSeverityColor(damage.severity)}
           />
         </DxcFlex>
