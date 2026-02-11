@@ -52,16 +52,16 @@ const ClaimHeader = ({
   const getStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
     if (statusUpper === 'APPROVED' || statusUpper === 'CLOSED' || statusUpper === 'PAID') {
-      return 'green';
+      return 'success';
     }
     if (statusUpper === 'DENIED' || statusUpper === 'DECLINED' || statusUpper === 'REJECTED') {
-      return 'red';
+      return 'error';
     }
     if (statusUpper === 'UNDER_REVIEW' || statusUpper === 'PENDING' || statusUpper === 'IN_PROGRESS') {
-      return 'orange';
+      return 'warning';
     }
     if (statusUpper === 'ON_HOLD' || statusUpper === 'SUSPENDED') {
-      return 'yellow';
+      return 'warning';
     }
     return undefined; // use default badge color
   };
@@ -112,6 +112,7 @@ const ClaimHeader = ({
                 </DxcTypography>
                 <DxcBadge
                   label={claim.status}
+                  mode="contextual"
                   {...(getStatusColor(claim.status) && { color: getStatusColor(claim.status) })}
                 />
                 {claim.routing && (

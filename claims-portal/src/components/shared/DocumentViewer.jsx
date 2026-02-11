@@ -68,13 +68,13 @@ const DocumentViewer = ({
   const getDocumentStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
     if (statusUpper === 'VERIFIED' || statusUpper === 'APPROVED' || statusUpper === 'PROCESSED') {
-      return 'green';
+      return 'success';
     }
     if (statusUpper === 'PENDING' || statusUpper === 'PROCESSING' || statusUpper === 'UNDER REVIEW') {
-      return 'orange';
+      return 'warning';
     }
     if (statusUpper === 'REJECTED' || statusUpper === 'FAILED' || statusUpper === 'INVALID') {
-      return 'red';
+      return 'error';
     }
     return undefined;
   };

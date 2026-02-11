@@ -83,13 +83,13 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
   const getBeneficiaryStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
     if (statusUpper === 'VERIFIED' || statusUpper === 'APPROVED') {
-      return 'green';
+      return 'success';
     }
     if (statusUpper === 'PENDING' || statusUpper === 'UNDER REVIEW') {
-      return 'orange';
+      return 'warning';
     }
     if (statusUpper === 'REJECTED' || statusUpper === 'INVALID') {
-      return 'red';
+      return 'error';
     }
     return undefined;
   };
@@ -474,6 +474,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                               </DxcFlex>
                               <DxcBadge
                                 label={ben.status}
+                                mode="contextual"
                                 {...(getBeneficiaryStatusColor(ben.status) && { color: getBeneficiaryStatusColor(ben.status) })}
                               />
                             </DxcFlex>

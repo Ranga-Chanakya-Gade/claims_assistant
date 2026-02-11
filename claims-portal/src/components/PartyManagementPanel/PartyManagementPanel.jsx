@@ -58,26 +58,26 @@ const PartyManagementPanel = ({ parties = [], onAddParty, onEditParty, onChangeI
   // Badge color functions for DxcBadge (expects "green", "red", "orange", "yellow", "purple", "blue", or undefined)
   const getRoleColor = (role) => {
     const roleUpper = (role || '').toUpperCase();
-    if (roleUpper.includes('INSURED')) return 'purple';
-    if (roleUpper.includes('PRIMARY BENEFICIARY') || roleUpper.includes('BENEFICIARY')) return 'green';
-    if (roleUpper.includes('OWNER')) return 'blue';
-    if (roleUpper.includes('AGENT')) return 'orange';
+    if (roleUpper.includes('INSURED')) return 'info';
+    if (roleUpper.includes('PRIMARY BENEFICIARY') || roleUpper.includes('BENEFICIARY')) return 'success';
+    if (roleUpper.includes('OWNER')) return 'info';
+    if (roleUpper.includes('AGENT')) return 'warning';
     return undefined;
   };
 
   const getVerificationStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'VERIFIED' || statusUpper === 'PASSED') return 'green';
-    if (statusUpper === 'PENDING' || statusUpper === 'IN_PROGRESS') return 'orange';
-    if (statusUpper === 'FAILED' || statusUpper === 'NOT_VERIFIED') return 'red';
+    if (statusUpper === 'VERIFIED' || statusUpper === 'PASSED') return 'success';
+    if (statusUpper === 'PENDING' || statusUpper === 'IN_PROGRESS') return 'warning';
+    if (statusUpper === 'FAILED' || statusUpper === 'NOT_VERIFIED') return 'error';
     return undefined;
   };
 
   const getCSLNColor = (result) => {
     const resultUpper = (result || '').toUpperCase();
-    if (resultUpper.includes('PASS') || resultUpper.includes('MATCH')) return 'green';
-    if (resultUpper.includes('PENDING') || resultUpper.includes('REVIEW')) return 'orange';
-    if (resultUpper.includes('FAIL') || resultUpper.includes('NO_MATCH')) return 'red';
+    if (resultUpper.includes('PASS') || resultUpper.includes('MATCH')) return 'success';
+    if (resultUpper.includes('PENDING') || resultUpper.includes('REVIEW')) return 'warning';
+    if (resultUpper.includes('FAIL') || resultUpper.includes('NO_MATCH')) return 'error';
     return undefined;
   };
 

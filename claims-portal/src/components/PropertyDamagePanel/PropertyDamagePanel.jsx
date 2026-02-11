@@ -30,16 +30,16 @@ const PropertyDamagePanel = ({ damageData }) => {
   const getSeverityColor = (severity) => {
     switch (severity?.toLowerCase()) {
       case 'critical':
-        return 'red';
+        return 'error';
       case 'major':
       case 'high':
-        return 'red';
+        return 'error';
       case 'moderate':
       case 'medium':
-        return 'orange';
+        return 'warning';
       case 'minor':
       case 'low':
-        return 'green';
+        return 'success';
       default:
         return undefined;
     }

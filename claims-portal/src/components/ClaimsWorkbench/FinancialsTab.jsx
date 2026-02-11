@@ -28,16 +28,16 @@ const FinancialsTab = ({
   const getPaymentStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
     if (statusUpper === 'PAID' || statusUpper === 'COMPLETED' || statusUpper === 'ISSUED') {
-      return 'green';
+      return 'success';
     }
     if (statusUpper === 'PENDING' || statusUpper === 'PENDING APPROVAL' || statusUpper === 'SCHEDULED') {
-      return 'orange';
+      return 'warning';
     }
     if (statusUpper === 'CANCELLED' || statusUpper === 'FAILED' || statusUpper === 'REJECTED') {
-      return 'red';
+      return 'error';
     }
     if (statusUpper === 'ON HOLD' || statusUpper === 'PROCESSING') {
-      return 'yellow';
+      return 'warning';
     }
     return undefined;
   };
