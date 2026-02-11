@@ -67,16 +67,16 @@ const DocumentViewer = ({
   // Get document status color for DxcBadge
   const getDocumentStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'VERIFIED' || statusUpper === 'APPROVED' || statusUpper === 'PROCESSED') {
+    if (statusUpper.includes('VERIFIED') || statusUpper.includes('APPROVED') || statusUpper.includes('PROCESSED')) {
       return 'success';
     }
-    if (statusUpper === 'PENDING' || statusUpper === 'PROCESSING' || statusUpper === 'UNDER REVIEW') {
+    if (statusUpper.includes('PENDING') || statusUpper.includes('PROCESSING') || statusUpper.includes('REVIEW')) {
       return 'warning';
     }
-    if (statusUpper === 'REJECTED' || statusUpper === 'FAILED' || statusUpper === 'INVALID') {
+    if (statusUpper.includes('REJECTED') || statusUpper.includes('FAILED') || statusUpper.includes('INVALID')) {
       return 'error';
     }
-    return undefined;
+    return 'info';
   };
 
   // Format file size

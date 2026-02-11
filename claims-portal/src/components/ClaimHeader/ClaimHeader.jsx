@@ -51,19 +51,22 @@ const ClaimHeader = ({
 
   const getStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'APPROVED' || statusUpper === 'CLOSED' || statusUpper === 'PAID') {
+    // Success states
+    if (statusUpper === 'APPROVED' || statusUpper === 'CLOSED' || statusUpper === 'PAYMENT_COMPLETE') {
       return 'success';
     }
+    // Error states
     if (statusUpper === 'DENIED' || statusUpper === 'DECLINED' || statusUpper === 'REJECTED') {
       return 'error';
     }
-    if (statusUpper === 'UNDER_REVIEW' || statusUpper === 'PENDING' || statusUpper === 'IN_PROGRESS') {
+    // Warning/In-progress states - use includes for underscore variants
+    if (statusUpper.includes('PENDING') || statusUpper.includes('REVIEW') ||
+        statusUpper === 'SUBMITTED' || statusUpper === 'IN_APPROVAL' ||
+        statusUpper === 'PAYMENT_SCHEDULED' || statusUpper === 'SUSPENDED') {
       return 'warning';
     }
-    if (statusUpper === 'ON_HOLD' || statusUpper === 'SUSPENDED') {
-      return 'warning';
-    }
-    return undefined; // use default badge color
+    // Default for NEW and others
+    return 'info';
   };
 
   const slaDate = claim.workflow?.sla?.dueDate ? new Date(claim.workflow.sla.dueDate) : null;

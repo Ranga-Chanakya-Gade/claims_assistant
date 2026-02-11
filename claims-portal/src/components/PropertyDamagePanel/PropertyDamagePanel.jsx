@@ -41,7 +41,7 @@ const PropertyDamagePanel = ({ damageData }) => {
       case 'low':
         return 'success';
       default:
-        return undefined;
+        return 'info';
     }
   };
 

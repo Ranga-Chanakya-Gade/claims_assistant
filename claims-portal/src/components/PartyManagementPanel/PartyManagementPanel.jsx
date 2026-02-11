@@ -67,10 +67,10 @@ const PartyManagementPanel = ({ parties = [], onAddParty, onEditParty, onChangeI
 
   const getVerificationStatusColor = (status) => {
     const statusUpper = (status || '').toUpperCase();
-    if (statusUpper === 'VERIFIED' || statusUpper === 'PASSED') return 'success';
-    if (statusUpper === 'PENDING' || statusUpper === 'IN_PROGRESS') return 'warning';
-    if (statusUpper === 'FAILED' || statusUpper === 'NOT_VERIFIED') return 'error';
-    return undefined;
+    if (statusUpper.includes('VERIFIED') || statusUpper.includes('PASSED')) return 'success';
+    if (statusUpper.includes('PENDING') || statusUpper.includes('PROGRESS')) return 'warning';
+    if (statusUpper.includes('FAILED') || statusUpper.includes('NOT_VERIFIED')) return 'error';
+    return 'info';
   };
 
   const getCSLNColor = (result) => {
