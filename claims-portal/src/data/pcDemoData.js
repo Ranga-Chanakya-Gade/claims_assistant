@@ -170,7 +170,7 @@ const pcDemoData = [
     ],
 
     routing: {
-      type: 'STP',
+      type: 'fasttrack',
       method: 'STP - Straight-Through Processing',
       reason: 'IoT-verified, prevention compliance, prior good history, all 5 STP criteria met',
       score: 94,
