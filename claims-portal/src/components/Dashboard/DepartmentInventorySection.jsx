@@ -9,7 +9,8 @@ const DepartmentInventorySection = ({
   claims,
   demoLineOfBusiness,
   subsetFilter,
-  onFilterChange
+  onFilterChange,
+  compact = false
 }) => {
   // Calculate department counts
   const departmentGroups = (() => {
@@ -84,24 +85,27 @@ const DepartmentInventorySection = ({
 
   return (
     <DxcContainer
-      padding="var(--spacing-padding-m)"
+      padding={compact ? 'var(--spacing-padding-s)' : 'var(--spacing-padding-m)'}
       style={{
         backgroundColor: 'var(--color-bg-neutral-lightest)',
         borderRadius: 'var(--border-radius-m)',
-        boxShadow: 'var(--shadow-mid-04)'
+        boxShadow: 'var(--shadow-mid-04)',
+        height: compact ? '100%' : 'auto'
       }}
     >
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+      <DxcFlex direction="column" gap={compact ? 'var(--spacing-gap-s)' : 'var(--spacing-gap-m)'} style={{ height: '100%' }}>
         {/* Section Title */}
-        <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+        <DxcTypography fontSize={compact ? 'font-scale-02' : 'font-scale-03'} fontWeight="font-weight-semibold">
           Department Inventory
         </DxcTypography>
 
         {/* Department Cards Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--spacing-gap-m)'
+          gridTemplateColumns: compact ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: compact ? 'var(--spacing-gap-s)' : 'var(--spacing-gap-m)',
+          flex: compact ? '1' : 'auto',
+          alignContent: 'start'
         }}>
           {departmentGroups.map((group) => (
             <div
@@ -118,7 +122,7 @@ const DepartmentInventorySection = ({
                 }
               }}
               style={{
-                padding: 'var(--spacing-padding-m)',
+                padding: compact ? 'var(--spacing-padding-s)' : 'var(--spacing-padding-m)',
                 backgroundColor: subsetFilter === group.key
                   ? 'var(--color-bg-primary-lighter)'
                   : 'var(--color-bg-neutral-lighter)',
@@ -131,22 +135,29 @@ const DepartmentInventorySection = ({
                 boxShadow: subsetFilter === group.key ? 'var(--shadow-mid-02)' : 'none'
               }}
             >
-              <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
-                <span
-                  className="material-icons"
-                  style={{
-                    fontSize: '32px',
-                    color: group.color
-                  }}
-                >
-                  {group.icon}
-                </span>
-                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                  {group.label}
-                </DxcTypography>
+              <DxcFlex
+                direction={compact ? 'row' : 'column'}
+                gap={compact ? 'var(--spacing-gap-xs)' : 'var(--spacing-gap-s)'}
+                alignItems="center"
+                justifyContent={compact ? 'space-between' : 'center'}
+              >
+                <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                  <span
+                    className="material-icons"
+                    style={{
+                      fontSize: compact ? '20px' : '32px',
+                      color: group.color
+                    }}
+                  >
+                    {group.icon}
+                  </span>
+                  <DxcTypography fontSize={compact ? 'font-scale-01' : 'font-scale-02'} fontWeight="font-weight-semibold">
+                    {group.label}
+                  </DxcTypography>
+                </DxcFlex>
                 <DxcBadge
                   label={group.count.toString()}
-                  mode="contextual"
+                  mode={compact ? 'notification' : 'contextual'}
                   color={subsetFilter === group.key ? 'primary' : 'neutral'}
                 />
               </DxcFlex>

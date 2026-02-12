@@ -570,22 +570,25 @@ const Dashboard = ({ onClaimSelect }) => {
           <div style={{ flex: 2 }}>
             <DashboardMetricsCard claims={allClaims} demoLineOfBusiness={demoLineOfBusiness} />
           </div>
+
+          {/* Department Inventory - Compact */}
+          <div style={{ flex: 1.5 }}>
+            <DepartmentInventorySection
+              claims={allClaims}
+              demoLineOfBusiness={demoLineOfBusiness}
+              subsetFilter={subsetFilter}
+              onFilterChange={(newFilter) => {
+                setSubsetFilter(newFilter);
+                setActiveTabIndex(0);
+                setCurrentPage(1);
+              }}
+              compact={true}
+            />
+          </div>
         </DxcFlex>
 
         {/* FastTrack Metrics Card */}
         <FastTrackMetricsCard claims={allClaims} />
-
-        {/* Department Inventory */}
-        <DepartmentInventorySection
-          claims={allClaims}
-          demoLineOfBusiness={demoLineOfBusiness}
-          subsetFilter={subsetFilter}
-          onFilterChange={(newFilter) => {
-            setSubsetFilter(newFilter);
-            setActiveTabIndex(0);
-            setCurrentPage(1);
-          }}
-        />
 
         {/* Inventory by Phase */}
         <PhaseInventory
