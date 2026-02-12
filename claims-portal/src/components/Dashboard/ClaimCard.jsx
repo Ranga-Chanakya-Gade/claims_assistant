@@ -55,6 +55,17 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
     return typeLabels[type] || `LOB: ${type}`;
   };
 
+  // Helper to get status badge color
+  const getStatusColor = (status) => {
+    const statusLower = status?.toLowerCase();
+    if (statusLower === 'approved' || statusLower === 'approved_payment') return 'success';
+    if (statusLower === 'denied' || statusLower === 'declined') return 'error';
+    if (statusLower === 'under_review' || statusLower === 'pending') return 'warning';
+    if (statusLower === 'new' || statusLower === 'submitted') return 'info';
+    if (statusLower === 'closed') return 'neutral';
+    return 'neutral';
+  };
+
   const displayName = isClaim ? getClaimantName(submission) : submission.name;
   const displayStatus = isClaim ? submission.status : submission.status;
   const displayType = isClaim ? getClaimTypeLabel(submission.type) : submission.type;
@@ -162,7 +173,7 @@ const ClaimCard = ({ submission, isGridView, onSelect }) => {
               <DxcTypography fontSize="10px" color="var(--color-fg-neutral-stronger)">
                 STATUS
               </DxcTypography>
-              <DxcBadge label={displayStatus} mode="contextual" color="neutral" />
+              <DxcBadge label={displayStatus} mode="contextual" color={getStatusColor(displayStatus)} />
             </DxcFlex>
             <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
               <DxcTypography fontSize="10px" color="var(--color-fg-neutral-stronger)">
