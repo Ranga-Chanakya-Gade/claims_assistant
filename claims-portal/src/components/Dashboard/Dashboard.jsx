@@ -559,14 +559,6 @@ const Dashboard = ({ onClaimSelect }) => {
           </DxcFlex>
         </div>
 
-        {/* Inventory by Phase */}
-        <PhaseInventory
-          claims={allClaims}
-          user={user}
-          onPhaseClick={handlePhaseClick}
-          selectedPhase={selectedPhase}
-        />
-
         {/* Highlights Section - Top Cards */}
         <DxcFlex gap="var(--spacing-gap-m)">
           {/* My Tasks Card */}
@@ -582,6 +574,26 @@ const Dashboard = ({ onClaimSelect }) => {
 
         {/* FastTrack Metrics Card */}
         <FastTrackMetricsCard claims={allClaims} />
+
+        {/* Department Inventory */}
+        <DepartmentInventorySection
+          claims={allClaims}
+          demoLineOfBusiness={demoLineOfBusiness}
+          subsetFilter={subsetFilter}
+          onFilterChange={(newFilter) => {
+            setSubsetFilter(newFilter);
+            setActiveTabIndex(0);
+            setCurrentPage(1);
+          }}
+        />
+
+        {/* Inventory by Phase */}
+        <PhaseInventory
+          claims={allClaims}
+          user={user}
+          onPhaseClick={handlePhaseClick}
+          selectedPhase={selectedPhase}
+        />
 
         {/* ServiceNow FNOL Claims Table - DISABLED */}
         {/* Uncomment below to re-enable ServiceNow integration
@@ -600,18 +612,6 @@ const Dashboard = ({ onClaimSelect }) => {
           />
         )}
         */}
-
-        {/* Department Inventory */}
-        <DepartmentInventorySection
-          claims={allClaims}
-          demoLineOfBusiness={demoLineOfBusiness}
-          subsetFilter={subsetFilter}
-          onFilterChange={(newFilter) => {
-            setSubsetFilter(newFilter);
-            setActiveTabIndex(0);
-            setCurrentPage(1);
-          }}
-        />
 
         {/* Main Content Card - Claims Inventory */}
         <div style={{
