@@ -21,6 +21,7 @@ import {
 import { useClaims } from '../../contexts/ClaimsContext';
 import { useWorkflow } from '../../contexts/WorkflowContext';
 import { useDemoMode } from '../../contexts/DemoModeContext';
+import { useApp } from '../../contexts/AppContext';
 import FastTrackBadge from '../shared/FastTrackBadge';
 import SLAIndicator from '../shared/SLAIndicator';
 import { RoutingType, ClaimStatus } from '../../types/claim.types';
@@ -66,6 +67,8 @@ const Dashboard = ({ onClaimSelect }) => {
   } = useWorkflow();
 
   const { demoLineOfBusiness } = useDemoMode();
+
+  const { user } = useApp();
 
   // ARIA live region for announcing changes
   const [announce, LiveRegion] = useAriaLiveRegion();
@@ -152,6 +155,24 @@ const Dashboard = ({ onClaimSelect }) => {
       avgDaysToClose
     };
   }, [allClaims]);
+
+  // Calculate Total Open Inventory for logged-in user
+  const totalOpenInventory = useMemo(() => {
+    if (!allClaims || allClaims.length === 0) return 0;
+
+    // Count all open claims assigned to the current user
+    // If user is not logged in or claims don't have assignedTo, show all open claims
+    return allClaims.filter(c => {
+      const isOpen = c.status !== ClaimStatus.CLOSED && c.status !== ClaimStatus.DENIED;
+
+      // If no user context or claim has no assignedTo field, include all open claims
+      if (!user || !c.assignedTo) return isOpen;
+
+      // Otherwise, filter by assignment
+      const isAssignedToUser = c.assignedTo === user.name || c.assignedTo === user.id;
+      return isOpen && isAssignedToUser;
+    }).length;
+  }, [allClaims, user]);
 
   // Calculate general metrics
   const metrics = useMemo(() => {
@@ -465,6 +486,43 @@ const Dashboard = ({ onClaimSelect }) => {
           </DxcAlert>
         )}
 
+        {/* Total Open Inventory - Large KPI Tile */}
+        <div style={{
+          backgroundColor: 'var(--color-bg-info-lighter)',
+          borderRadius: 'var(--border-radius-m)',
+          boxShadow: 'var(--shadow-high-01)',
+          padding: 'var(--spacing-padding-xl)',
+          border: '2px solid var(--color-border-info-medium)'
+        }}>
+          <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
+            <DxcTypography
+              fontSize="font-scale-02"
+              fontWeight="font-weight-semibold"
+              color="var(--color-fg-neutral-stronger)"
+              textAlign="center"
+            >
+              TOTAL OPEN INVENTORY
+            </DxcTypography>
+            <DxcTypography
+              fontSize="56px"
+              fontWeight="font-weight-bold"
+              color="var(--color-fg-info-dark)"
+              textAlign="center"
+              style={{ lineHeight: '1' }}
+            >
+              {totalOpenInventory}
+            </DxcTypography>
+            <DxcTypography
+              fontSize="font-scale-03"
+              fontWeight="font-weight-regular"
+              color="var(--color-fg-neutral-strong)"
+              textAlign="center"
+            >
+              {user ? `Open cases assigned to ${user.name}` : 'Open cases assigned to you'}
+            </DxcTypography>
+          </DxcFlex>
+        </div>
+
         {/* Highlights Section - Top Cards */}
         <DxcFlex gap="var(--spacing-gap-m)">
           {/* My Tasks Card */}
@@ -481,19 +539,21 @@ const Dashboard = ({ onClaimSelect }) => {
         {/* FastTrack Metrics Card */}
         <FastTrackMetricsCard claims={allClaims} />
 
-        {/* ServiceNow FNOL Claims Table */}
-        <ServiceNowClaimsTable
-          snowClaims={snowClaims}
-          snowLoading={snowLoading}
-          snowError={snowError}
-          snowConnected={snowConnected}
-          onClaimSelect={onClaimSelect}
-          onRetry={fetchServiceNowClaims}
-          onDisconnect={() => {
-            serviceNowService.clearAuth();
-            setSnowClaims([]);
-          }}
-        />
+        {/* ServiceNow FNOL Claims Table - Hidden for now */}
+        {false && (snowClaims.length > 0 || snowLoading || snowError) && (
+          <ServiceNowClaimsTable
+            snowClaims={snowClaims}
+            snowLoading={snowLoading}
+            snowError={snowError}
+            snowConnected={snowConnected}
+            onClaimSelect={onClaimSelect}
+            onRetry={fetchServiceNowClaims}
+            onDisconnect={() => {
+              serviceNowService.clearAuth();
+              setSnowClaims([]);
+            }}
+          />
+        )}
 
         {/* Department Inventory */}
         <DepartmentInventorySection

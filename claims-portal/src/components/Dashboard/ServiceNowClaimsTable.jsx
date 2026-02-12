@@ -102,32 +102,7 @@ const ServiceNowClaimsTable = ({
               onClick={onRetry}
             />
           </DxcAlert>
-        ) : !snowConnected && serviceNowService.useOAuth ? (
-          /* Not Connected State */
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{
-              backgroundColor: 'var(--color-bg-neutral-lighter)',
-              borderRadius: 'var(--border-radius-m)'
-            }}
-          >
-            <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
-              <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
-                Connect to ServiceNow to view FNOL claims from the global domain.
-              </DxcTypography>
-            </DxcFlex>
-          </DxcContainer>
-        ) : snowClaims.length === 0 && !snowLoading ? (
-          /* Empty State */
-          <DxcContainer
-            padding="var(--spacing-padding-m)"
-            style={{ backgroundColor: 'var(--color-bg-neutral-lighter)' }}
-          >
-            <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
-              No ServiceNow FNOL records found. Check your ServiceNow connection configuration.
-            </DxcTypography>
-          </DxcContainer>
-        ) : (
+        ) : snowClaims.length > 0 && (
           /* Claims Table */
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }} aria-label="ServiceNow FNOL Claims">
