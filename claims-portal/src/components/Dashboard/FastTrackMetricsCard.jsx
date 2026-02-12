@@ -48,20 +48,20 @@ const FastTrackMetricsCard = ({ claims }) => {
 
   return (
     <DxcContainer
-      padding="var(--spacing-padding-m)"
+      padding="12px"
       style={{
         backgroundColor: 'var(--color-bg-info-lightest)',
         borderRadius: 'var(--border-radius-m)',
-        boxShadow: 'var(--shadow-mid-04)'
+        boxShadow: 'var(--shadow-mid-02)'
       }}
     >
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+      <DxcFlex direction="column" gap="8px">
         {/* Card Title */}
-        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-          <span className="material-icons" style={{ color: '#000000', fontSize: '20px' }}>
+        <DxcFlex gap="6px" alignItems="center">
+          <span className="material-icons" style={{ color: '#000000', fontSize: '16px' }}>
             flash_on
           </span>
-          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+          <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
             FastTrack Performance
           </DxcTypography>
         </DxcFlex>
@@ -69,19 +69,19 @@ const FastTrackMetricsCard = ({ claims }) => {
         {/* Metrics Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-          gap: 'var(--spacing-gap-m)'
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '8px'
         }}>
           {/* FastTrack Claims Count */}
           <DxcContainer
-            padding="var(--spacing-padding-m)"
+            padding="10px"
             style={{ backgroundColor: 'var(--color-bg-info-lighter)' }}
           >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" fontWeight="font-weight-semibold">
-                FASTTRACK CLAIMS
+            <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcTypography fontSize="10px" fontWeight="font-weight-semibold">
+                FASTTRACK
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-semibold" color="#000000">
+              <DxcTypography fontSize="24px" fontWeight="font-weight-semibold" color="#000000" style={{ lineHeight: '1' }}>
                 {fastTrackMetrics.count}
               </DxcTypography>
             </DxcFlex>
@@ -89,43 +89,44 @@ const FastTrackMetricsCard = ({ claims }) => {
 
           {/* Avg Days to Close */}
           <DxcContainer
-            padding="var(--spacing-padding-m)"
+            padding="10px"
             style={{ backgroundColor: 'var(--color-bg-success-lighter)' }}
           >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" fontWeight="font-weight-semibold">
-                AVG DAYS TO CLOSE
+            <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcTypography fontSize="10px" fontWeight="font-weight-semibold">
+                AVG DAYS
               </DxcTypography>
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-semibold" color="#000000">
+              <DxcTypography fontSize="24px" fontWeight="font-weight-semibold" color="#000000" style={{ lineHeight: '1' }}>
                 {fastTrackMetrics.avgDaysToClose}
               </DxcTypography>
-              <DxcTypography fontSize="10px" color="var(--color-fg-neutral-strong)">
-                Target: ≤10 days
+              <DxcTypography fontSize="9px" color="var(--color-fg-neutral-strong)">
+                Target: ≤10
               </DxcTypography>
             </DxcFlex>
           </DxcContainer>
 
           {/* Target Achievement */}
           <DxcContainer
-            padding="var(--spacing-padding-m)"
+            padding="10px"
             style={{
               backgroundColor: fastTrackMetrics.percentage >= 40
                 ? 'var(--color-bg-success-lighter)'
                 : 'var(--color-bg-warning-lighter)'
             }}
           >
-            <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-              <DxcTypography fontSize="font-scale-01" fontWeight="font-weight-semibold">
-                % OF TOTAL CLAIMS
+            <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcTypography fontSize="10px" fontWeight="font-weight-semibold">
+                % OF TOTAL
               </DxcTypography>
               <DxcTypography
-                fontSize="font-scale-05"
+                fontSize="24px"
                 fontWeight="font-weight-semibold"
                 color="#000000"
+                style={{ lineHeight: '1' }}
               >
                 {fastTrackMetrics.percentage}%
               </DxcTypography>
-              <DxcTypography fontSize="10px" color="var(--color-fg-neutral-strong)">
+              <DxcTypography fontSize="9px" color="var(--color-fg-neutral-strong)">
                 Target: ≥40%
               </DxcTypography>
             </DxcFlex>

@@ -496,8 +496,8 @@ const Dashboard = ({ onClaimSelect }) => {
   const displayData = paginatedClaims.length > 0 ? paginatedClaims : submissionsData;
 
   return (
-    <div style={{ padding: '24px', width: '100%', backgroundColor: '#f5f5f5' }}>
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+    <div style={{ padding: '16px', width: '100%', backgroundColor: '#f5f5f5' }}>
+      <DxcFlex direction="column" gap="12px">
         {/* Page Title */}
         <DxcHeading level={1} text="Dashboard" />
 
@@ -523,39 +523,38 @@ const Dashboard = ({ onClaimSelect }) => {
           </DxcAlert>
         )}
 
-        {/* Total Open Inventory - Large KPI Tile */}
+        {/* Total Open Inventory - Compact */}
         <div style={{
           backgroundColor: 'var(--color-bg-info-lighter)',
           borderRadius: 'var(--border-radius-m)',
-          boxShadow: 'var(--shadow-high-01)',
-          padding: 'var(--spacing-padding-xl)',
-          border: '2px solid var(--color-border-info-medium)'
+          boxShadow: 'var(--shadow-mid-02)',
+          padding: '12px 16px',
+          border: '1px solid var(--color-border-info-medium)'
         }}>
-          <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center">
+          <DxcFlex justifyContent="space-between" alignItems="center">
+            <DxcFlex direction="column" gap="4px">
+              <DxcTypography
+                fontSize="10px"
+                fontWeight="font-weight-semibold"
+                color="var(--color-fg-neutral-stronger)"
+                style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}
+              >
+                Total Open Inventory
+              </DxcTypography>
+              <DxcTypography
+                fontSize="11px"
+                color="var(--color-fg-neutral-strong)"
+              >
+                {user ? `Assigned to ${user.name}` : 'Assigned to you'}
+              </DxcTypography>
+            </DxcFlex>
             <DxcTypography
-              fontSize="font-scale-02"
-              fontWeight="font-weight-semibold"
-              color="var(--color-fg-neutral-stronger)"
-              textAlign="center"
-            >
-              TOTAL OPEN INVENTORY
-            </DxcTypography>
-            <DxcTypography
-              fontSize="56px"
+              fontSize="42px"
               fontWeight="font-weight-bold"
               color="var(--color-fg-info-dark)"
-              textAlign="center"
               style={{ lineHeight: '1' }}
             >
               {totalOpenInventory}
-            </DxcTypography>
-            <DxcTypography
-              fontSize="font-scale-03"
-              fontWeight="font-weight-regular"
-              color="var(--color-fg-neutral-strong)"
-              textAlign="center"
-            >
-              {user ? `Open cases assigned to ${user.name}` : 'Open cases assigned to you'}
             </DxcTypography>
           </DxcFlex>
         </div>

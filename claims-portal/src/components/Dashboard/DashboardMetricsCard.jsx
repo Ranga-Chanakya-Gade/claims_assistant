@@ -48,24 +48,26 @@ const DashboardMetricsCard = ({ claims, demoLineOfBusiness }) => {
 
   return (
     <DxcContainer
-      padding="var(--spacing-padding-m)"
+      padding="12px"
       style={{
         backgroundColor: 'var(--color-bg-neutral-lightest)',
         borderRadius: 'var(--border-radius-m)',
-        boxShadow: 'var(--shadow-mid-04)'
+        boxShadow: 'var(--shadow-mid-02)',
+        height: '100%'
       }}
     >
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+      <DxcFlex direction="column" gap="8px" style={{ height: '100%' }}>
         {/* Card Title */}
-        <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
           Key Metrics
         </DxcTypography>
 
         {/* Metrics Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: 'var(--spacing-gap-m)'
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '8px',
+          flex: '1'
         }}>
           {/* Claims Paid YTD */}
           <MetricCard

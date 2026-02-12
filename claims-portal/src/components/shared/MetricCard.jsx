@@ -37,31 +37,31 @@ const MetricCard = ({
 
   // Map size to font sizes
   const valueFontSizes = {
-    small: '24px',
-    medium: '32px',
-    large: '40px'
+    small: '20px',
+    medium: '24px',
+    large: '32px'
   };
 
   const labelFontSizes = {
-    small: '10px',
-    medium: '12px',
-    large: '14px'
+    small: '9px',
+    medium: '10px',
+    large: '11px'
   };
 
   const subtextFontSizes = {
-    small: '10px',
-    medium: '12px',
-    large: '14px'
+    small: '9px',
+    medium: '10px',
+    large: '11px'
   };
 
   return (
     <div
       style={{
-        padding: 'var(--spacing-padding-m)',
+        padding: '10px',
         backgroundColor: backgroundColors[variant] || backgroundColors.info
       }}
     >
-      <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
+      <DxcFlex direction="column" gap="4px" alignItems="center">
         {/* Label */}
         <DxcTypography
           fontSize={labelFontSizes[size]}

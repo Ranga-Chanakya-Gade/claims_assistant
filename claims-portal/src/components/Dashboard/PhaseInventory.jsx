@@ -90,53 +90,53 @@ const PhaseInventory = ({ claims, user, onPhaseClick, selectedPhase }) => {
 
   return (
     <DxcContainer
-      padding="var(--spacing-padding-m)"
+      padding="12px"
       style={{
         backgroundColor: 'var(--color-bg-neutral-lightest)',
         borderRadius: 'var(--border-radius-m)',
-        boxShadow: 'var(--shadow-mid-04)'
+        boxShadow: 'var(--shadow-mid-02)'
       }}
     >
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+      <DxcFlex direction="column" gap="8px">
         {/* Section Title */}
-        <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
           Inventory by Phase
         </DxcTypography>
 
         {/* Compact Table */}
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #000000', textAlign: 'left' }}>
+              <tr style={{ borderBottom: '1px solid #000000', textAlign: 'left' }}>
                 <th style={{
-                  padding: '8px 12px',
+                  padding: '6px 8px',
                   color: 'var(--color-fg-neutral-stronger)',
                   fontWeight: 600,
-                  fontSize: '11px',
+                  fontSize: '10px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px'
                 }}>
                   Phase
                 </th>
                 <th style={{
-                  padding: '8px 12px',
+                  padding: '6px 8px',
                   color: 'var(--color-fg-neutral-stronger)',
                   fontWeight: 600,
-                  fontSize: '11px',
+                  fontSize: '10px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px'
                 }}>
                   Description
                 </th>
                 <th style={{
-                  padding: '8px 12px',
+                  padding: '6px 8px',
                   color: 'var(--color-fg-neutral-stronger)',
                   fontWeight: 600,
-                  fontSize: '11px',
+                  fontSize: '10px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   textAlign: 'center',
-                  width: '100px'
+                  width: '80px'
                 }}>
                   Count
                 </th>
@@ -179,22 +179,22 @@ const PhaseInventory = ({ claims, user, onPhaseClick, selectedPhase }) => {
                     }
                   }}
                 >
-                  <td style={{ padding: '12px' }}>
-                    <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                      <span className="material-icons" style={{ fontSize: '18px', color: phase.color }}>
+                  <td style={{ padding: '6px 8px' }}>
+                    <DxcFlex gap="6px" alignItems="center">
+                      <span className="material-icons" style={{ fontSize: '16px', color: phase.color }}>
                         {phase.icon}
                       </span>
-                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+                      <DxcTypography fontSize="12px" fontWeight="font-weight-semibold">
                         {phase.label}
                       </DxcTypography>
                     </DxcFlex>
                   </td>
-                  <td style={{ padding: '12px' }}>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                  <td style={{ padding: '6px 8px' }}>
+                    <DxcTypography fontSize="11px" color="var(--color-fg-neutral-dark)">
                       {phase.description}
                     </DxcTypography>
                   </td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>
+                  <td style={{ padding: '6px 8px', textAlign: 'center' }}>
                     <DxcBadge
                       label={phase.count.toString()}
                       mode="notification"
