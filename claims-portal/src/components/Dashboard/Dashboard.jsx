@@ -34,6 +34,7 @@ import ServiceNowClaimsTable from './ServiceNowClaimsTable';
 import MyTasksCard from './MyTasksCard';
 import ClaimCard from './ClaimCard';
 import PhaseInventory from './PhaseInventory';
+import MyPerformance from './MyPerformance';
 import './Dashboard.css';
 
 const Dashboard = ({ onClaimSelect }) => {
@@ -597,6 +598,9 @@ const Dashboard = ({ onClaimSelect }) => {
           onPhaseClick={handlePhaseClick}
           selectedPhase={selectedPhase}
         />
+
+        {/* My Performance */}
+        <MyPerformance claims={allClaims} user={user} />
 
         {/* ServiceNow FNOL Claims Table - DISABLED */}
         {/* Uncomment below to re-enable ServiceNow integration
