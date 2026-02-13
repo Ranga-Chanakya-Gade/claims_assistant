@@ -194,9 +194,9 @@ const MyPerformance = ({ claims, user }) => {
             {/* Hours Worked */}
             <DxcContainer
               padding="10px"
-              style={{ backgroundColor: 'var(--color-bg-info-lighter)' }}
+              style={{ backgroundColor: 'var(--color-bg-info-lighter)', height: '100%' }}
             >
-              <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcFlex direction="column" gap="4px" alignItems="center" style={{ height: '100%' }}>
                 <DxcTypography fontSize="10px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                   HOURS WORKED
                 </DxcTypography>
@@ -206,58 +206,88 @@ const MyPerformance = ({ claims, user }) => {
                 <DxcTypography fontSize="10px" color={hoursComparisonColor}>
                   {hoursComparisonText}
                 </DxcTypography>
-                <DxcButton
-                  label="Details"
-                  mode="text"
-                  size="small"
-                  onClick={() => {
-                    setDrillThroughPeriod(2);
-                    setShowDrillThrough(true);
-                  }}
-                />
+                <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
+                  <button
+                    onClick={() => {
+                      setDrillThroughPeriod(2);
+                      setShowDrillThrough(true);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-fg-primary-medium)',
+                      fontSize: '11px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      padding: '2px 4px',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
               </DxcFlex>
             </DxcContainer>
 
             {/* Cases Closed */}
             <DxcContainer
               padding="10px"
-              style={{ backgroundColor: 'var(--color-bg-success-lighter)' }}
+              style={{ backgroundColor: 'var(--color-bg-success-lighter)', height: '100%' }}
             >
-              <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcFlex direction="column" gap="4px" alignItems="center" style={{ height: '100%' }}>
                 <DxcTypography fontSize="10px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                   CASES CLOSED
                 </DxcTypography>
                 <DxcTypography fontSize="28px" fontWeight="font-weight-bold" color="#000000" style={{ lineHeight: '1' }}>
                   {yesterdayMetrics.casesClosedCount}
                 </DxcTypography>
-                <DxcFlex gap="4px">
+                <div style={{ height: '10px' }} />
+                <div style={{ marginTop: 'auto', paddingTop: '8px', display: 'flex', gap: '8px' }}>
                   {yesterdayMetrics.casesClosedCount > 0 && (
-                    <DxcButton
-                      label="Claims"
-                      mode="text"
-                      size="small"
+                    <button
                       onClick={() => setShowClosedClaims(true)}
-                    />
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--color-fg-primary-medium)',
+                        fontSize: '11px',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                        padding: '2px 4px',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      Claims
+                    </button>
                   )}
-                  <DxcButton
-                    label="Details"
-                    mode="text"
-                    size="small"
+                  <button
                     onClick={() => {
                       setDrillThroughPeriod(2);
                       setShowDrillThrough(true);
                     }}
-                  />
-                </DxcFlex>
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-fg-primary-medium)',
+                      fontSize: '11px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      padding: '2px 4px',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
               </DxcFlex>
             </DxcContainer>
 
             {/* Activities Completed */}
             <DxcContainer
               padding="10px"
-              style={{ backgroundColor: 'var(--color-bg-warning-lighter)' }}
+              style={{ backgroundColor: 'var(--color-bg-warning-lighter)', height: '100%' }}
             >
-              <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcFlex direction="column" gap="4px" alignItems="center" style={{ height: '100%' }}>
                 <DxcTypography fontSize="10px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                   ACTIVITIES
                 </DxcTypography>
@@ -267,15 +297,26 @@ const MyPerformance = ({ claims, user }) => {
                 <DxcTypography fontSize="10px" color="var(--color-fg-neutral-strong)">
                   Calls, emails, notes
                 </DxcTypography>
-                <DxcButton
-                  label="Details"
-                  mode="text"
-                  size="small"
-                  onClick={() => {
-                    setDrillThroughPeriod(2);
-                    setShowDrillThrough(true);
-                  }}
-                />
+                <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
+                  <button
+                    onClick={() => {
+                      setDrillThroughPeriod(2);
+                      setShowDrillThrough(true);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-fg-primary-medium)',
+                      fontSize: '11px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      padding: '2px 4px',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
               </DxcFlex>
             </DxcContainer>
 
@@ -287,10 +328,11 @@ const MyPerformance = ({ claims, user }) => {
                   ? 'var(--color-bg-success-lighter)'
                   : yesterdayMetrics.utilizationPercent >= 60
                   ? 'var(--color-bg-warning-lighter)'
-                  : 'var(--color-bg-error-lighter)'
+                  : 'var(--color-bg-error-lighter)',
+                height: '100%'
               }}
             >
-              <DxcFlex direction="column" gap="4px" alignItems="center">
+              <DxcFlex direction="column" gap="4px" alignItems="center" style={{ height: '100%' }}>
                 <DxcTypography fontSize="10px" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">
                   UTILIZATION
                 </DxcTypography>
@@ -300,15 +342,26 @@ const MyPerformance = ({ claims, user }) => {
                 <DxcTypography fontSize="10px" color="var(--color-fg-neutral-strong)">
                   {yesterdayMetrics.activitiesPerHour}/hr
                 </DxcTypography>
-                <DxcButton
-                  label="Details"
-                  mode="text"
-                  size="small"
-                  onClick={() => {
-                    setDrillThroughPeriod(2);
-                    setShowDrillThrough(true);
-                  }}
-                />
+                <div style={{ marginTop: 'auto', paddingTop: '8px' }}>
+                  <button
+                    onClick={() => {
+                      setDrillThroughPeriod(2);
+                      setShowDrillThrough(true);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-fg-primary-medium)',
+                      fontSize: '11px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      padding: '2px 4px',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Details
+                  </button>
+                </div>
               </DxcFlex>
             </DxcContainer>
           </div>
@@ -323,7 +376,7 @@ const MyPerformance = ({ claims, user }) => {
       {/* Closed Claims Dialog */}
       {showClosedClaims && (
         <DxcDialog onCloseIconClick={() => setShowClosedClaims(false)}>
-          <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+          <DxcFlex direction="column" gap="var(--spacing-gap-m)" style={{ padding: '0 16px' }}>
             <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold">
               Cases Closed Yesterday
             </DxcTypography>
@@ -406,7 +459,7 @@ const MyPerformance = ({ claims, user }) => {
           onCloseIconClick={() => setShowDrillThrough(false)}
           overlay={true}
         >
-          <div style={{ minWidth: '800px', maxWidth: '1000px' }}>
+          <div style={{ minWidth: '800px', maxWidth: '1000px', padding: '0 16px' }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
               <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold">
                 Performance Details
