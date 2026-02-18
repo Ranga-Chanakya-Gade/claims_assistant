@@ -810,15 +810,34 @@ a:focus, .bloom-link:focus {
 }
 
 /* ============================================================================
-   REMOVE PURPLE - ENSURE NO PURPLE ANYWHERE
+   HALSTACK PURPLE → BLOOM BLUE OVERRIDE
+   Replaces the DXC purple color palette used inside Halstack components
+   with the Bloom darker-blue equivalents at the CSS variable level,
+   so every Halstack component (buttons, links, focus rings, active states,
+   the ApplicationLayout header accent, etc.) renders in blue.
    ============================================================================ */
 
-/* Override any potential purple colors */
+:root {
+  --color-purple-50:  #E8F4FC;
+  --color-purple-100: #D6E9F7;   /* --color-blue-pale  */
+  --color-purple-200: #B3D4EE;
+  --color-purple-300: #8BBFE5;
+  --color-purple-400: #5CA9DD;   /* --color-blue-lighter */
+  --color-purple-500: #2A8FD4;   /* --color-blue-light   */
+  --color-purple-600: #1B75BB;   /* --color-blue         */
+  --color-purple-700: #0F4470;   /* --color-blue-darker  (the darker blue) */
+  --color-purple-800: #0A3358;
+  --color-purple-900: #061E33;
+}
+
+/* Inline-style purple fallback — enforce Bloom darker blue */
 *[style*="purple"],
 *[style*="#667eea"],
 *[style*="#764ba2"],
+*[style*="#5f249f"],
+*[style*="#660099"],
 *[class*="purple"] {
-  color: var(--color-primary) !important;
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
+  color: var(--color-blue-darker, #0F4470) !important;
+  background-color: var(--color-blue-darker, #0F4470) !important;
+  border-color: var(--color-blue-darker, #0F4470) !important;
 }
