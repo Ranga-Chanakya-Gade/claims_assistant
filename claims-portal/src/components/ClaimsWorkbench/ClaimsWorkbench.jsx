@@ -186,7 +186,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
     policyNumber: claim.policy?.policyNumber || 'N/A',
     insuredName: claim.insured?.name || claim.claimant?.name || 'N/A',
     policyType: claim.policy?.policyType || 'Term Life Insurance',
-    coverage: claim.financial?.claimAmount ? formatCurrency(claim.financial.claimAmount) : 'N/A',
+    coverage: claim.policy?.coverageLimit ? formatCurrency(claim.policy.coverageLimit) : 'N/A',
     effectiveDate: claim.policy?.effectiveDate || claim.policy?.issueDate || 'N/A',
     expirationDate: claim.policy?.expirationDate || 'N/A',
     premium: claim.policy?.premium || 'N/A'
@@ -778,7 +778,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Face Amount</DxcTypography>
-                          <DxcTypography fontSize="16px" fontWeight="font-weight-semibold" color="var(--color-fg-info-medium)">{policyDetails.coverage}</DxcTypography>
+                          <DxcTypography fontSize="16px" fontWeight="font-weight-semibold" color="var(--color-primary)">{policyDetails.coverage}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Issue Date</DxcTypography>
