@@ -448,7 +448,52 @@ const createPCShowcaseClaims = () => {
       ],
       aiInsights: {
         riskScore: 8,
-        alerts: []
+        alerts: [
+          {
+            id: 'pc-ai-6-1',
+            severity: 'Low',
+            category: 'Weather Corroboration',
+            title: 'Loss Event Validated — Freeze Timing & Severity Confirmed',
+            message: 'NOAA weather data and IoT sensor logs independently corroborate the reported loss event.',
+            description: 'AI cross-referenced NOAA Winter Storm Warning data with IoT sensor readings from FloodStop Pro. Temperature sensor TEMP-BPF-001 recorded -5°F at 02:30 — consistent with the freeze threshold for commercial pipe failure. Water sensor WATER-BPF-002 activated at 03:45, aligning precisely with the reported burst event. Loss timing, temperature severity, and physical sensor evidence are fully corroborated across independent data sources.',
+            recommendation: 'No further weather validation required. Freeze timing and severity confirmed. Proceed with STP approval.',
+            confidence: 99,
+            timestamp: createdDate.toISOString()
+          },
+          {
+            id: 'pc-ai-6-2',
+            severity: 'Low',
+            category: 'Estimate Validation',
+            title: 'No Inflation Indicators Detected — Estimate Within Expected Range',
+            message: 'Damage estimate of $87,000 validates against 127 comparable commercial pipe burst claims.',
+            description: 'Claimed amount of $87,000 benchmarked against comparable commercial property pipe burst losses in the Pacific Northwest (2024–2026 cohort, n=127). Estimate falls within expected range for a florist with refrigerated storage, retail floor, walk-in cooler, and business interruption. No line-item inflation, round-number anomalies, duplicate billing, or cost escalation patterns detected. Inventory loss quantum is consistent with a florist of this size and seasonal stock profile.',
+            recommendation: 'Settlement amount validated. No independent appraisal required. Approve as submitted.',
+            confidence: 96,
+            timestamp: createdDate.toISOString()
+          },
+          {
+            id: 'pc-ai-6-3',
+            severity: 'Low',
+            category: 'Pattern Analysis',
+            title: 'Prior Claim History Supports Authenticity — Prevention Compliance Verified',
+            message: 'Insured completed all 4 prevention measures recommended after prior claim CLM-2024-012847.',
+            description: 'Prior claim CLM-2024-012847 (January 2024, frozen pipe, $15,000) reviewed and cross-referenced. Post-claim adjuster recommended 4 prevention measures. All 4 independently verified: FloodStop Pro water sensor installed March 2024 (hardware registration confirmed), exposed basement pipes insulated (contractor invoice on file), Smart Business Monitoring enrollment active (telematics data accessible), winterization checklist completed and submitted October 2025. Proactive compliance behavior is statistically inconsistent with fraudulent intent and supports STP Criterion 4.',
+            recommendation: 'Prior claim compliance strengthens authenticity. Pattern consistent with a responsible insured who took prevention seriously.',
+            confidence: 98,
+            timestamp: createdDate.toISOString()
+          },
+          {
+            id: 'pc-ai-6-4',
+            severity: 'Low',
+            category: 'Agentic Validation',
+            title: 'Holistic Risk Profile Complete — 5 Independent Sources Corroborate Loss',
+            message: 'Agentic AI assembled complete contextual picture from 5 data sources. Fraud score: 8/100.',
+            description: 'Claims AI agent assembled and cross-referenced 5 independent data sources: (1) NOAA Winter Storm Warning — freeze event confirmed for Portland OR 97214; (2) FloodStop Pro IoT sensor logs — temperature, water leak, and humidity readings timestamped and geo-verified; (3) Mobile FNOL submission — geo-tagged damage photos submitted within hours of sensor alert; (4) Prior claim history and prevention compliance record — behavioral pattern consistent with a low-risk insured; (5) Comparable loss benchmarks — estimate validated against regional peer cohort. All 5 sources independently support the reported loss. Fraud control achieved through context, not suspicion.',
+            recommendation: 'STP approved. Complete contextual picture assembled — no human adjuster review required. Approve and schedule ACH payment.',
+            confidence: 94,
+            timestamp: createdDate.toISOString()
+          }
+        ]
       },
       financial: {
         claimAmount: 87000, deductible: 5000, repairEstimate: 75000, salvageValue: 0,

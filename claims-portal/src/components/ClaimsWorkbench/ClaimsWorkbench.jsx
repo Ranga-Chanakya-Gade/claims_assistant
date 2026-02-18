@@ -344,24 +344,72 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
               {/* Dashboard Tab - SA-001 Claim Dashboard 360° View */}
               {activeTab === 0 && (
                 <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-                  {/* Top Row: Death Event and AI Insights */}
+                  {/* Top Row: Loss/Death Event and AI Insights */}
                   <div className="dashboard-grid-top">
-                    <DeathEventPanel
-                      claimData={{
-                        dateOfDeath: claim.deathEvent?.dateOfDeath || claim.insured?.dateOfDeath,
-                        mannerOfDeath: claim.deathEvent?.mannerOfDeath || 'Natural',
-                        causeOfDeath: claim.deathEvent?.causeOfDeath,
-                        deathInUSA: claim.deathEvent?.deathInUSA || 'Yes',
-                        countryOfDeath: claim.deathEvent?.countryOfDeath || 'United States',
-                        proofOfDeathSourceType: claim.deathEvent?.proofOfDeathSourceType || 'Certified Death Certificate',
-                        proofOfDeathDate: claim.deathEvent?.proofOfDeathDate,
-                        certifiedDOB: claim.insured?.dateOfBirth,
-                        verificationSource: claim.deathEvent?.verificationSource || 'LexisNexis',
-                        verificationScore: claim.deathEvent?.verificationScore || 95,
-                        specialEvent: claim.deathEvent?.specialEvent
-                      }}
-                      onEdit={() => console.log('Edit death event')}
-                    />
+                    {isPC ? (
+                      <div style={{ backgroundColor: 'var(--color-bg-neutral-lightest)', padding: 'var(--spacing-padding-l)', borderRadius: 'var(--border-radius-m)', border: '1px solid var(--color-border-neutral-lighter)' }}>
+                        <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                          <DxcHeading level={3} text="Loss Event" />
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-gap-m)' }}>
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Date of Loss</DxcTypography>
+                              <DxcTypography fontSize="16px" fontWeight="font-weight-semibold">{claim.lossEvent?.dateOfLoss || 'N/A'}</DxcTypography>
+                            </DxcFlex>
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Cause of Loss</DxcTypography>
+                              <DxcTypography fontSize="16px" fontWeight="font-weight-semibold">{claim.lossEvent?.causeOfLoss || 'N/A'}</DxcTypography>
+                            </DxcFlex>
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Loss Location</DxcTypography>
+                              <DxcTypography fontSize="16px">{claim.lossEvent?.lossLocation || 'N/A'}</DxcTypography>
+                            </DxcFlex>
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Fault Determination</DxcTypography>
+                              <DxcTypography fontSize="16px">{claim.lossEvent?.faultDetermination || 'N/A'}</DxcTypography>
+                            </DxcFlex>
+                            {claim.lossEvent?.weatherConditions && (
+                              <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                                <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Weather Conditions</DxcTypography>
+                                <DxcTypography fontSize="16px">{claim.lossEvent.weatherConditions}</DxcTypography>
+                              </DxcFlex>
+                            )}
+                            {claim.lossEvent?.policeReportNumber && (
+                              <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                                <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Police Report #</DxcTypography>
+                                <DxcTypography fontSize="16px">{claim.lossEvent.policeReportNumber}</DxcTypography>
+                              </DxcFlex>
+                            )}
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Deductible</DxcTypography>
+                              <DxcTypography fontSize="16px" fontWeight="font-weight-semibold">{claim.policy?.deductible ? formatCurrency(claim.policy.deductible) : 'N/A'}</DxcTypography>
+                            </DxcFlex>
+                          </div>
+                          {claim.lossEvent?.lossDescription && (
+                            <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
+                              <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Description</DxcTypography>
+                              <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">{claim.lossEvent.lossDescription}</DxcTypography>
+                            </DxcFlex>
+                          )}
+                        </DxcFlex>
+                      </div>
+                    ) : (
+                      <DeathEventPanel
+                        claimData={{
+                          dateOfDeath: claim.deathEvent?.dateOfDeath || claim.insured?.dateOfDeath,
+                          mannerOfDeath: claim.deathEvent?.mannerOfDeath || 'Natural',
+                          causeOfDeath: claim.deathEvent?.causeOfDeath,
+                          deathInUSA: claim.deathEvent?.deathInUSA || 'Yes',
+                          countryOfDeath: claim.deathEvent?.countryOfDeath || 'United States',
+                          proofOfDeathSourceType: claim.deathEvent?.proofOfDeathSourceType || 'Certified Death Certificate',
+                          proofOfDeathDate: claim.deathEvent?.proofOfDeathDate,
+                          certifiedDOB: claim.insured?.dateOfBirth,
+                          verificationSource: claim.deathEvent?.verificationSource || 'LexisNexis',
+                          verificationScore: claim.deathEvent?.verificationScore || 95,
+                          specialEvent: claim.deathEvent?.specialEvent
+                        }}
+                        onEdit={() => console.log('Edit death event')}
+                      />
+                    )}
                     <AIInsightsPanel
                       claimData={{
                         riskScore: claim.aiInsights?.riskScore || 0
@@ -523,23 +571,25 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                   <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                     <DxcFlex justifyContent="space-between" alignItems="center">
                       <DxcHeading level={4} text="Payment History" />
-                      <DxcFlex gap="var(--spacing-gap-s)">
-                        <DxcButton
-                          label="Calculate PMI"
-                          mode="secondary"
-                          size="small"
-                          icon="calculate"
-                          onClick={() => setShowPMICalculator(true)}
-                        />
-                        <DxcButton
-                          label="Tax Withholding"
-                          mode="secondary"
-                          size="small"
-                          icon="account_balance"
-                          onClick={() => setShowTaxCalculator(true)}
-                        />
-                        <DxcButton label="View EOB" mode="tertiary" size="small" icon="description" />
-                      </DxcFlex>
+                      {!isPC && (
+                        <DxcFlex gap="var(--spacing-gap-s)">
+                          <DxcButton
+                            label="Calculate PMI"
+                            mode="secondary"
+                            size="small"
+                            icon="calculate"
+                            onClick={() => setShowPMICalculator(true)}
+                          />
+                          <DxcButton
+                            label="Tax Withholding"
+                            mode="secondary"
+                            size="small"
+                            icon="account_balance"
+                            onClick={() => setShowTaxCalculator(true)}
+                          />
+                          <DxcButton label="View EOB" mode="tertiary" size="small" icon="description" />
+                        </DxcFlex>
+                      )}
                     </DxcFlex>
                     {financialData.payments.map((payment, index) => (
                       <DxcContainer
