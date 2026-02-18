@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { DxcApplicationLayout, DxcFlex, DxcTypography, DxcButton } from '@dxc-technology/halstack-react';
 import Dashboard from './components/Dashboard/Dashboard';
 import ClaimsWorkbench from './components/ClaimsWorkbench/ClaimsWorkbench';
@@ -35,7 +36,8 @@ function AppContent() {
   const [isThemeSettingsOpen, setIsThemeSettingsOpen] = useState(false);
   const [snowConnected, setSnowConnected] = useState(serviceNowService.isAuthenticated());
   const [actionsMenuOpen, setActionsMenuOpen] = useState(false);
-  const actionsMenuRef = useRef(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
+  const actionsButtonRef = useRef(null);
 
   // Track ServiceNow connection state
   useEffect(() => {
@@ -45,18 +47,27 @@ function AppContent() {
     return () => unsubscribe?.();
   }, []);
 
-  // Close actions menu on outside click
+  // Close actions menu on outside click or scroll
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (actionsMenuRef.current && !actionsMenuRef.current.contains(e.target)) {
-        setActionsMenuOpen(false);
-      }
-    };
+    const close = () => setActionsMenuOpen(false);
     if (actionsMenuOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener('mousedown', close);
+      document.addEventListener('scroll', close, true);
     }
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('scroll', close, true);
+    };
   }, [actionsMenuOpen]);
+
+  const openActionsMenu = useCallback((e) => {
+    e.stopPropagation();
+    const rect = actionsButtonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setMenuPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+    }
+    setActionsMenuOpen(prev => !prev);
+  }, []);
 
   const handleClaimSelect = async (claim) => {
     console.log('[App] handleClaimSelect called with claim:', claim);
@@ -160,28 +171,39 @@ function AppContent() {
             isResponsive ? null : (
               <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
                 {/* Actions Menu */}
-                <div ref={actionsMenuRef} style={{ position: 'relative' }}>
-                  <DxcButton
-                    label="Actions"
-                    mode="secondary"
-                    icon="expand_more"
-                    iconPosition="after"
-                    size="small"
-                    onClick={() => setActionsMenuOpen(prev => !prev)}
-                  />
-                  {actionsMenuOpen && (
-                    <div style={{
-                      position: 'absolute',
-                      top: 'calc(100% + 6px)',
-                      right: 0,
-                      minWidth: '250px',
-                      backgroundColor: 'var(--color-bg-neutral-lightest)',
-                      border: '1px solid var(--border-color-neutral-lighter)',
-                      borderRadius: 'var(--border-radius-m)',
-                      boxShadow: 'var(--shadow-mid-04)',
-                      zIndex: 1000,
-                      overflow: 'hidden'
-                    }}>
+                <div style={{ position: 'relative' }}>
+                  <button
+                    ref={actionsButtonRef}
+                    onClick={openActionsMenu}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '6px 14px', cursor: 'pointer',
+                      background: 'transparent',
+                      border: '1px solid var(--color-border-primary-medium)',
+                      borderRadius: 'var(--border-radius-s)',
+                      color: 'var(--color-fg-primary-stronger)',
+                      fontSize: '14px', fontWeight: '500',
+                      userSelect: 'none'
+                    }}
+                  >
+                    Actions
+                    <span className="material-icons" style={{ fontSize: '18px' }}>expand_more</span>
+                  </button>
+                  {actionsMenuOpen && createPortal(
+                    <div
+                      onMouseDown={e => e.stopPropagation()}
+                      style={{
+                        position: 'fixed',
+                        top: menuPos.top,
+                        right: menuPos.right,
+                        minWidth: '250px',
+                        backgroundColor: 'var(--color-bg-neutral-lightest)',
+                        border: '1px solid var(--border-color-neutral-lighter)',
+                        borderRadius: 'var(--border-radius-m)',
+                        boxShadow: 'var(--shadow-mid-04)',
+                        zIndex: 99999,
+                        overflow: 'hidden'
+                      }}>
                       {/* Product Line Toggle Section */}
                       <div style={{ padding: '8px 16px 4px', borderBottom: '1px solid var(--border-color-neutral-lighter)' }}>
                         <div style={{ fontSize: '11px', fontWeight: '600', color: 'var(--color-fg-neutral-strong)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
@@ -277,7 +299,8 @@ function AppContent() {
                           </button>
                         )
                       )}
-                    </div>
+                    </div>,
+                    document.body
                   )}
                 </div>
                 <div
