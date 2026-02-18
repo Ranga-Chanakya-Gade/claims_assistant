@@ -424,7 +424,7 @@ const createPCShowcaseClaims = () => {
 
   // ---- CLAIM PC-6: Commercial Property — STP, CLOSED (IoT-Validated Winter Storm) ----
   {
-    const createdDate = new Date(NOW.getTime() - 34 * DAY);
+    const createdDate = new Date(NOW.getTime() - 8 * DAY);
     const lossDate = createdDate;
     const closedDate = new Date(createdDate.getTime() + 4 * 3600000); // approved in 45 min, closed same day
     const slaDate = new Date(createdDate.getTime() + 1 * DAY);
