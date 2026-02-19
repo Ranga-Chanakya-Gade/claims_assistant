@@ -447,24 +447,26 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
               {/* Dashboard Tab - SA-001 Claim Dashboard 360° View */}
               {activeTab === 0 && (
                 <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-                  {/* Top Row: Death Event and AI Insights */}
+                  {/* Top Row: Death Event (L&A only) and AI Insights */}
                   <div className="dashboard-grid-top">
-                    <DeathEventPanel
-                      claimData={{
-                        dateOfDeath: claim.deathEvent?.dateOfDeath || claim.insured?.dateOfDeath,
-                        mannerOfDeath: claim.deathEvent?.mannerOfDeath || 'Natural',
-                        causeOfDeath: claim.deathEvent?.causeOfDeath,
-                        deathInUSA: claim.deathEvent?.deathInUSA || 'Yes',
-                        countryOfDeath: claim.deathEvent?.countryOfDeath || 'United States',
-                        proofOfDeathSourceType: claim.deathEvent?.proofOfDeathSourceType || 'Certified Death Certificate',
-                        proofOfDeathDate: claim.deathEvent?.proofOfDeathDate,
-                        certifiedDOB: claim.insured?.dateOfBirth,
-                        verificationSource: claim.deathEvent?.verificationSource || 'LexisNexis',
-                        verificationScore: claim.deathEvent?.verificationScore || 95,
-                        specialEvent: claim.deathEvent?.specialEvent
-                      }}
-                      onEdit={() => console.log('Edit death event')}
-                    />
+                    {claim.deathEvent && (
+                      <DeathEventPanel
+                        claimData={{
+                          dateOfDeath: claim.deathEvent?.dateOfDeath || claim.insured?.dateOfDeath,
+                          mannerOfDeath: claim.deathEvent?.mannerOfDeath || 'Natural',
+                          causeOfDeath: claim.deathEvent?.causeOfDeath,
+                          deathInUSA: claim.deathEvent?.deathInUSA || 'Yes',
+                          countryOfDeath: claim.deathEvent?.countryOfDeath || 'United States',
+                          proofOfDeathSourceType: claim.deathEvent?.proofOfDeathSourceType || 'Certified Death Certificate',
+                          proofOfDeathDate: claim.deathEvent?.proofOfDeathDate,
+                          certifiedDOB: claim.insured?.dateOfBirth,
+                          verificationSource: claim.deathEvent?.verificationSource || 'LexisNexis',
+                          verificationScore: claim.deathEvent?.verificationScore || 95,
+                          specialEvent: claim.deathEvent?.specialEvent
+                        }}
+                        onEdit={() => console.log('Edit death event')}
+                      />
+                    )}
                     <AIInsightsPanel
                       claimData={{
                         riskScore: aiInsights.filter(i => ['HIGH', 'CRITICAL'].includes(i.severity)).length > 0 ? 75 : aiInsights.length > 0 ? 50 : 0
