@@ -248,10 +248,10 @@ const ClaimHeader = ({
               </DxcTypography>
               <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
                 <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                  {claim.requirements.filter(r => r.status === 'SATISFIED').length}/{claim.requirements.length}
+                  {claim.requirements.filter(r => r.status === 'satisfied').length}/{claim.requirements.length}
                 </DxcTypography>
                 <DxcChip
-                  label={`${Math.round((claim.requirements.filter(r => r.status === 'SATISFIED').length / claim.requirements.length) * 100)}%`}
+                  label={`${Math.round((claim.requirements.filter(r => r.status === 'satisfied').length / claim.requirements.length) * 100)}%`}
                   size="small"
                 />
               </DxcFlex>

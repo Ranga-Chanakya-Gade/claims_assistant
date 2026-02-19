@@ -288,7 +288,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
   const policyDetails = {
     policyNumber: claim.policy?.policyNumber || 'N/A',
     insuredName: claim.insured?.name || claim.claimant?.name || 'N/A',
-    policyType: claim.policy?.policyType || 'Term Life Insurance',
+    policyType: claim.policy?.policyType || claim.policy?.type || 'N/A',
     coverage: claim.financial?.claimAmount ? formatCurrency(claim.financial.claimAmount) : 'N/A',
     effectiveDate: claim.policy?.effectiveDate || claim.policy?.issueDate || 'N/A',
     expirationDate: claim.policy?.expirationDate || 'N/A',
@@ -333,7 +333,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
             {requirements.length > 0 && (
               <DxcProgressBar
                 label="Requirements Complete"
-                value={Math.round((requirements.filter(r => r.status === 'SATISFIED' || r.status === 'Completed').length / requirements.length) * 100)}
+                value={Math.round((requirements.filter(r => r.status === 'satisfied' || r.status === 'SATISFIED' || r.status === 'Completed').length / requirements.length) * 100)}
                 showValue
               />
             )}
@@ -433,6 +433,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                 >
                   <div />
                 </DxcTabs.Tab>
+                {claim.deathEvent && (
                 <DxcTabs.Tab
                   label="Beneficiary Analyzer"
                   icon="psychology"
@@ -441,6 +442,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                 >
                   <div />
                 </DxcTabs.Tab>
+                )}
               </DxcTabs>
             </DxcInset>
 
@@ -536,12 +538,14 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         icon="upload_file"
                         onClick={() => setActiveTab(5)}
                       />
+                      {claim.deathEvent && (
                       <DxcButton
                         label="Analyze Beneficiaries"
                         mode="primary"
                         icon="psychology"
                         onClick={() => setActiveTab(6)}
                       />
+                      )}
                     </DxcFlex>
                   </DxcContainer>
                 </DxcFlex>
@@ -808,8 +812,8 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                           <DxcTypography fontSize="16px">{policyDetails.effectiveDate}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Issue State</DxcTypography>
-                          <DxcTypography fontSize="16px">{claim.policy?.issueState || 'N/A'}</DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">{claim.lossEvent ? 'Loss Location' : 'Issue State'}</DxcTypography>
+                          <DxcTypography fontSize="16px">{claim.lossEvent?.lossLocation || claim.policy?.issueState || 'N/A'}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Plan Code</DxcTypography>
@@ -829,7 +833,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Paid To Date</DxcTypography>
-                          <DxcTypography fontSize="16px">{claim.policy?.paidToDate || 'N/A'}</DxcTypography>
+                          <DxcTypography fontSize="16px">{claim.policy?.paidToDate || (claim.financial?.amountPaid ? formatCurrency(claim.financial.amountPaid) : 'N/A')}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Source System</DxcTypography>
@@ -839,6 +843,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                     </DxcContainer>
                   </DxcFlex>
 
+                  {claim.deathEvent && (
                   <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                     <DxcFlex justifyContent="space-between" alignItems="center">
                       <DxcHeading level={4} text="Beneficiaries" />
@@ -881,6 +886,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                       </DxcContainer>
                     ))}
                   </DxcFlex>
+                  )}
                 </DxcFlex>
               )}
 
