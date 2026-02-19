@@ -1208,7 +1208,11 @@ class ServiceNowService {
       });
 
       if (!response.ok) {
-        throw new Error(`ServiceNow API error: ${response.status}`);
+        const errorText = await response.text();
+        const err = new Error(`ServiceNow API error: ${response.status}`);
+        err.status = response.status;
+        err.responseText = errorText;
+        throw err;
       }
 
       const data = await response.json();

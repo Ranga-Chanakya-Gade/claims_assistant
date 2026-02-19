@@ -421,7 +421,20 @@ const BeneficiaryAnalyzer = ({ claimId, claim, onApproveBeneficiaries, onCancel 
           } catch (pollError) {
             console.error('[BeneficiaryAnalyzer] Error polling for completion:', pollError);
 
-            // Continue polling on error (network issues, etc.)
+            // Stop immediately on auth/permission errors — retrying won't help
+            const isAuthError = pollError.status === 401 || pollError.status === 403 ||
+              pollError.message?.includes('401') || pollError.message?.includes('403') ||
+              pollError.message?.includes('Not Authorized');
+
+            if (isAuthError) {
+              console.warn('[BeneficiaryAnalyzer] Auth/permission error — stopping poll, using fallback data');
+              setError('Beneficiary analyzer service is not accessible with current permissions. Displaying available claim data instead.');
+              setAnalysisData(buildAnalysisData());
+              setLoading(false);
+              return false;
+            }
+
+            // Continue polling on transient errors (network issues, etc.)
             if (pollAttempts < maxPollAttempts) {
               setTimeout(() => pollForCompletion(), pollInterval);
             } else {
