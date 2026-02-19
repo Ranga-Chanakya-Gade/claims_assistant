@@ -1315,23 +1315,41 @@ class ServiceNowService {
         sysparm_display_value: 'true'
       });
 
+      // Primary: dedicated attachment API (requires attachment_read role)
       const path = `/api/now/attachment?${params}`;
       const url = this.buildProxyURL(path);
       console.log('[ServiceNow] Fetching attachments for:', tableName, tableSysId);
 
       const headers = await this.getAuthHeaders();
-      const response = await fetch(url, {
-        method: 'GET',
-        headers
-      });
+      const response = await fetch(url, { method: 'GET', headers });
 
-      if (!response.ok) {
-        throw new Error(`ServiceNow API error: ${response.status}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('[ServiceNow] Attachments fetched:', data.result?.length || 0, 'files');
+        return data.result || [];
       }
 
-      const data = await response.json();
-      console.log('[ServiceNow] Attachments fetched:', data.result?.length || 0, 'files');
-      return data.result || [];
+      // Fallback: query sys_attachment via Table API (same permissions as FNOL reads)
+      if (response.status === 403 || response.status === 401) {
+        console.warn('[ServiceNow] Attachment API access denied, falling back to sys_attachment table');
+        const fallbackParams = new URLSearchParams({
+          sysparm_query: `table_name=${tableName}^table_sys_id=${tableSysId}`,
+          sysparm_display_value: 'true',
+          sysparm_fields: 'sys_id,file_name,size_bytes,content_type,table_name,table_sys_id,sys_created_on'
+        });
+        const fallbackPath = `${this.apiVersion}/sys_attachment?${fallbackParams}`;
+        const fallbackUrl = this.buildProxyURL(fallbackPath);
+        const fallbackResponse = await fetch(fallbackUrl, { method: 'GET', headers });
+        if (fallbackResponse.ok) {
+          const fallbackData = await fallbackResponse.json();
+          console.log('[ServiceNow] Attachments fetched via fallback:', fallbackData.result?.length || 0, 'files');
+          return fallbackData.result || [];
+        }
+        console.warn('[ServiceNow] Both attachment APIs inaccessible — integration_user needs attachment_read role in ServiceNow');
+        return [];
+      }
+
+      throw new Error(`ServiceNow API error: ${response.status}`);
     } catch (error) {
       console.error('[ServiceNow] Error fetching attachments:', error);
       throw new Error(`Failed to fetch attachments from ServiceNow: ${error.message}`);
