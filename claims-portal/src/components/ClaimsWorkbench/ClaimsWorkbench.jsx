@@ -341,8 +341,9 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
               {claim.workflow?.sla?.dueDate && (() => {
                 const dueDate = new Date(claim.workflow.sla.dueDate);
                 const today = new Date();
-                const daysRemaining = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-                const color = daysRemaining <= 3 ? 'var(--color-fg-error-medium)' : daysRemaining <= 7 ? 'var(--color-fg-warning-medium)' : 'var(--color-fg-success-medium)';
+                const isClosed = claim.status === 'closed' || claim.status === 'denied' || claim.status === 'approved';
+                const daysRemaining = isClosed ? 0 : Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+                const color = isClosed ? 'var(--color-fg-success-medium)' : daysRemaining <= 3 ? 'var(--color-fg-error-medium)' : daysRemaining <= 7 ? 'var(--color-fg-warning-medium)' : 'var(--color-fg-success-medium)';
 
                 return (
                   <>
@@ -351,7 +352,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         SLA DAYS REMAINING
                       </DxcTypography>
                       <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color={color}>
-                        {daysRemaining}
+                        {isClosed ? 'Closed' : daysRemaining}
                       </DxcTypography>
                     </DxcFlex>
                     <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
