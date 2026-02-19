@@ -804,8 +804,8 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                           <DxcTypography fontSize="16px" fontWeight="font-weight-semibold">{policyDetails.policyType}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Face Amount</DxcTypography>
-                          <DxcTypography fontSize="16px" fontWeight="font-weight-semibold" color="var(--color-fg-info-medium)">{policyDetails.coverage}</DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">{claim.lossEvent ? 'Coverage Limit' : 'Face Amount'}</DxcTypography>
+                          <DxcTypography fontSize="16px" fontWeight="font-weight-semibold" color="var(--color-fg-info-medium)">{claim.lossEvent ? (claim.policy?.coverageLimit ? formatCurrency(claim.policy.coverageLimit) : 'N/A') : policyDetails.coverage}</DxcTypography>
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Issue Date</DxcTypography>
@@ -837,7 +837,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                         </DxcFlex>
                         <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
                           <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">Source System</DxcTypography>
-                          <DxcTypography fontSize="16px">{claim.policy?.source || 'CyberLife'}</DxcTypography>
+                          <DxcTypography fontSize="16px">{claim.policy?.source || (claim.lossEvent ? 'POINT-J' : 'CyberLife')}</DxcTypography>
                         </DxcFlex>
                       </div>
                     </DxcContainer>
