@@ -521,7 +521,7 @@ const BeneficiaryAnalyzer = ({ claimId, claim, onApproveBeneficiaries, onCancel 
               Beneficiary Analysis in Progress
             </DxcTypography>
             <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-strong)" textAlign="center">
-              AI is extracting and comparing beneficiary data from DMS documents and PAS records.
+              System is extracting and comparing beneficiary data from DMS documents and PAS records.
             </DxcTypography>
             <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)" textAlign="center">
               This may take up to 60 seconds. Please wait...
@@ -1071,7 +1071,7 @@ const BeneficiaryAnalyzer = ({ claimId, claim, onApproveBeneficiaries, onCancel 
                                 <DxcFlex gap="8px" alignItems="center">
                                   <span className="material-icons" style={{ fontSize: '18px', color: '#1565C0' }}>psychology</span>
                                   <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-bold" color="#1565C0">
-                                    AI Analysis
+                                    Automated Analysis
                                   </DxcTypography>
                                 </DxcFlex>
                                 <DxcTypography fontSize="font-scale-02" color="#1F2937" style={{ lineHeight: '1.5' }}>

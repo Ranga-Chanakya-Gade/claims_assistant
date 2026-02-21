@@ -848,7 +848,7 @@ const ClaimsWorkbench = ({ claim, onBack }) => {
                     <DxcFlex justifyContent="space-between" alignItems="center">
                       <DxcHeading level={4} text="Beneficiaries" />
                       <DxcButton
-                        label="Analyze Beneficiaries with AI"
+                        label="Analyze Beneficiaries"
                         mode="primary"
                         icon="psychology"
                         onClick={() => setShowBeneficiaryAnalyzer(true)}

@@ -22,6 +22,7 @@ import {
   DxcInset
 } from '@dxc-technology/halstack-react';
 import serviceNowService from '../../services/api/serviceNowService';
+import idpService from '../../services/api/idpService';
 import './DocumentUpload.css';
 
 const DocumentUpload = ({
@@ -183,7 +184,7 @@ const DocumentUpload = ({
     });
   };
 
-  // Upload files to ServiceNow
+  // Upload files to ServiceNow and trigger IDP processing
   const handleUpload = async () => {
     console.log('[DocumentUpload] handleUpload called');
     console.log('[DocumentUpload] actualTableSysId:', actualTableSysId);
@@ -209,35 +210,86 @@ const DocumentUpload = ({
     try {
       const uploadResults = [];
       const totalFiles = files.length;
+      let completedServiceNowUploads = 0;
+      let completedIDPUploads = 0;
 
-      // Upload each file sequentially
-      for (let i = 0; i < files.length; i++) {
-        const fileData = files[i];
-        console.log(`Uploading file ${i + 1} of ${totalFiles}:`, fileData.name);
-
+      // Step 1: Upload all files to ServiceNow in parallel (faster!)
+      console.log('[DocumentUpload] Step 1: Uploading', totalFiles, 'file(s) to ServiceNow in parallel...');
+      const snowPromises = files.map(async (fileData) => {
         try {
-          // Upload to ServiceNow
           const result = await serviceNowService.uploadDocument(
             fileData.file,
             tableName,
             actualTableSysId
           );
+          completedServiceNowUploads++;
+          setUploadProgress(Math.round((completedServiceNowUploads / totalFiles) * 50)); // 0-50%
+          return { success: true, fileName: fileData.name, result };
+        } catch (error) {
+          completedServiceNowUploads++;
+          setUploadProgress(Math.round((completedServiceNowUploads / totalFiles) * 50));
+          return { success: false, fileName: fileData.name, error: error.message };
+        }
+      });
+
+      const snowResults = await Promise.all(snowPromises);
+      console.log('[DocumentUpload] ServiceNow uploads complete:', snowResults);
+
+      // Step 2 & 3: Send all files to IDP for processing in parallel (faster!)
+      console.log('[DocumentUpload] Step 2 & 3: Sending', totalFiles, 'file(s) to IDP in parallel...');
+      const idpFilesToUpload = files
+        .map(f => f.file)
+        .filter((file, index) => snowResults[index].success); // Only process files that uploaded to ServiceNow
+
+      let idpResults = [];
+      if (idpFilesToUpload.length > 0) {
+        try {
+          idpResults = await idpService.uploadAndProcessBatch(
+            idpFilesToUpload,
+            actualTableSysId,
+            (completed, total) => {
+              completedIDPUploads = completed;
+              // Progress: 50-100% (50% for ServiceNow done, 50% for IDP)
+              setUploadProgress(50 + Math.round((completed / total) * 50));
+            }
+          );
+          console.log('[DocumentUpload] IDP batch processing complete:', idpResults);
+        } catch (idpError) {
+          console.warn('[DocumentUpload] IDP batch processing failed (non-fatal):', idpError);
+          // Create failed results for all IDP uploads
+          idpResults = idpFilesToUpload.map(file => ({
+            success: false,
+            fileName: file.name,
+            error: idpError.message
+          }));
+        }
+      }
+
+      // Combine results
+      let idpIndex = 0;
+      for (let i = 0; i < snowResults.length; i++) {
+        const snowResult = snowResults[i];
+
+        if (snowResult.success) {
+          const idpResult = idpResults[idpIndex++];
 
           uploadResults.push({
             success: true,
-            fileName: fileData.name,
-            attachmentSysId: result.attachmentSysId
+            fileName: snowResult.fileName,
+            attachmentSysId: snowResult.result.attachmentSysId,
+            idpProcessing: idpResult?.success ? {
+              submissionId: idpResult.submissionId,
+              status: 'processing'
+            } : {
+              status: 'failed',
+              error: idpResult?.error || 'IDP processing not available'
+            }
           });
-
-          // Update progress
-          setUploadProgress(Math.round(((i + 1) / totalFiles) * 100));
-
-        } catch (uploadError) {
-          console.error(`Error uploading ${fileData.name}:`, uploadError);
+        } else {
           uploadResults.push({
             success: false,
-            fileName: fileData.name,
-            error: uploadError.message
+            fileName: snowResult.fileName,
+            error: snowResult.error
           });
         }
       }

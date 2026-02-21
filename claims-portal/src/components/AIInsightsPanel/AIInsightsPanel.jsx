@@ -44,7 +44,7 @@ const AIInsightsPanel = ({ claimData, insights = [], anomalyData }) => {
   // Generate summary text (2-3 lines max)
   const getSummaryText = () => {
     if (totalAlerts === 0) {
-      return 'All AI verification checks passed successfully. No anomalies or risk indicators detected.';
+      return 'All automated verification checks passed successfully. No anomalies or risk indicators detected.';
     }
 
     const criticalCount = highAlerts.length;
@@ -87,7 +87,7 @@ const AIInsightsPanel = ({ claimData, insights = [], anomalyData }) => {
                 fontSize="font-scale-03"
                 fontWeight="font-weight-semibold"
               >
-                AI Insights
+                Automated Insights
               </DxcTypography>
             </DxcFlex>
 

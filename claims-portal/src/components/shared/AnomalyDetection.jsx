@@ -153,7 +153,7 @@ const AnomalyDetection = ({ anomalyData, onClose }) => {
 
           {overallStatus === 'PASS' ? (
             <DxcTypography fontSize="font-scale-02">
-              All AI verification checks passed successfully.
+              All automated verification checks passed successfully.
             </DxcTypography>
           ) : (
             <DxcTypography fontSize="font-scale-02">
